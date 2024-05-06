@@ -6,6 +6,7 @@ app.use(express.static('src'));
 
 
 // Mengatur rute untuk halaman utama
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '.', 'index.html'));
 });
