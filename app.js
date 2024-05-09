@@ -1,17 +1,20 @@
 const express = require('express');
 const path = require('path');
-
 const app = express();
-app.use(express.static('src'));
+
+app.set('view engine','ejs');
+app.set('views',[path.join(__dirname,'/views')]);
+app.use(express.static(path.join(__dirname,'/assets')));
+app.use(express.static(path.join(__dirname,'/node_modules/preline/dist')));
 
 
-// Mengatur rute untuk halaman utama
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '.', 'index.html'));
-});
 
-// Menjalankan server
+
+  app.get('/login', (req, res) => {
+    res.render('login')
+  });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server berjalan di http://localhost:${PORT}`);
+  console.log('Server berjalan di http://localhost:${PORT}');
 });
