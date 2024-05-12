@@ -15,9 +15,9 @@
     "sqlite3": "^5.1.7"
   },
   "scripts": {
-    "start": "node ./bin/www & npx tailwindcss -i ./src/input.css -o ./public/stylesheets/output.css --watch",
-    "dev": "nodemon app.js & npx tailwindcss -i ./src/input.css -o ./public/stylesheets/output.css --watch",
-    "build": "tailwindcss -i ./src/input.css -o ./assets/style.css - watch"
+    "start": "node ./bin/www & npx tailwindcss -i ./src/input.css ./public ./public/style.css --watch",
+    "dev": "nodemon app.js ",
+    "build": "tailwindcss -i ./src/input.css -o ./public/style.css - watch"
   },
   "devDependencies": {
     "daisyui": "^4.10.5",
