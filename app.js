@@ -68,7 +68,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/users', usersRouter);
 
 
-app.use('/', mhsRouter);
+app.use('/mahasiswa', mhsRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use('/kaprodi', kaprodiRouter);

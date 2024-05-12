@@ -28,7 +28,7 @@ const checklogin = async (req, res) => {
 
     // Buat token JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, email: user.email, role: user.role, nama: user.nama, no_identitas: user.no_identitas, alamat: user.alamat, no_hp: user.no_hp},
       process.env.JWT_SECRET_TOKEN,
       { expiresIn: 86400 }
     );
@@ -38,7 +38,7 @@ const checklogin = async (req, res) => {
 
     // Redirect ke halaman sesuai dengan peran pengguna
     if (user.role == "mahasiswa"){
-      return res.redirect("/home");
+      return res.redirect("/mahasiswa/home");
     } else if (user.role == "kaprodi"){
       return res.redirect("/dosen/dashboard");
     } else if(user.role == "admin"){

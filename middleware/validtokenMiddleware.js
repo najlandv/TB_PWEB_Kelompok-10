@@ -15,8 +15,12 @@ function verifyToken(req, res, next) {
       }
   
       req.userId = decoded.id;
-      req.userRole = decoded.role; 
+      req.userRole = decoded.role;
       req.userEmail = decoded.email;
+      req.userNama = decoded.nama;
+      req.userNo_Identitas = decoded.no_identitas;
+      req.userNo_Hp= decoded.no_hp;
+      req.userAlamat = decoded.alamat;
       next();
     });
 
