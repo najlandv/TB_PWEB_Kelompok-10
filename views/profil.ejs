@@ -4,15 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
-    <link href="/style.css" rel="stylesheet">
+    <link href="/profil.css" rel="stylesheet">
+    <!-- Include Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<h1>Profil</h1>
-<h1>email: <%= userEmail %></h1>
-<h1>nama: <%= userNama %></h1>
-<h1>nomor identitas: <%= userNo_Identitas %></h1>
-<h1>no hp: <%= userNo_Hp %></h1>
-<h1>alamat: <%= userAlamat%></h1>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <!-- Add your profile logo here -->
+      <img src="profile_logo.png" alt="Profile Logo">
+    </div>
+    <!-- You can add any other navbar items here -->
+  </nav>
 
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="#"><i class="fas fa-clipboard"></i> Formulir</a></li>
+      <li><a href="#"><i class="fas fa-check-circle"></i> Persetujuan</a></li>
+      <li><a href="#"><i class="fas fa-check"></i> Diterima</a></li>
+      <li><a href="#"><i class="fas fa-times"></i> Ditolak</a></li>
+      <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
+    </ul>
+    <!-- Logout link at the bottom -->
+    <a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="container">
+    <h1 class="heading">Profil Pengguna</h1>
+    <div class="profile-info">
+      <div class="info-row">
+        <span class="info-label">Email:</span>
+        <span class="info-value"><%= userEmail %></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Nama:</span>
+        <span class="info-value"><%= userNama %></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Nomor Identitas:</span>
+        <span class="info-value"><%= userNo_Identitas %></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">No HP:</span>
+        <span class="info-value"><%= userNo_Hp %></span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Alamat:</span>
+        <span class="info-value"><%= userAlamat %></span>
+      </div>
+    </div>
+  </div>
+  <script src="./node_modules/preline/dist/preline.js"></script>
+  <script>src="preline.js"</script>
 </body>
 </html>
