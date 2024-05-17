@@ -54,6 +54,20 @@ const checklogin = async (req, res) => {
   }
 };
 
+const updateProfilMhs = async (req, res) => {
+try {
+  const { email, nama, no_identitas, no_hp, alamat } = req.body;
+
+  console.log(req.body);
+  
+} catch (error) {
+  console.error("Error during login: ", err);
+  res.status(500).json({ message: "Internal server error" });
+}
+
+
+}
+
 function logout(req, res) {
   res.clearCookie("token");
   res.redirect("/auth/login");
@@ -66,4 +80,5 @@ module.exports = {
   form,
   checklogin,
   logout,
+  updateProfilMhs
 };

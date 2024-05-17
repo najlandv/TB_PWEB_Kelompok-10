@@ -32,19 +32,19 @@ require('dotenv').config()
 
 
 
-
-
 // var indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 var mhsRouter = require('./routes/mahasiswaRoute');
 var adminRouter = require('./routes/adminRoute');
 var kaprodiRouter = require('./routes/kaprodiRoute');
 var authRouter = require('./routes/authRoute');
+const methodOverride = require('method-override')
 
 
 
 var app = express();
 // app.use(publicRoutes);
+app.use(methodOverride('_method'))
 
 
 
