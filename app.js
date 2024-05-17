@@ -75,9 +75,9 @@ app.use('/admin', adminRouter);
 app.use('/kaprodi', kaprodiRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// app.use(function(req, res, next) {
+//   next(createError(404));
+// });
 
 // error handler
 app.use(function(err, req, res, next) {

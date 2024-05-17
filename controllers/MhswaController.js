@@ -54,20 +54,78 @@ const checklogin = async (req, res) => {
   }
 };
 
-const updateProfilMhs = async (req, res) => {
-try {
-  const { email, nama, no_identitas, no_hp, alamat } = req.body;
-
-  console.log(req.body);
+const lihatProfil = async (req, res) => {
+  try {
   
+    console.log(req.userId);
+    // res.json(req.user)
+    const lihatProfil = await User.findByPk(req.userId);
+    console.log (lihatProfil)
+    const userId = lihatProfil.id;
+    const userRole = lihatProfil.role;
+    const userEmail = lihatProfil.email;
+    const userNama = lihatProfil.nama;
+    const userNo_Identitas = lihatProfil.no_identitas;
+    const userNo_Hp = lihatProfil.no_hp;
+    const userAlamat = lihatProfil.alamat;
+    res.render('profil/profil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat});
+    
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+  
+  
+  
+}
+
+const updateProfilMhs = async (req, res) => {
+  try {
+    const { email, nama, no_identitas, no_hp, alamat } = req.body;
+    
+    console.log(req.userId);
+    // res.json(req.user)
+    await User.update(
+      { email: email,
+        nama: nama,
+        no_identitas: no_identitas,
+        no_hp: no_hp,
+        alamat: alamat
+      },
+      {
+        where: {
+      id: req.userId,
+    },
+  },
+);
+res.redirect('/mahasiswa/profil')  
 } catch (error) {
-  console.error("Error during login: ", err);
+  console.error("Error during login: ", error);
   res.status(500).json({ message: "Internal server error" });
 }
 
 
 }
+const aksesUpdateProfil = async (req, res) => {
+  try {
+    
+    const lihatProfil = await User.findByPk(req.userId);
+    console.log (lihatProfil)
+    const userId = lihatProfil.id;
+    const userRole = lihatProfil.role;
+    const userEmail = lihatProfil.email;
+    const userNama = lihatProfil.nama;
+    const userNo_Identitas = lihatProfil.no_identitas;
+    const userNo_Hp = lihatProfil.no_hp;
+    const userAlamat = lihatProfil.alamat;
 
+    res.render('profil/editprofil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat}); 
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+
+}
 function logout(req, res) {
   res.clearCookie("token");
   res.redirect("/auth/login");
@@ -80,5 +138,7 @@ module.exports = {
   form,
   checklogin,
   logout,
-  updateProfilMhs
+  updateProfilMhs,
+  lihatProfil,
+  aksesUpdateProfil
 };
