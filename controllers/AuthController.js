@@ -3,27 +3,27 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
 
 const form = (req, res) => {
-  
-
-  
-  res.render("login", { title: "Express" });
+  console.log("Rendering Form Login");
+  res.render("login", { title: "Express", error: null });
 };
 
 const checklogin = async (req, res) => {
+  console.log("Attempting to log in:", req.body);
   const { email, password } = req.body;
   try {
     // Menggunakan nama variabel lain untuk menyimpan hasil pencarian user
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      console.log("User Not Found!");
+      return res.status(404).render("login",{ title:"Express", error: "Email atau Passward salah! Silahkan coba lagi" });
     }
 
     // Verifikasi password
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ message: "Invalid password" });
+      return res.status(401).render("login", { title: "Express", error: "Email atau Passward salah! Silahkan coba lagi" });
     }
 
     // Buat token JWT

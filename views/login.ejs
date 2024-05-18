@@ -6,7 +6,6 @@
     <title>Login</title>
     <link href="/style.css" rel="stylesheet">
     <link href="/input.css" rel="stylesheet">
-    
 </head>
 <body>
   <div class = "container">
@@ -19,12 +18,15 @@
         <input type="text" id ="email" name="email" placeholder="Masukkan email anda">
         <label for ="email">Password</label>
         <input type="password"  id="password" name="password" placeholder="Masukkan password anda">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <p style="color: red;"><%= error %></p>
+        <% } %>
         <button type="submit">Login</button>
       </form>
     </div>
     <div class="right">
       <div class="logo">
-        <img src="img/logo.png" alt ="unand" >
+        <img src="/img/logo.png" alt ="unand" >
       </div>
     </div>
     
