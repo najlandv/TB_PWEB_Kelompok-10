@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ubah Password - Universitas Andalas</title>
+
+  <style>
+    body {
+      background-image: url("http://sisteminformasi.fti.unand.ac.id/download/university-logo.jpg"); /* Make sure this is the correct URL for the image */
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background-color: #00994d; /* Hijau Muda */
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      color: white;
+      margin-bottom: 5px;
+    }
+
+    input[type="password"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background-color: #007bff; /* Biru Muda */
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ubah Password</h1>
+    <form method="POST" action="/auth/changepass">
+      <label for="passwordLama">Password Lama:</label>
+      <input type="password" id="passwordLama" name="passwordLama" required>
+
+      <label for="passwordBaru">Password Baru:</label>
+      <input type="password" id="passwordBaru" name="passwordBaru" required>
+
+      <label for="konfirmasiPassword">Konfirmasi Password:</label>
+      <input type="password" id="konfirmasiPassword" name="konfirmasiPassword" required>
+
+      <button type="submit">Ubah Password</button>
+    </form>
+  </div>
+</body>
+</html>
