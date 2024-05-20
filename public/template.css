@@ -5,16 +5,27 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
 /* Setting font family */
 body {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: "Poppins", sans-serif;
     background-color: #f3f3f3; /* Cream color */
 }
+.poppins-light {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+  
 
 /* Navbar styling */
 .navbar {
+    position: fixed; /* Membuat navbar menempel */
+    top: 0; /* Menempatkan navbar di bagian atas halaman */
+    left: 0;
+    width: 100%; /* Lebar navbar mengikuti lebar layar */
     background-color: #1A4D2E;
     color: white;
     padding: 10px;
@@ -22,7 +33,8 @@ body {
     height: 60px;
     display: flex;
     justify-content: space-between; /* Mengatur jarak antara elemen di dalam navbar */
-    align-items: center; 
+    align-items: center;
+    z-index: 1000; /* Menentukan urutan tumpukan (z-index) navbar */
 }
 
 .navbar-toggle {
@@ -57,10 +69,10 @@ body {
 /* Sidebar styling */
 .sidebar {
     position: fixed;
-    
     left: 0;
+    top:50px;
     width: 200px;
-    height: 90%;
+    height: calc(100vh - 50px); 
     background-color: #4F6F52; /* Dark green */
     padding: 20px;
     color: #ffffff; /* White */
@@ -113,6 +125,8 @@ body {
 /* Container styling */
 .container {
     margin-left: 220px; /* Adjust based on sidebar width */
+    margin-top: 50px;
+    margin-right: 20px;
     padding: 20px;
     background-color: #ffffff; /* White */
     border-radius: 10px;
@@ -147,3 +161,110 @@ body {
 #sidebar.active {
     left: 0; /* Tampilkan sidebar */
 }
+
+.logout {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .logout i {
+    margin-right: 8px; /* Optional: Adjust space between icon and text */
+  }
+
+  /* CSS untuk tombol logout */
+  .logout {
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    font: inherit;
+    padding: 0;
+    margin: 0;
+}
+
+/* CSS untuk modal */
+.modal {
+    display: none; /* Sembunyikan modal secara default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Poppins", sans-serif;
+    overflow: auto;
+    color : #333;
+    background-color: rgba(0, 0, 0, 0.5); /* Tambahkan lapisan transparan di belakang modal */
+}
+
+.modal-content {
+    font-size: small;
+    background-color: #fefefe;
+    margin: 15% auto; /* Letakkan modal di tengah halaman */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.modal-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.modal-body {
+    padding: 20px 0;
+}
+
+.modal-footer {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.confirm-button, .cancel-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: small;
+}
+
+.confirm-button {
+    background-color: #4CAF50; /* Hijau */
+    color: white;
+}
+
+.confirm-button:hover {
+    background-color: #45a049;
+}
+
+.cancel-button {
+    background-color: #949494; /* Merah */
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #898989;
+}
+
+
+.show {
+    display: block;
+}
+  

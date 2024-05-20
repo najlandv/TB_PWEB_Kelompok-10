@@ -4,10 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="/profil.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+      <!-- Sidebar -->
+  <div class="sidebar">
+    <ul>
+      <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="#"><i class="fas fa-clipboard"></i> Formulir</a></li>
+      <li><a href="#"><i class="fas fa-check-circle"></i> Persetujuan</a></li>
+      <li><a href="#"><i class="fas fa-check"></i> Diterima</a></li>
+      <li><a href="#"><i class="fas fa-times"></i> Ditolak</a></li>
+      <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
+    </ul>
+    <!-- Logout link at the bottom -->
+    <!-- Form logout -->
+    <form id="logout-form" method="POST" action="/auth/logout">
+      <button type="button" class="logout" id="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </form>
+
+  <!-- Modal konfirmasi -->
+  <div id="modal" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div class="modal-content">
+          <div class="modal-header">
+            <i class="fa-solid fa-right-from-bracket" style="color: #333;font-size: 3em; margin-bottom: 10px;"; ></i>
+              <h2 id="modal-title">Logout Confirmation</h2>
+          </div>
+          <div class="modal-body">
+              <p>Are you sure you want to logout?</p>
+          </div>
+          <div class="modal-footer">
+              <button id="cancel-logout" type="button" class="cancel-button">Cancel</button>
+              <button id="confirm-logout" type="button" class="confirm-button">Logout</button>
+          </div>
+      </div>
+  </div>
+
+  <script>
+      // Menampilkan modal saat tombol logout diklik
+      document.getElementById('logout-button').addEventListener('click', function() {
+          document.getElementById('modal').classList.add('show');
+      });
+
+      // Menangani klik tombol "Logout" di modal
+      document.getElementById('confirm-logout').addEventListener('click', function() {
+          document.getElementById('logout-form').submit();
+      });
+
+      // Menangani klik tombol "Cancel" di modal
+      document.getElementById('cancel-logout').addEventListener('click', function() {
+          document.getElementById('modal').classList.remove('show');
+      });
+  </script> 
+  </div>
+<div class="container">
     <h1>Silahkan Lihat Profil Pengguna</h1>
     <h1><a href="profil" >Profil</a></h1>
+</div>
+    
 
 </body>
 </html>
