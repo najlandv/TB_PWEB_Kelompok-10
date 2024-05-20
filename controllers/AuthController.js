@@ -40,7 +40,7 @@ const checklogin = async (req, res) => {
     if (user.role == "mahasiswa"){
       return res.redirect("/mahasiswa/home");
     } else if (user.role == "kaprodi"){
-      return res.redirect("/dosen/dashboard");
+      return res.redirect("/kaprodi/dashboard");
     } else if(user.role == "admin"){
       return res.redirect("/admin/dashboard");
     }
