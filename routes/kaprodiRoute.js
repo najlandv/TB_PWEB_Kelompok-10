@@ -29,6 +29,6 @@ router.get('/dashboard', verifyToken, role('kaprodi'), function(req, res, next) 
 
 router.get('/profile', verifyToken,role('kaprodi'), KaprodiControllerr.lihatProfil);
 router.get('/editprofil', verifyToken,role('kaprodi'), KaprodiControllerr.aksesUpdateProfil)
-
 router.patch('/editprofil', verifyToken,role('kaprodi'), KaprodiControllerr.updateProfilMhs)
 module.exports = router;
+
