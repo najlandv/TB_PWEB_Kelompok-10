@@ -40,7 +40,7 @@ const checklogin = async (req, res) => {
     } else if (user.role == "admin"){
       return res.redirect("/admin/dashboard");
     } else if(user.role == "mahasiswa"){
-      return res.redirect("/mahasiswa/dashboard");
+      return res.redirect("/mahasiswa/sidebar");
     }
 
 
@@ -95,7 +95,7 @@ const updateProfilMhs = async (req, res) => {
       },
     },
   );
-  res.redirect('/mahasiswa/profil')  
+  res.redirect('/kaprodi/profil')  
   } catch (error) {
     console.error("Error during login: ", error);
     res.status(500).json({ message: "Internal server error" });
