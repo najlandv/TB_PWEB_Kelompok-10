@@ -95,7 +95,7 @@ const updateProfilMhs = async (req, res) => {
       },
     },
   );
-  res.redirect('/kaprodi/profil')  
+  res.redirect('/kaprodi/profile')  
   } catch (error) {
     console.error("Error during login: ", error);
     res.status(500).json({ message: "Internal server error" });
@@ -116,7 +116,7 @@ const aksesUpdateProfil = async (req, res) => {
     const userNo_Hp = lihatProfil.no_hp;
     const userAlamat = lihatProfil.alamat;
 
-    res.render('profil/editprofil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat}); 
+    res.render('kaprodi/editprofil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat, title:'Diva maleh baraja'}); 
   } catch (error) {
     console.error("Error during login: ", error);
     res.status(500).json({ message: "Internal server error" });
