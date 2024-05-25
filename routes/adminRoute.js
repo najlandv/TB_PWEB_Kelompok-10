@@ -15,19 +15,8 @@ router.get('/dashboard', verifyToken, role('admin'), function(req, res, next) {
   res.render('admin/dashboard', {title}); 
 });
 
-// router.get('/admin/profile', verifyToken, function (req, res, next) {
-//   const userId = req.userId;
-//   const userRole = req.userRole;
-//   const userEmail = req.userEmail;
-//   const userNama = req.userNama;
-//   const userNo_Identitas = req.userNo_Identitas;
-//   const userNo_Hp = req.userNo_Hp;
-//   const userAlamat = req.userAlamat;
-
-//   res.render('admin/profile', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat})
-// })
-
 router.get('/profile', verifyToken,role('admin'), AdminControllerr.lihatProfil);
+router.get('/persetujuan', verifyToken,role('admin'), AdminControllerr.lihatPersetujuan);
 
 
 module.exports = router;

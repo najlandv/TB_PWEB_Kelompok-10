@@ -62,9 +62,9 @@ const lihatProfil = async (req, res) => {
     const userId = lihatProfil.id;
     const userRole = lihatProfil.role;
     const userEmail = lihatProfil.email;
-    const userNamaDepan = lihatProfil.namaDepan;
-    const userNamaBelakang = lihatProfil.namaBelakang;
-    const userProfil = lihatProfil.userProfil;
+    const userNamaDepan = lihatProfil.nama_depan;
+    const userNamaBelakang = lihatProfil.nama_belakang;
+    const userProfil = lihatProfil.foto_profil;
     const userNo_Identitas = lihatProfil.no_identitas;
     const userNo_Hp = lihatProfil.no_hp;
     const userAlamat = lihatProfil.alamat;
@@ -124,6 +124,30 @@ const aksesUpdateProfil = async (req, res) => {
   }
 
 }
+
+const lihatPersetujuan = async (req, res) => {
+  try {
+    const lihatPersetujuan = await formulir.findByPk(req.nomorSurat);
+    console.log(lihatPersetujuan)
+    const nomorSurat = lihatPersetujuan.nomorSurat;
+    const tanggalDikirim = lihatPersetujuan.tanggalDikirim;
+    const tanggalDisetujui = lihatPersetujuan.tanggalDisetujui;
+    const penerima = lihatPersetujuan.penerima;
+    const instansi = lihatPersetujuan.instansi;
+    const acceptByAdmin = lihatPersetujuan.acceptByAdmin;
+    const acceptByKaprodi = lihatPersetujuan.acceptByKaprodi;
+    const judulTA = lihatPersetujuan.judulTA;
+    const title = 'Persetujuan';
+  
+    res.render('admin/persetujuan', {lihatPersetujuan, nomorSurat,tanggalDikirim,tanggalDisetujui,penerima,instansi,acceptByAdmin,acceptByKaprodi,judulTA,title});
+  }
+  catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+
+}
+
 function logout(req, res) {
   res.clearCookie("token");
   res.redirect("/auth/login");
@@ -138,5 +162,6 @@ module.exports = {
   logout,
   updateProfilMhs,
   lihatProfil,
-  aksesUpdateProfil
+  aksesUpdateProfil,
+  lihatPersetujuan
 };

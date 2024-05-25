@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
+const formulir = require("../models/formulir");
 
 const form = (req, res) => {
   
@@ -63,12 +64,14 @@ const lihatProfil = async (req, res) => {
     const userId = lihatProfil.id;
     const userRole = lihatProfil.role;
     const userEmail = lihatProfil.email;
-    const userNama = lihatProfil.nama;
+    const userNamaDepan = lihatProfil.nama_depan;
+    const userNamaBelakang = lihatProfil.nama_belakang;
+    const userProfil = lihatProfil.foto_profil;
     const userNo_Identitas = lihatProfil.no_identitas;
     const userNo_Hp = lihatProfil.no_hp;
     const userAlamat = lihatProfil.alamat;
     const title = 'Profile';
-    res.render('kaprodi/profile', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat, title});
+    res.render('kaprodi/profile', {userId, userRole, userEmail, userNamaDepan, userNamaBelakang, userProfil, userNo_Identitas, userNo_Hp, userAlamat, title});
     
   } catch (error) {
     console.error("Error during login: ", error);
@@ -115,14 +118,17 @@ const aksesUpdateProfil = async (req, res) => {
     const userNo_Identitas = lihatProfil.no_identitas;
     const userNo_Hp = lihatProfil.no_hp;
     const userAlamat = lihatProfil.alamat;
+    const title = 'Edit Profile'
 
-    res.render('kaprodi/editprofil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat, title:'Diva maleh baraja'}); 
+    res.render('kaprodi/editprofil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat, title}); 
   } catch (error) {
     console.error("Error during login: ", error);
     res.status(500).json({ message: "Internal server error" });
   }
 
 }
+
+
 function logout(req, res) {
   res.clearCookie("token");
   res.redirect("/auth/login");
