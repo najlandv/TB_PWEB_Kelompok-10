@@ -46,7 +46,44 @@
               <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
             </ul>
             <!-- Logout link at the bottom -->
-            <a href="#" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                 <!-- Form logout -->
+    <form id="logout-form" method="POST" action="/auth/logout">
+      <button type="button" class="logout" id="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </form>
+
+  <!-- Modal konfirmasi -->
+  <div id="modal" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div class="modal-content">
+          <div class="modal-header">
+            <i class="fa-solid fa-right-from-bracket" style="color: #333;font-size: 3em; margin-bottom: 10px;"; ></i>
+              <h2 id="modal-title">Logout Confirmation</h2>
+          </div>
+          <div class="modal-body">
+              <p>Are you sure you want to logout?</p>
+          </div>
+          <div class="modal-footer">
+              <button id="cancel-logout" type="button" class="cancel-button">Cancel</button>
+              <button id="confirm-logout" type="button" class="confirm-button">Logout</button>
+          </div>
+      </div>
+  </div>
+
+  <script>
+      // Menampilkan modal saat tombol logout diklik
+      document.getElementById('logout-button').addEventListener('click', function() {
+          document.getElementById('modal').classList.add('show');
+      });
+
+      // Menangani klik tombol "Logout" di modal
+      document.getElementById('confirm-logout').addEventListener('click', function() {
+          document.getElementById('logout-form').submit();
+      });
+
+      // Menangani klik tombol "Cancel" di modal
+      document.getElementById('cancel-logout').addEventListener('click', function() {
+          document.getElementById('modal').classList.remove('show');
+      });
+  </script> 
           </div>
     </aside>
     <main>
