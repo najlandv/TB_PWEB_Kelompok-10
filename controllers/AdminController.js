@@ -62,12 +62,14 @@ const lihatProfil = async (req, res) => {
     const userId = lihatProfil.id;
     const userRole = lihatProfil.role;
     const userEmail = lihatProfil.email;
-    const userNama = lihatProfil.nama;
+    const userNamaDepan = lihatProfil.namaDepan;
+    const userNamaBelakang = lihatProfil.namaBelakang;
+    const userProfil = lihatProfil.userProfil;
     const userNo_Identitas = lihatProfil.no_identitas;
     const userNo_Hp = lihatProfil.no_hp;
     const userAlamat = lihatProfil.alamat;
     const title = 'Profile';
-    res.render('admin/profile', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat, title});
+    res.render('admin/profile', {userId, userRole, userEmail, userNamaDepan, userNamaBelakang, userProfil, userNo_Identitas, userNo_Hp, userAlamat, title});
     
   } catch (error) {
     console.error("Error during login: ", error);

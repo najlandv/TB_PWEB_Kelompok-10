@@ -3,6 +3,7 @@ var router = express.Router();
 const verifyToken= require ('../middleware/validtokenMiddleware');
 const KaprodiControllerr= require('../controllers/KaprodiController');
 const role = require ('../middleware/checkroleMiddleware');
+const passcontroller = require('../controllers/UbahpassController')
 
 
 router.get('/notfound', verifyToken, function(req, res, next) {
@@ -30,5 +31,6 @@ router.get('/dashboard', verifyToken, role('kaprodi'), function(req, res, next) 
 router.get('/profile', verifyToken,role('kaprodi'), KaprodiControllerr.lihatProfil);
 router.get('/editprofil', verifyToken,role('kaprodi'), KaprodiControllerr.aksesUpdateProfil)
 router.patch('/editprofil', verifyToken,role('kaprodi'), KaprodiControllerr.updateProfilMhs)
+router.get('/ubahPassword', verifyToken, passcontroller.formchangepass)
 module.exports = router;
 

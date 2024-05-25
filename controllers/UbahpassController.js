@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
 const { where } = require("sequelize");
+
 const formchangepass = (req, res) => {
     res.render("ubahpass", { title: "Express" });
   };
