@@ -81,13 +81,14 @@ const lihatProfil = async (req, res) => {
 
 const updateProfilMhs = async (req, res) => {
     try {
-      const { email, nama, no_identitas, no_hp, alamat } = req.body;
+      const { email, nama_depan, nama_belakang, no_identitas, no_hp, alamat } = req.body;
       
       console.log(req.userId);
       // res.json(req.user)
       await User.update(
         { email: email,
-          nama: nama,
+          nama_depan: nama_depan,
+          nama_belakang: nama_belakang,
           no_identitas: no_identitas,
           no_hp: no_hp,
           alamat: alamat
@@ -114,13 +115,14 @@ const aksesUpdateProfil = async (req, res) => {
     const userId = lihatProfil.id;
     const userRole = lihatProfil.role;
     const userEmail = lihatProfil.email;
-    const userNama = lihatProfil.nama;
+    const userNamaDepan = lihatProfil.nama_depan;
+    const userNamaBelakang = lihatProfil.nama_belakang;
     const userNo_Identitas = lihatProfil.no_identitas;
     const userNo_Hp = lihatProfil.no_hp;
     const userAlamat = lihatProfil.alamat;
     const title = 'Edit Profile'
 
-    res.render('kaprodi/editprofil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat, title}); 
+    res.render('kaprodi/editprofil', {userId, userRole, userEmail, userNamaDepan,userNamaBelakang, userNo_Identitas, userNo_Hp, userAlamat, title}); 
   } catch (error) {
     console.error("Error during login: ", error);
     res.status(500).json({ message: "Internal server error" });

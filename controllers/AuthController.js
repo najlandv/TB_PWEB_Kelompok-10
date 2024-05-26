@@ -28,7 +28,7 @@ const checklogin = async (req, res) => {
 
     // Buat token JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, nama: user.nama, no_identitas: user.no_identitas, alamat: user.alamat, no_hp: user.no_hp},
+      { id: user.id, email: user.email, role: user.role, nama_depan: user.nama_depan, no_identitas: user.no_identitas, alamat: user.alamat, no_hp: user.no_hp},
       process.env.JWT_SECRET_TOKEN,
       { expiresIn: 86400 }
     );
