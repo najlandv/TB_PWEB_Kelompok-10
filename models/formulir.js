@@ -16,8 +16,6 @@ module.exports = (sequelize, DataTypes) => {
   Formulir.init({
     nomorSurat: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
     },
     tanggalDikirim: DataTypes.DATE,
     tanggalDisetujui: DataTypes.DATE,
