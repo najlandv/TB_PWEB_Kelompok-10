@@ -13,9 +13,9 @@ body {
     font-family: "Poppins", sans-serif;
     background-color: #f3f3f3; /* Cream color */
 }
-.poppins-light {
+.poppins-light{
     font-family: "Poppins", sans-serif;
-    font-weight: 300;
+    font-weight: bold;
     font-style: normal;
   }
   
@@ -32,7 +32,7 @@ body {
     text-align: center;
     height: 60px;
     display: flex;
-    justify-content: space-between; /* Mengatur jarak antara elemen di dalam navbar */
+    justify-content: right; /* Mengatur jarak antara elemen di dalam navbar */
     align-items: center;
     z-index: 1000; /* Menentukan urutan tumpukan (z-index) navbar */
 }
@@ -268,6 +268,10 @@ body {
     display: block;
 }
 
+.notification {
+    margin-right: 15px;
+}
+
 /* Profile dropdown styling */
 .profile-dropdown {
     position: relative;
@@ -312,4 +316,41 @@ body {
 .profile-dropdown:hover .profile-dropdown-content {
     display: block;
 }
-  
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    
+}
+th, td {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+    color: #1A4D2E;
+}
+
+.custom-heading {
+    color: #134025;
+    padding-bottom: 8px;
+}
+
+.btn {
+    background-color: #4F6F52;
+    color: #f1f1f1; /* Light text */
+    border: none; /* Remove default border */
+    font-size: 12px; /* Font size */
+    padding: 10px 10px; /* Padding for the button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin: 5px; /* Add some margin around the buttons */
+    text-align: center;
+    display: inline-block; /* Ensure buttons stay inline */
+}
+
+.btn i {
+    margin-right: 5px;
+}
