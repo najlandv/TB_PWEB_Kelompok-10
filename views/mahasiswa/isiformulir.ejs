@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isi Formulir</title>
+    <link href="/isiformulir.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Isi Formulir</h1>
+        <form action="/mahasiswa/kirimformulir" method="POST">
+            <input type="hidden" name="id">
+
+
+            
+            <!-- <div class="form-group">
+                <label for="tanggalDikirim">Tanggal Dikirim:</label>
+                <input type="date" id="tanggalDikirim" name="tanggalDikirim">
+            </div>
+             -->
+            <!-- <div class="form-group">
+                <label for="tanggalDisetujui">Tanggal Disetujui:</label>
+                <input type="date" id="tanggalDisetujui" name="tanggalDisetujui">
+            </div> -->
+            
+            <div class="form-group">
+                <label for="penerima">Penerima:</label>
+                <input type="text" id="penerima" name="penerima">
+            </div>
+            
+            <div class="form-group">
+                <label for="instansi">Instansi:</label>
+                <input type="text" id="instansi" name="instansi">
+            </div>
+            
+            <!-- <div class="form-group">
+                <label for="acceptByAdmin">Diterima oleh Admin:</label>
+                <input type="checkbox" id="acceptByAdmin" name="acceptByAdmin" 
+            </div> -->
+            
+            <!-- <div class="form-group">
+                <label for="acceptByKaprodi">Diterima oleh Kaprodi:</label>
+                <input type="checkbox" id="acceptByKaprodi" name="acceptByKaprodi"
+            </div> -->
+            
+            <div class="form-group">
+                <label for="judulTA">Judul TA:</label>
+                <input type="text" id="judulTA" name="judulTA">
+            </div>
+            
+            <input type="hidden" name="id_user">
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 const verifyToken= require ('../middleware/validtokenMiddleware');
 const role= require ('../middleware/checkroleMiddleware');
-const MhswaController= require('../controllers/MhswaController');
+const MhswaController = require('../controllers/MhswaController');
+
 
 router.get('/notfound', verifyToken, function(req, res, next) {
   res.render('notfound');
@@ -43,5 +44,11 @@ router.get('/editprofil', verifyToken,role('mahasiswa'), MhswaController.aksesUp
 //   res.render('profil/editprofil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat});
 // })
 
-router.patch('/editprofil', verifyToken,role('mahasiswa'), MhswaController.updateProfilMhs)
+// Rute untuk formulir mahasiswa
+
+router.get('/isiformulir', verifyToken,role('mahasiswa'), MhswaController.tampilkanFormulir);
+router.post('/kirimformulir', verifyToken,role('mahasiswa'), MhswaController.kirimFormulir);
+router.get('/riwayatpermintaan', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaan);
+router.get('/detailriwayat/:id', verifyToken,role('mahasiswa'), MhswaController.detailRiwayat);
+
 module.exports = router;

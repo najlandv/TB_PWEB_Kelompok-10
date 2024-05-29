@@ -1,53 +1,45 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
+const {Formulir}  = require("../models/index");
+const { where } = require("sequelize");
 
 const form = (req, res) => {
-  
-
-  
   res.render("login", { title: "Express" });
 };
 
 const checklogin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    // Menggunakan nama variabel lain untuk menyimpan hasil pencarian user
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Verifikasi password
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    // Buat token JWT
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET_TOKEN,
       { expiresIn: 86400 }
     );
 
-    // Set cookie dengan token
     res.cookie("token", token, { httpOnly: true });
 
-    // Redirect ke halaman sesuai dengan peran pengguna
-    if (user.role == "mahasiswa"){
+    if (user.role == "mahasiswa") {
       return res.redirect("/home");
-    } else if (user.role == "kaprodi"){
+    } else if (user.role == "kaprodi") {
       return res.redirect("/kaprodi/dashboard");
-    } else if(user.role == "admin"){
+    } else if (user.role == "admin") {
       return res.redirect("/admin/dashboard");
     }
 
-    // Jika tidak ada peran yang cocok, berikan respons standar
     res.status(200).send({ auth: true, token: token });
-
   } catch (err) {
     console.error("Error during login: ", err);
     res.status(500).json({ message: "Internal server error" });
@@ -56,85 +48,144 @@ const checklogin = async (req, res) => {
 
 const lihatProfil = async (req, res) => {
   try {
-  
-    console.log(req.userId);
-    // res.json(req.user)
     const lihatProfil = await User.findByPk(req.userId);
-    console.log (lihatProfil)
-    const userId = lihatProfil.id;
-    const userRole = lihatProfil.role;
-    const userEmail = lihatProfil.email;
-    const userNamaDepan = lihatProfil.nama_depan;
-    const userNamaBelakang = lihatProfil.nama_belakang;
-    const userNo_Identitas = lihatProfil.no_identitas;
-    const userNo_Hp = lihatProfil.no_hp;
-    const userAlamat = lihatProfil.alamat;
-    res.render('profil/profil', {userId, userRole, userEmail, userNamaDepan, userNamaBelakang, userNo_Identitas, userNo_Hp, userAlamat});
-    
+
+    if (!lihatProfil) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userData = {
+      userId: lihatProfil.id,
+      userRole: lihatProfil.role,
+      userEmail: lihatProfil.email,
+      userNamaDepan: lihatProfil.nama_depan,
+      userNamaBelakang: lihatProfil.nama_belakang,
+      userNo_Identitas: lihatProfil.no_identitas,
+      userNo_Hp: lihatProfil.no_hp,
+      userAlamat: lihatProfil.alamat,
+    };
+
+    res.render('profil/profil', userData);
   } catch (error) {
-    console.error("Error during login: ", error);
+    console.error("Error during profile view: ", error);
     res.status(500).json({ message: "Internal server error" });
   }
-  
-  
-  
-}
+};
 
 const updateProfilMhs = async (req, res) => {
   try {
     const { email, nama_depan, nama_belakang, no_identitas, no_hp, alamat } = req.body;
-    
-    console.log(req.userId);
-    // res.json(req.user)
+
     await User.update(
-      { email: email,
+      {
+        email: email,
         nama_depan: nama_depan,
         nama_belakang: nama_belakang,
         no_identitas: no_identitas,
         no_hp: no_hp,
-        alamat: alamat
-        
+        alamat: alamat,
       },
       {
-        where: {
-      id: req.userId,
-    },
-  },
-);
-res.redirect('/mahasiswa/profil')  
-} catch (error) {
-  console.error("Error during login: ", error);
-  res.status(500).json({ message: "Internal server error" });
-}
+        where: { id: req.userId },
+      }
+    );
 
-
-}
-const aksesUpdateProfil = async (req, res) => {
-  try {
-    
-    const lihatProfil = await User.findByPk(req.userId);
-    console.log (lihatProfil)
-    const userId = lihatProfil.id;
-    const userRole = lihatProfil.role;
-    const userEmail = lihatProfil.email;
-    const userNamaDepan = lihatProfil.nama_depan;
-    const userNamaBelakang = lihatProfil.nama_belakang;
-    const userNo_Identitas = lihatProfil.no_identitas;
-    const userNo_Hp = lihatProfil.no_hp;
-    const userAlamat = lihatProfil.alamat;
-
-    res.render('profil/editprofil', {userId, userRole, userEmail, userNamaDepan, userNamaBelakang, userNo_Identitas, userNo_Hp, userAlamat}); 
+    res.redirect('/mahasiswa/profil');
   } catch (error) {
-    console.error("Error during login: ", error);
+    console.error("Error during profile update: ", error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
 
+const aksesUpdateProfil = async (req, res) => {
+  try {
+    const lihatProfil = await User.findByPk(req.userId);
+
+    if (!lihatProfil) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userData = {
+      userId: lihatProfil.id,
+      userRole: lihatProfil.role,
+      userEmail: lihatProfil.email,
+      userNamaDepan: lihatProfil.nama_depan,
+      userNamaBelakang: lihatProfil.nama_belakang,
+      userNo_Identitas: lihatProfil.no_identitas,
+      userNo_Hp: lihatProfil.no_hp,
+      userAlamat: lihatProfil.alamat,
+    };
+
+    res.render('profil/editprofil', userData);
+  } catch (error) {
+    console.error("Error during profile access: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const tampilkanFormulir = async (req, res) => {
+  try {
+
+    res.render('mahasiswa/isiformulir');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+
+const kirimFormulir = async (req, res) => {
+  try {
+    const { penerima, instansi, judulTA } = req.body;
+
+   // Memasukkan data formulir ke dalam basis data menggunakan model Formulir
+    await Formulir.create({ 
+      penerima: penerima,
+      instansi: instansi,
+      judulTA: judulTA,
+      id_user:req.userId,
+      tanggalDikirim: new Date()
+    });
+
+    return res.render('mahasiswa/isiformulir', { successMessage: "Formulir berhasil dikirim!" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+};
+
+const riwayatPermintaan = async (req, res) => {
+  try {
+    const riwayatPermintaan = await Formulir.findAll({ where: { id_user: req.userId } });
+    console.log(riwayatPermintaan)
+    const nomorSurat = riwayatPermintaan.nomorSurat;
+    const tanggalDikirim = riwayatPermintaan.tanggalDikirim;
+    const penerima = riwayatPermintaan.penerima;
+    const instansi = riwayatPermintaan.instansi;
+    const judulTA = riwayatPermintaan.judulTA;
+    res.render('mahasiswa/riwayatpermintaan', {riwayatPermintaan, nomorSurat, tanggalDikirim, penerima, instansi, judulTA });
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+    
+  }
 }
-function logout(req, res) {
+
+const detailRiwayat = async (req, res) => {
+  try {
+const nomorSurat = req.params.id;
+const detailRiwayat = await Formulir.findOne({ where: { nomorSurat }})
+res.render('mahasiswa/detailriwayat', { requestDetail: detailRiwayat });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+}
+const logout = (req, res) => {
   res.clearCookie("token");
   res.redirect("/auth/login");
- 
-}
+};
 
 
 
@@ -144,5 +195,9 @@ module.exports = {
   logout,
   updateProfilMhs,
   lihatProfil,
-  aksesUpdateProfil
+  aksesUpdateProfil,
+  tampilkanFormulir,
+  kirimFormulir,
+  riwayatPermintaan,
+  detailRiwayat,
 };

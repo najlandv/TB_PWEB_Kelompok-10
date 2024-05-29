@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Formulir extends Model {
     /**
@@ -14,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Formulir.init({
+
     nomorSurat: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
