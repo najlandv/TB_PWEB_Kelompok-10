@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
 const { Formulir } = require("../models/index");
+const { where } = require("sequelize");
 
 const form = (req, res) => {
   
@@ -128,8 +129,11 @@ const aksesUpdateProfil = async (req, res) => {
 
 const lihatPersetujuan = async (req, res) => {
   try {
-    const lihatPersetujuan = await formulir.findByPk(req.nomorSurat);
+    const lihatPersetujuan = await Formulir.findAll({
+      include:[{model:User}]
+    });
     console.log(lihatPersetujuan)
+    // return res.json(lihatPersetujuan)
     const nomorSurat = lihatPersetujuan.nomorSurat;
     const tanggalDikirim = lihatPersetujuan.tanggalDikirim;
     const tanggalDisetujui = lihatPersetujuan.tanggalDisetujui;
@@ -149,6 +153,66 @@ const lihatPersetujuan = async (req, res) => {
 
 }
 
+const lihatAkun = async (req,res) => {
+  try {
+    const lihatAkun  = await User.findAll({});
+    console.log(lihatAkun)
+    // return res.json(lihatAkun);
+
+    const title = 'Akun';
+
+    res.render('admin/akun', {lihatAkun, title})
+
+  }
+  catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+ 
+const lihatDetail =  async (req,res) => {
+  try {
+    const lihatDetail = await Formulir.findOne({
+      include:[{model:User}]
+    });
+    console.log(lihatDetail)
+    // return res.json(lihatDetail)
+
+    const title = 'Detail Formulir';
+  
+    res.render('admin/detail', {lihatDetail,title});
+  }
+  catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+const terimaFormulir = async (req,res)=> {
+  try {
+    const nomorSurat = req.params.nomorSurat;
+    const statusFormulir = await Formulir.findOne({where:{nomorSurat}});
+    statusFormulir.update({acceptByAdmin : 1});
+    res.redirect ('/admin/persetujuan')
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+
+}
+
+const tolakFormulir = async (req,res)=> {
+  try {
+    const nomorSurat = req.params.nomorSurat;
+    const statusFormulir = await Formulir.findOne({where:{nomorSurat}});
+    statusFormulir.update({acceptByAdmin : 1});
+    res.redirect ('/admin/persetujuan')
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 function logout(req, res) {
   res.clearCookie("token");
   res.redirect("/auth/login");
@@ -164,5 +228,9 @@ module.exports = {
   updateProfilMhs,
   lihatProfil,
   aksesUpdateProfil,
-  lihatPersetujuan
+  lihatPersetujuan,
+  lihatAkun,
+  lihatDetail,
+  terimaFormulir,
+  tolakFormulir
 };

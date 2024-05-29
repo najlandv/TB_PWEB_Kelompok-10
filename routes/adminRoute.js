@@ -17,10 +17,10 @@ router.get('/dashboard', verifyToken, role('admin'), function(req, res, next) {
 
 router.get('/profile', verifyToken,role('admin'), AdminControllerr.lihatProfil);
 router.get('/persetujuan', verifyToken,role('admin'), AdminControllerr.lihatPersetujuan);
-router.get('/akun', verifyToken, role('admin'), function(req, res) {
-  const title = 'akun';
-  res.render('admin/akun',{title});
-});
+router.get('/akun', verifyToken, role('admin'), AdminControllerr.lihatAkun);
+router.get('/detail', verifyToken, role('admin'), AdminControllerr.lihatDetail);
+router.post('/persetujuan/:nomorSurat',verifyToken,role('admin'), AdminControllerr.terimaFormulir)
+router.post('/persetujuan/:nomorSurat',verifyToken,role('admin'), AdminControllerr.tolakFormulir)
 
 
 module.exports = router;

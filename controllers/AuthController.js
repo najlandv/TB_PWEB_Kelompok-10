@@ -23,7 +23,7 @@ const checklogin = async (req, res) => {
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).render("login", { title: "Express", error: "Email atau Passward salah! Silahkan coba lagi" });
+      return res.status(401).render("login", { title: "Express",layout:false, error: "Email atau Passward salah! Silahkan coba lagi" });
     }
 
     // Buat token JWT

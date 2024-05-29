@@ -1,5 +1,6 @@
 'use strict';
 const {Model} = require('sequelize');
+const UserModel = require('./UserModel');
 module.exports = (sequelize, DataTypes) => {
   class Formulir extends Model {
     /**
@@ -9,6 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Formulir.belongsTo(models.User, {
+        foreignKey : 'id_user'
+      })
     }
   }
   Formulir.init({
@@ -19,10 +23,18 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
 
-    tanggalDikirim: DataTypes.DATE,
-    tanggalDisetujui: DataTypes.DATE,
-    penerima: DataTypes.STRING,
-    instansi: DataTypes.STRING,
+    tanggalDikirim: {
+      type: DataTypes.DATE
+    },
+    tanggalDisetujui: {
+      type : DataTypes.DATE
+    },
+    penerima: {
+      type : DataTypes.STRING
+    },
+    instansi: {
+      type : DataTypes.STRING
+    },
     acceptByAdmin:{
       type: DataTypes.BOOLEAN,
       defaultValue: false
@@ -31,13 +43,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    judulTA: DataTypes.STRING,
+    judulTA: {
+      type : DataTypes.STRING
+    },
     id_user: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: 'User',
-        key: 'id'
+        key: 'ida'
       }
     }
   }, {

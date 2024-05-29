@@ -1,4 +1,4 @@
-<% const akunContent = 'admin/akun' %>
+<% const akunContent = '' %>
 <%- include('./template', { content: akunContent }) %>
 
 <div class="container">
@@ -13,6 +13,18 @@
                 <th>Alamat</th>
                 <th>Role</th>
             </tr>
+            <tbody>
+                <% lihatAkun.forEach ( (akun ) => { %>
+                    <tr>
+                        <td><%= akun.nama_depan %> <%= akun.nama_belakang %></td>
+                        <td><%= akun.email %></td>
+                        <td><%= akun.no_identitas %></td>
+                        <td> <%= akun.no_hp %></td>
+                        <td> <%= akun.alamat %></td>
+                        <td><%= akun.role %></td>
+                    </tr>
+                    <% }) %>
+            </tbody>
             
         </thead>
     </table>
