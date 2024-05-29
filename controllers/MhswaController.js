@@ -154,6 +154,48 @@ const kirimFormulir = async (req, res) => {
   }
 };
 
+const editFormulir = async (req, res) => {
+  try {
+    const nomorSurat = req.params.id;
+    const updateFormulir = await Formulir.findOne({ where: { nomorSurat }})
+    const {penerima,instansi,judulTA} =  req.body
+    
+    await updateFormulir.update({penerima,instansi,judulTA});
+
+    return res.redirect('/mahasiswa/riwayatpermintaan')
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+};
+const deleteFormulir = async (req, res) => {
+  try {
+    const nomorSurat = req.params.id;
+    const updateFormulir = await Formulir.findOne({ where: { nomorSurat }})
+   
+    await updateFormulir.destroy();
+
+    return res.redirect('/mahasiswa/riwayatpermintaan')
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+};
+
+
+const updateFormulir = async (req, res) => {
+  try {
+const nomorSurat = req.params.id;
+const updateFormulir = await Formulir.findOne({ where: { nomorSurat }})
+
+res.render('mahasiswa/editformulir', { requestDetail: updateFormulir });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+}
+
+
 const riwayatPermintaan = async (req, res) => {
   try {
     const riwayatPermintaan = await Formulir.findAll({ where: { id_user: req.userId } });
@@ -200,4 +242,7 @@ module.exports = {
   kirimFormulir,
   riwayatPermintaan,
   detailRiwayat,
+  editFormulir,
+  deleteFormulir,
+  updateFormulir,
 };
