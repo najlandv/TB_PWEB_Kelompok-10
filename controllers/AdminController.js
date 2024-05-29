@@ -128,20 +128,19 @@ const aksesUpdateProfil = async (req, res) => {
 
 const lihatPersetujuan = async (req, res) => {
   try {
-    const lihatPersetujuan = await Formulir.findByPk(req.formId);
+    const lihatPersetujuan = await formulir.findByPk(req.nomorSurat);
     console.log(lihatPersetujuan)
-    const nomorSurat = lihatPersetujuan?.nomorSurat;
-    const formId = lihatPersetujuan?.id;
-    const tanggalDikirim = lihatPersetujuan?.tanggalDikirim;
-    const tanggalDisetujui = lihatPersetujuan?.tanggalDisetujui;
-    const penerima = lihatPersetujuan?.penerima;
-    const instansi = lihatPersetujuan?.instansi;
-    const acceptByAdmin = lihatPersetujuan?.acceptByAdmin;
-    const acceptByKaprodi = lihatPersetujuan?.acceptByKaprodi;
-    const judulTA = lihatPersetujuan?.judulTA;
+    const nomorSurat = lihatPersetujuan.nomorSurat;
+    const tanggalDikirim = lihatPersetujuan.tanggalDikirim;
+    const tanggalDisetujui = lihatPersetujuan.tanggalDisetujui;
+    const penerima = lihatPersetujuan.penerima;
+    const instansi = lihatPersetujuan.instansi;
+    const acceptByAdmin = lihatPersetujuan.acceptByAdmin;
+    const acceptByKaprodi = lihatPersetujuan.acceptByKaprodi;
+    const judulTA = lihatPersetujuan.judulTA;
     const title = 'Persetujuan';
   
-    res.render('admin/persetujuan', {lihatPersetujuan,formId,nomorSurat,tanggalDikirim,tanggalDisetujui,penerima,instansi,acceptByAdmin,acceptByKaprodi,judulTA,title});
+    res.render('admin/persetujuan', {lihatPersetujuan, nomorSurat,tanggalDikirim,tanggalDisetujui,penerima,instansi,acceptByAdmin,acceptByKaprodi,judulTA,title});
   }
   catch (error) {
     console.error("Error during login: ", error);
