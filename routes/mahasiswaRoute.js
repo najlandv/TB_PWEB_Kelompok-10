@@ -43,5 +43,7 @@ router.get('/riwayatpermintaan', verifyToken,role('mahasiswa'), MhswaController.
 router.get('/detailriwayat/:id', verifyToken,role('mahasiswa'), MhswaController.detailRiwayat);
 router.get('/updateformulir/:id', verifyToken,role('mahasiswa'), MhswaController.updateFormulir);
 router.post('/editformulir/:id/update', verifyToken,role('mahasiswa'), MhswaController.editFormulir);
-router.post('/editformulir/:id/delete', verifyToken,role('mahasiswa'), MhswaController.deleteFormulir); //
+router.post('/editformulir/:id/delete', verifyToken,role('mahasiswa'), MhswaController.deleteFormulir); 
+router.get('/permintaandisetujui', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaanDisetujui);
+router.get('/permintaanditolak', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaanDitolak);
 module.exports = router;

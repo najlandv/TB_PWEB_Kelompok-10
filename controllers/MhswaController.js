@@ -231,7 +231,29 @@ const logout = (req, res) => {
   res.redirect("/auth/login");
 };
 
+const riwayatPermintaanDisetujui = async (req, res) => {
+  try {
+    const riwayatPermintaanDisetujui = await Formulir.findAll({ where: { acceptByAdmin:1}})
+    res.render('mahasiswa/permintaandisetujui', {riwayatPermintaanDisetujui})
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+    
+  }
+}
 
+const riwayatPermintaanDitolak = async (req, res) => {
+  try {
+    const riwayatPermintaanDitolak = await Formulir.findAll({ where: { acceptByAdmin:2}})
+    res.render('mahasiswa/permintaanditolak', {riwayatPermintaanDitolak})
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+    
+  }
+}
 
 module.exports = {
   form,
@@ -247,4 +269,6 @@ module.exports = {
   editFormulir,
   deleteFormulir,
   updateFormulir,
+  riwayatPermintaanDisetujui,
+  riwayatPermintaanDitolak,
 };
