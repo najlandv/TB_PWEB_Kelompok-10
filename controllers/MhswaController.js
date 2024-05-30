@@ -76,6 +76,8 @@ const updateProfilMhs = async (req, res) => {
   try {
     const { email, nama_depan, nama_belakang, no_identitas, no_hp, alamat } = req.body;
 
+    // const user = await User.findOne({ where:{ id:req.userId}});
+    // user.update({ email, nama_depan, nama_belakang, no_hp, alamat });
     await User.update(
       {
         email: email,

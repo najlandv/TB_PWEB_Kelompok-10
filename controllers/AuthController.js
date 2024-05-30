@@ -38,7 +38,7 @@ const checklogin = async (req, res) => {
 
     // Redirect ke halaman sesuai dengan peran pengguna
     if (user.role == "mahasiswa"){
-      return res.redirect("/mahasiswa/home");
+      return res.redirect("/mahasiswa/dashboard");
     } else if (user.role == "kaprodi"){
       return res.redirect("/kaprodi/dashboard");
     } else if(user.role == "admin"){

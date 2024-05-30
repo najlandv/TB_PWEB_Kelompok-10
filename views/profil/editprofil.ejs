@@ -1,34 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profil</title>
-    <link href="/profil.css" rel="stylesheet" />
-    <!-- Include Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-  </head>
-  <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-      <div class="logo">
-        <!-- Add your profile logo here -->
-        <img src="profile_logo.png" alt="Profile Logo" />
-      </div>
-      <!-- You can add any other navbar items here -->
-    </nav>
-
-    <%- include ('../mahasiswa/sidebar') %>
+<% const editProfilContent = '' %>
+<%- include('../mahasiswa/template', { content: editProfilContent }) %>
 
     <!-- Profile Content -->
         <div class="container">
             <h1 class="heading">Profil Pengguna</h1>
             <div class="max-w-sm space-y-3">
                 <form action="/mahasiswa/editprofil?_method=PATCH" method ="POST">
-                    <!-- <input type="hidden" name="_method" value="PATCH"> -->
                     
                     <div>
                             <div class="flex rounded-lg shadow-sm">
@@ -50,7 +27,7 @@
                             >
                             <input
                                 type="text"
-                                name="namadepan"
+                                name="nama_depan"
                                 class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-e-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                                 value="<%= userNamaDepan %>"
                             />
@@ -62,7 +39,7 @@
                               >
                               <input
                                   type="text"
-                                  name="namabelakang"
+                                  name="nama_belakang"
                                   class="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-e-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                                   value="<%= userNamaBelakang %>"
                               />
@@ -91,8 +68,8 @@
                                 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50
                                 disabled:pointer-events-none dark:bg-neutral-900
                                 dark:border-neutral-700 dark:text-neutral-400
-                                dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="
-                                <%=userNo_Hp%>"
+                                dark:placeholder-neutral-500 dark:focus:ring-neutral-600" value="">
+                                <%=userNo_Hp%>
                             </div>
                             <div class="flex rounded-lg shadow-sm">
                                 <span
@@ -107,7 +84,7 @@
                                 disabled:pointer-events-none dark:bg-neutral-900
                                 dark:border-neutral-700 dark:text-neutral-400
                                 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                                value="<%=userAlamat%>"
+                                value="<%=userAlamat%>">
                             </div>
                     </div>
                     <button type="submit">Simpan</button>

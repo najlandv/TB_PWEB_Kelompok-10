@@ -14,6 +14,12 @@ router.get('/home', verifyToken,role('mahasiswa'), function(req, res, next) {
   res.render('mahasiswa/home');
 });
 
+
+router.get('/dashboard', verifyToken, role('mahasiswa'), function(req, res, next) {
+  const title = 'Dashboard';
+  res.render('mahasiswa/dashboard', {title}); 
+});
+
 // router.get('/profil', verifyToken, function (req, res, next) {
   // const userId = req.userId;
 
@@ -28,23 +34,8 @@ router.get('/home', verifyToken,role('mahasiswa'), function(req, res, next) {
 // })
 router.get('/profil', verifyToken,role('mahasiswa'), MhswaController.lihatProfil)
 router.get('/editprofil', verifyToken,role('mahasiswa'), MhswaController.aksesUpdateProfil)
+router.patch('/editprofil', verifyToken,role('mahasiswa'), MhswaController.updateProfilMhs)
 
-
-
-
-// router.get('/editprofil', verifyToken, function (req, res, next) {
-//   const userId = req.userId;
-//   const userRole = req.userRole;
-//   const userEmail = req.userEmail;
-//   const userNama = req.userNama;
-//   const userNo_Identitas = req.userNo_Identitas;
-//   const userNo_Hp = req.userNo_Hp;
-//   const userAlamat = req.userAlamat;
-
-//   res.render('profil/editprofil', {userId, userRole, userEmail, userNama, userNo_Identitas, userNo_Hp, userAlamat});
-// })
-
-// Rute untuk formulir mahasiswa
 
 router.get('/isiformulir', verifyToken,role('mahasiswa'), MhswaController.tampilkanFormulir);
 router.post('/kirimformulir', verifyToken,role('mahasiswa'), MhswaController.kirimFormulir);
