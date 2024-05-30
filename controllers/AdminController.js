@@ -205,7 +205,7 @@ const tolakFormulir = async (req,res)=> {
   try {
     const nomorSurat = req.params.nomorSurat;
     const statusFormulir = await Formulir.findOne({where:{nomorSurat}});
-    statusFormulir.update({acceptByAdmin : 1});
+    statusFormulir.update({acceptByAdmin : 2,acceptByKaprodi : 2});
     res.redirect ('/admin/persetujuan')
   } catch (error) {
     console.error("Error during login: ", error);

@@ -233,19 +233,27 @@ const logout = (req, res) => {
 
 const riwayatPermintaanDisetujui = async (req, res) => {
   try {
-    const riwayatPermintaanDisetujui = await Formulir.findAll({ where: { acceptByAdmin:1}})
+    const riwayatPermintaanDisetujui = await Formulir.findAll({
+      where: {
+          acceptByAdmin: 1,
+          id_user: req.userId
+      }
+  });
     res.render('mahasiswa/permintaandisetujui', {riwayatPermintaanDisetujui})
     
   } catch (error) {
     console.error(error);
     return res.status(500).send('Terjadi Kesalahan Server');
-    
   }
 }
 
 const riwayatPermintaanDitolak = async (req, res) => {
   try {
-    const riwayatPermintaanDitolak = await Formulir.findAll({ where: { acceptByAdmin:2}})
+    const riwayatPermintaanDitolak = await Formulir.findAll({
+       where: {
+         acceptByAdmin:2,
+         id_user: req.userId
+        }})
     res.render('mahasiswa/permintaanditolak', {riwayatPermintaanDitolak})
     
   } catch (error) {

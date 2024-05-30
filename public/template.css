@@ -385,3 +385,15 @@ th {
     font-size: 1.2em;
     color : #F5EFE6;
 }
+
+.custom-confirm {
+    display: flex; 
+    justify-content:space-around; 
+    width: 100%;
+}
+
+.custom-confirm button {
+    width: 90px;
+    height : 40px;
+}
+
