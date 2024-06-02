@@ -4,90 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <% if (locals.title) { %>
-     
         <title>Mahasiswa | <%= title %></title>
     <% } %>
     <link href="/template.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"> 
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"> 
 </head>
-    <body>
-      <header>
-          <!-- Navbar -->
-          <nav class="navbar">
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar">
             <div class="notification">
                 <i class="fa-solid fa-bell fa-lg"></i>
             </div>
             <div class="profile-dropdown">
-              <a href="profil"><img src="/img/profil.png" alt="Foto Profil"></a>
-              <div class="profile-dropdown-content">    
-                  <a href="profil">Profil Saya </a>
-                  <a href = '/auth/ubahPassword'> ubah password</a>
-              </div>
-          </div>
-          </nav>   
-      </header>
-      <aside>
+                <a href="profil"><img src="/img/profil.png" alt="Foto Profil"></a>
+                <div class="profile-dropdown-content">    
+                    <a href="profil">Profil Saya </a>
+                    <a href="/auth/ubahPassword">Ubah Password</a>
+                </div>
+            </div>
+        </nav>   
+    </header>
+    <aside>
         <!-- Sidebar -->
         <div class="sidebar">
             <ul>
                 <li><a href="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="isiformulir"><i class="fas fa-clipboard"></i> Formulir</a></li>
-                <li><a href="riwayatpermintaan"><i class="fas fa-check-circle"></i> Permintaan</a></li>
+                <!-- Ganti ikon permintaan menjadi ikon "envelope" -->
+                <li><a href="riwayatpermintaan"><i class="fas fa-envelope"></i> Permintaan</a></li>
                 <li><a href="permintaandisetujui"><i class="fas fa-check-circle"></i> Diterima</a></li>
                 <li><a href="permintaanditolak"><i class="fas fa-times"></i> Ditolak</a></li>
                 <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
-              </ul>
+            </ul>
             <!-- Logout link at the bottom -->
-            
             <!-- Form logout -->
-    <form id="logout-form" method="POST" action="/auth/logout">
-      <button type="button" class="logout" id="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
-  </form>
+            <form id="logout-form" method="POST" action="/auth/logout">
+                <button type="button" class="logout" id="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </form>
+            <!-- Modal konfirmasi -->
+            <div id="modal" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <i class="fa-solid fa-right-from-bracket" style="color: #333; font-size: 3em; margin-bottom: 10px;"></i>
+                        <h2 id="modal-title">Logout Confirmation</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to logout?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cancel-logout" type="button" class="cancel-button">Cancel</button>
+                        <button id="confirm-logout" type="button" class="confirm-button">Logout</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                // Menampilkan modal saat tombol logout diklik
+                document.getElementById('logout-button').addEventListener('click', function() {
+                    document.getElementById('modal').classList.add('show');
+                });
 
-  <!-- Modal konfirmasi -->
-  <div id="modal" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-      <div class="modal-content">
-          <div class="modal-header">
-            <i class="fa-solid fa-right-from-bracket" style="color: #333;font-size: 3em; margin-bottom: 10px;"; ></i>
-              <h2 id="modal-title">Logout Confirmation</h2>
-          </div>
-          <div class="modal-body">
-              <p>Are you sure you want to logout?</p>
-          </div>
-          <div class="modal-footer">
-              <button id="cancel-logout" type="button" class="cancel-button">Cancel</button>
-              <button id="confirm-logout" type="button" class="confirm-button">Logout</button>
-          </div>
-      </div>
-  </div>
+                // Menangani klik tombol "Logout" di modal
+                document.getElementById('confirm-logout').addEventListener('click', function() {
+                    document.getElementById('logout-form').submit();
+                });
 
-  <script>
-      // Menampilkan modal saat tombol logout diklik
-      document.getElementById('logout-button').addEventListener('click', function() {
-          document.getElementById('modal').classList.add('show');
-      });
-
-      // Menangani klik tombol "Logout" di modal
-      document.getElementById('confirm-logout').addEventListener('click', function() {
-          document.getElementById('logout-form').submit();
-      });
-
-      // Menangani klik tombol "Cancel" di modal
-      document.getElementById('cancel-logout').addEventListener('click', function() {
-          document.getElementById('modal').classList.remove('show');
-      });
-  </script> 
-          </div>
+                // Menangani klik tombol "Cancel" di modal
+                document.getElementById('cancel-logout').addEventListener('click', function() {
+                    document.getElementById('modal').classList.remove('show');
+                });
+            </script> 
+        </div>
     </aside>
     <main>
-      <%- content %>
-  </main>
-  </body>
-  
-    
+        <%- content %>
+    </main>
 </body>
 </html>
