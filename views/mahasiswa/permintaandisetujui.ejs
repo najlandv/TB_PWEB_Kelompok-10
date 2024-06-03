@@ -2,7 +2,7 @@
 <%- include('./template', { content: riwayatPermintaanDisetujuiContent }) %>
 
 <body>
-    <div class="container mx-auto mt-5">
+    <div class="container mx-auto mt-4">
         <h2 class="text-2xl font-semibold mb-4">Riwayat Permintaan Disetujui</h2>
         <div class="overflow-x-auto">
             <table class="w-full border-collapse border border-gray-300">
@@ -24,7 +24,7 @@
                             <td class="border border-gray-300 px-4 py-2"><%= request.penerima %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.instansi %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.judulTA %></td>
-                            <td class="border border-gray-300 px-4 py-2">
+                            <!-- <td class="border border-gray-300 px-4 py-2"> -->
                                 <!-- <a href="/mahasiswa/detailriwayat/<%= request.nomorSurat %>" class="text-blue-500">Detail</a>
                                 <a href="/mahasiswa/updateformulir/<%= request.nomorSurat %>" class="text-blue-500">Edit</a>
                                 <form action="/mahasiswa/editformulir/<%= request.nomorSurat %>/delete" method="post">
@@ -41,11 +41,11 @@
 </body>
 </html>
 <script>
-      function deleteConfirm() {
-    if (window.confirm("apakah yakinaskdjasld")) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+//       function deleteConfirm() {
+//     if (window.confirm("apakah yakin dihapus?")) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   }
 </script>
