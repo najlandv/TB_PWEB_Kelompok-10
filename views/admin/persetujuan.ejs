@@ -22,7 +22,7 @@
                     <td><%= persetujuan.User.no_identitas %></td>
                     <td><%= persetujuan.User.nama_depan%> <%= persetujuan.User.nama_belakang %> </td>
                     <td>
-                        <a class="btn" href="detail"><i class="fa-solid fa-circle-info fa-lg"></i>Detail</a>
+                        <a class="btn" href="detail/<%=persetujuan.nomorSurat %>"><i class="fa-solid fa-circle-info fa-lg"></i>Detail</a>
                     </td>
                     <td>
                         <% if (persetujuan.acceptByAdmin != false) { %>
@@ -127,52 +127,7 @@
             document.getElementById(`cancel-reject${i}`).addEventListener('click', function() {
                 document.getElementById(`modaltolak${i}`).classList.remove('show');
             });
-
-
-        
-        
         }
-
-        // // Menampilkan modal saat tombol terima diklik
-        // document.getElementById('terima-button').addEventListener('click', function() {
-        //     document.getElementById('modalterima').classList.add('show');
-        // });
-  
-        // // Menangani klik tombol "terima" di modal
-        // document.getElementById('confirm-accept').addEventListener('click', function() {
-        //     document.getElementById('accept-form').submit();
-        // });
-  
-        // // Menangani klik tombol "Cancel" di modal
-        // document.getElementById('cancel-accept').addEventListener('click', function() {
-        //     document.getElementById('modalterima').classList.remove('show');
-        // });
-        
-        // // Menampilkan modal saat tombol tolak diklik
-        // document.getElementById('tolak-button').addEventListener('click', function() {
-        //     document.getElementById('modaltolak').classList.add('show');
-        // });
-  
-        // // Menangani klik tombol "tolak" di modal
-        // document.getElementById('confirm-reject').addEventListener('click', function() {
-        //     document.getElementById('reject-form').submit();
-        // });
-  
-        // // Menangani klik tombol "Cancel" di modal
-        // document.getElementById('cancel-reject').addEventListener('click', function() {
-        //     document.getElementById('modaltolak').classList.remove('show');
-        // });
-
-        // function sumbit(diva,malas){
-            
-        // }
-
-        // function bukaModalTolak(){
-        //     document.getElementById('modaltolak').classList.add('show');
-        // }
-        // function bukaModalTerima(){
-        //     document.getElementById('modalterima').classList.remove('show');
-        // }
 
 
     </script> 

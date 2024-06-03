@@ -36,11 +36,11 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.STRING
     },
     acceptByAdmin:{
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       defaultValue: false
     },
     acceptByKaprodi:{
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       defaultValue: false
     },
     judulTA: {
