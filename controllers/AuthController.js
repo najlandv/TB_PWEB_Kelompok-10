@@ -56,7 +56,7 @@ const checklogin = async (req, res) => {
 
 function logout(req, res) {
   res.clearCookie("token");
-  res.redirect("/auth/login");
+  res.redirect("/");
  
 }
 

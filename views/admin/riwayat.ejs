@@ -1,0 +1,41 @@
+<% const riwayatContent = ' ' %>
+<%- include('./template', { content: riwayatContent }) %>
+
+<div class="container">
+    <h1 class="custom-heading">Riwayat Permintaan Surat</h1>
+    <table id="data" data = "<%= JSON.stringify(riwayatSurat) %>">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Tanggal</th>
+                <th>Nama</th>
+                <th>NIM</th>
+                <th>Angkatan</th>
+                <th>Surat</th>
+                <th>Hapus Surat</th>
+                <th>Kirim Lewat Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% riwayatSurat.forEach((riwayat,index=0) => { %>    
+            <tr> 
+                <td><%= index+1 %></td>       
+                <td><%= riwayat.tanggalDisetujui %></td>
+                <td><%= riwayat.User.nama_depan %> <%= riwayat.User.nama_belakang %></td>
+                <td><%= riwayat.User.no_identitas %></td>
+                <td><%= riwayat.User.angkatan %></td>
+                <td>
+                    <button>Lihat Surat</button>
+                </td>
+                <td>
+                    <button>Hapus</button>
+                </td>
+                <td>
+                    <a href="#">Send To Email</a>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+       
+    </table>
+</div>
