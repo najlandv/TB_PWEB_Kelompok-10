@@ -1,9 +1,9 @@
-<% const riwayatPermintaanContent = '' %>
-<%- include('./template', { content: riwayatPermintaanContent }) %>
+<% const riwayatSuratContent = '' %>
+<%- include('./template', { content: riwayatSuratContent }) %>
 
 <body>
-    <div class="container mx-auto mt-5">
-        <h2 class="text-2xl font-semibold mb-4">Riwayat Permintaan</h2>
+    <div class="container mx-auto mt-4">
+        <h2 class="text-2xl font-semibold mb-4">Riwayat Surat</h2>
         <div class="overflow-x-auto">
             <table class="w-full border-collapse border border-gray-300">
                 <thead class="bg-gray-200">
@@ -17,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% riwayatPermintaan.forEach(function(request) { %>
+                    <% riwayatSurat.forEach(function(request) { %>
                         <tr>
                             <td class="border border-gray-300 px-4 py-2"><%= request.nomorSurat %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.tanggalDikirim %></td>
@@ -25,16 +25,12 @@
                             <td class="border border-gray-300 px-4 py-2"><%= request.instansi %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.judulTA %></td>
                             <td class="border border-gray-300 px-4 py-2">
-                                <a href="/mahasiswa/detailriwayat/<%= request.nomorSurat %>" class="text-blue-500"><i class="fas fa-info-circle"></i></a>
-                                <% if (request.acceptByAdmin!=1) { %>
-                                    <a href="/mahasiswa/updateformulir/<%= request.nomorSurat %>" class="text-blue-500"><i class="fas fa-edit"></i></a>
-
-                                    <form action="/mahasiswa/editformulir/<%= request.nomorSurat %>/delete" method="post" class="inline">
-                                        <button onclick="return deleteConfirm()" type="submit" class="text-red-500"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                <% } %>
-                                 
-
+                                
+                                <!-- <a href="/mahasiswa/detailriwayat/<%= request.nomorSurat %>" class="text-blue-500">Detail</a>
+                                <a href="/mahasiswa/updateformulir/<%= request.nomorSurat %>" class="text-blue-500">Edit</a>
+                                <form action="/mahasiswa/editformulir/<%= request.nomorSurat %>/delete" method="post">
+                                    <button onclick="return deleteConfirm() " type="submit">delete</button> -->
+                                </form>
                             </td>
                         </tr>
                     <% }) %>
@@ -46,11 +42,5 @@
 </body>
 </html>
 <script>
-      function deleteConfirm() {
-    if (window.confirm("apakah yakin akan dihapus?")) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+
 </script>

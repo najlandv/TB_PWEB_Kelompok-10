@@ -40,10 +40,15 @@ router.patch('/editprofil', verifyToken,role('mahasiswa'), MhswaController.updat
 router.get('/isiformulir', verifyToken,role('mahasiswa'), MhswaController.tampilkanFormulir);
 router.post('/kirimformulir', verifyToken,role('mahasiswa'), MhswaController.kirimFormulir);
 router.get('/riwayatpermintaan', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaan);
+router.get('/riwayatsurat', verifyToken,role('mahasiswa'), MhswaController.riwayatSurat);
 router.get('/detailriwayat/:id', verifyToken,role('mahasiswa'), MhswaController.detailRiwayat);
 router.get('/updateformulir/:id', verifyToken,role('mahasiswa'), MhswaController.updateFormulir);
 router.post('/editformulir/:id/update', verifyToken,role('mahasiswa'), MhswaController.editFormulir);
 router.post('/editformulir/:id/delete', verifyToken,role('mahasiswa'), MhswaController.deleteFormulir); 
 router.get('/permintaandisetujui', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaanDisetujui);
 router.get('/permintaanditolak', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaanDitolak);
+
+
+router.get('/test', MhswaController.tesHalaman)
+router.post('/test', MhswaController.testpost)
 module.exports = router;

@@ -207,7 +207,26 @@ const riwayatPermintaan = async (req, res) => {
     const penerima = riwayatPermintaan.penerima;
     const instansi = riwayatPermintaan.instansi;
     const judulTA = riwayatPermintaan.judulTA;
-    res.render('mahasiswa/riwayatpermintaan', {riwayatPermintaan, nomorSurat, tanggalDikirim, penerima, instansi, judulTA });
+    const acceptByAdmin = riwayatPermintaan.acceptByAdmin;
+    res.render('mahasiswa/riwayatpermintaan', {riwayatPermintaan, nomorSurat, tanggalDikirim, penerima, instansi, judulTA, acceptByAdmin });
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+    
+  }
+}
+const riwayatSurat = async (req, res) => {
+  try {
+    const riwayatSurat = await Formulir.findAll({ where: { id_user: req.userId } });
+    console.log(riwayatSurat)
+    const nomorSurat = riwayatSurat.nomorSurat;
+    const tanggalDikirim = riwayatSurat.tanggalDikirim;
+    const penerima = riwayatSurat.penerima;
+    const instansi = riwayatSurat.instansi;
+    const judulTA = riwayatSurat.judulTA;
+    const acceptByAdmin = riwayatSurat.acceptByAdmin;
+    res.render('mahasiswa/riwayatsurat', {riwayatSurat, nomorSurat, tanggalDikirim, penerima, instansi, judulTA, acceptByAdmin });
     
   } catch (error) {
     console.error(error);
@@ -263,6 +282,37 @@ const riwayatPermintaanDitolak = async (req, res) => {
   }
 }
 
+const tesHalaman = function (req, res) {
+  res.render('mahasiswa/cobagenerate');
+}
+
+const  { PDFDocument, StandardFonts, rgb }  = require('pdf-lib')
+const testpost =async (req,res) => {
+  try {
+    
+    const pdfDoc = await PDFDocument.create()
+    const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+    
+    const page = pdfDoc.addPage()
+    const { width, height } = page.getSize()
+    const fontSize = 30
+    page.drawText('Creating PDFs in JavaScript is awesome!', {
+      x: 50,
+      y: height - 4 * fontSize,
+      size: fontSize,
+      font: timesRomanFont,
+      color: rgb(0, 0.53, 0.71),
+    })
+
+    const pdfBytes = await pdfDoc.save()
+    res.send(pdfBytes)
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+    
+  }
+}
+
 module.exports = {
   form,
   checklogin,
@@ -279,4 +329,8 @@ module.exports = {
   updateFormulir,
   riwayatPermintaanDisetujui,
   riwayatPermintaanDitolak,
+  riwayatSurat,
+  tesHalaman,
+    testpost,
+    tesHalaman
 };

@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@ironsoftware/ironpdf": "^2024.5.1",
+    "@ironsoftware/ironpdf-engine-windows-x64": "^2024.5.1",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -13,6 +15,7 @@
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.9.8",
+    "pdf-lib": "^1.17.1",
     "preline": "^2.1.0",
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
