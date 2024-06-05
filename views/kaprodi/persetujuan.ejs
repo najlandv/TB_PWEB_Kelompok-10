@@ -1,0 +1,134 @@
+<% const persetujuanContent = '' %>
+<%- include('./template', { content: persetujuanContent }) %>
+
+<div class="container">
+    <h1 class="custom-heading">Permintaan Surat Masuk</h1>
+    <table id="data" data = "<%= JSON.stringify(lihatPersetujuan) %>">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Tanggal</th>
+                <th>NIM</th>
+                <th>Nama Mahasiswa</th>
+                <th>Detail</th>
+                <th>Action</th>
+                <th>Status</th>
+            </tr>
+            <tbody>
+                <% lihatPersetujuan.forEach ( (persetujuan, index=0) => { %>
+                <tr>
+                    <td><%= index+1 %></td>
+                    <td><%= persetujuan.tanggalDikirim %></td>
+                    <td><%= persetujuan.User.no_identitas %></td>
+                    <td><%= persetujuan.User.nama_depan%> <%= persetujuan.User.nama_belakang %> </td>
+                    <td>
+                        <a class="btn" href="detail"><i class="fa-solid fa-circle-info fa-lg"></i>Detail</a>
+                    </td>
+                    <td>
+                        <% if (persetujuan.acceptByKaprodi != false) { %>
+                            <button type ="button" class="btn" id="terima-button<%= index+1 %>"disabled style = "background-color: darkgray;"><i class="fa-solid fa-circle-check fa-lg " ></i>Terima</button>
+                            <button type="button" class="btn" id="tolak-button<%= index+1 %>"disabled style = "background-color: darkgray;" ><i class="fa-solid fa-circle-xmark fa-lg " ></i>Tolak</button>
+                         <% } else { %>
+                          
+                            <button type ="button" class="btn" id="terima-button<%= index+1 %>"><i class="fa-solid fa-circle-check fa-lg"></i>Terima</button>
+                            <button type="button" class="btn" id="tolak-button<%= index+1 %>" ><i class="fa-solid fa-circle-xmark fa-lg "></i>Tolak</button>
+                            <% } %>
+                     
+                    </td>
+                    <td style="font-style: italic; font-size: small; color:#4F6F52; text-decoration: underline;"> 
+                        <% if (persetujuan.acceptByKaprodi==0) { %>
+                     Menunggu
+                     <% } else if (persetujuan.acceptByKaprodi==1) { %>
+  
+                    Diterima
+                    <% } else if (persetujuan.acceptByKaprodi ==2) { %>
+                     Ditolak
+                    <% } else { %>
+                     undefined
+                        <% } %>
+                     
+                </td>
+                </tr>
+                <!-- modal terima -->
+                <div id="modalterima<%= index+1 %>" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="modal-title">Accepted Confirmation</h2>
+                        </div>
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin menerima formulir ini?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="custom-confirm" >
+                                <button id="cancel-accept<%= index+1 %>" type="button" class="cancel-button">Cancel</button>
+                                <form onsubmit="submit(persetujuan.nomorSurat, 'terima')" action="/kaprodi/persetujuan/<%= persetujuan.nomorSurat %>/terima" method="POST">
+                                    <button id="confirm-accept<%= index+1 %>" type="submit" class="confirm-button">Yes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- modal tolak-->
+                <div id="modaltolak<%= index+1 %>" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="modal-title">Rejected Confirmation</h2>
+                        </div>
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin menolak formulir ini?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="custom-confirm">
+                                <button id="cancel-reject<%= index+1 %>" type="button" class="cancel-button">Cancel</button>
+                                <form action="/admin/persetujuan/<%= persetujuan.nomorSurat %>/tolak" method="POST">
+                                    <button id="confirm-reject<%= index+1 %>" type="submit" class="confirm-button">Yes</button>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
+    </div>
+    
+                <% }) %>
+            </tbody>
+        </thead>
+    </table>
+
+
+    <script>
+        
+        let data = document.getElementById('data').getAttribute('data')
+        data = JSON.parse(data)
+
+        console.log(data.length)
+              
+        for(let i=1;i<=data.length;i++ ){
+            // Menampilkan modal saat tombol terima diklik
+            document.getElementById(`terima-button${i}`).addEventListener('click', function() {
+                document.getElementById(`modalterima${i}`).classList.add('show');
+            });
+            // Menangani klik tombol "terima" di modal
+            document.getElementById(`confirm-accept${i}`).addEventListener('click', function() {
+                document.getElementById(`accept-form${i}`).classList.add('show');
+            });
+            // Menangani klik tombol "Cancel" di modal
+            document.getElementById(`cancel-accept${i}`).addEventListener('click', function() {
+                document.getElementById(`modalterima${i}`).classList.remove('show');
+            });
+            // Menampilkan modal saat tombol tolak diklik
+            document.getElementById(`tolak-button${i}`).addEventListener('click', function() {
+                document.getElementById(`modaltolak${i}`).classList.add('show');
+            });
+            // Menangani klik tombol "tolak" di modal
+            document.getElementById(`confirm-reject${i}`).addEventListener('click', function() {
+                document.getElementById(`reject-form${i}`).submit();
+            });
+            // Menangani klik tombol "Cancel" di modal
+            document.getElementById(`cancel-reject${i}`).addEventListener('click', function() {
+                document.getElementById(`modaltolak${i}`).classList.remove('show');
+            });   
+        
+        }
+
+    </script> 
+</div>

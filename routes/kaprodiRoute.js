@@ -32,5 +32,8 @@ router.get('/profile', verifyToken,role('kaprodi'), KaprodiControllerr.lihatProf
 router.get('/editprofil', verifyToken,role('kaprodi'), KaprodiControllerr.aksesUpdateProfil)
 router.patch('/editprofil', verifyToken,role('kaprodi'), KaprodiControllerr.updateProfilMhs)
 router.get('/ubahPassword', verifyToken, passcontroller.formchangepass)
+router.get('/persetujuan', verifyToken,role('kaprodi'), KaprodiControllerr.lihatPersetujuan);
+router.post('/persetujuan/:nomorSurat/terima',verifyToken,role('kaprodi'), KaprodiControllerr.terimaFormulir)
+router.post('/persetujuan/:nomorSurat/tolak',verifyToken,role('kaprodi'), KaprodiControllerr.tolakFormulir)
 module.exports = router;
 
