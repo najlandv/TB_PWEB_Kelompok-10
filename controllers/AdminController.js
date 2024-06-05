@@ -210,6 +210,7 @@ try {
 
 const formulirDiterima = async (req,res) => {
   try {
+    
     const formulirDiterima = await Formulir.findAll({
       include: [{ model: User }],
       where: {
@@ -244,6 +245,45 @@ const formulirDitolak = async (req,res) => {
   }
 }
 
+const hapusSurat = async (req,res) => {
+  try {
+    const nomorSurat = req.params.nomorSurat;
+    const updateSurat = await Formulir.findOne ({where : {nomorSurat}})
+    await updateSurat.destroy();
+
+    return res.redirect('/admin/riwayat');
+    
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+const riwayatSuratByTahun = async(req, res) => {
+  console.log(req.params);
+  try {
+    const angkatan = req.params.angkatan;
+    const riwayatSurat = await Formulir.findAll({
+      include: [{ model: User, where : {angkatan : angkatan}  }],
+      where: {
+        acceptByAdmin: 1,
+        acceptByKaprodi: 1,
+        
+      },
+      
+    })
+    const title = "Riwayat Surat";
+    // console.log(riwayatSurat)
+    res.render("admin/riwayatbytahun", { riwayatSurat: riwayatSurat, title, angkatan });
+    // return res.json(riwayatSurat)
+    
+  } catch (error) {
+    console.error("Error during login: ", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+   
+  } 
+
 
 module.exports = {
   updateProfilMhs,
@@ -256,5 +296,7 @@ module.exports = {
   tolakFormulir,
   riwayatSurat,
   formulirDiterima,
-  formulirDitolak
+  formulirDitolak,
+  hapusSurat,
+  riwayatSuratByTahun
 };

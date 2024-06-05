@@ -51,5 +51,8 @@ router.get("/admintemplate", verifyToken, role("admin"), (req, res) => {
 router.get("/riwayat",verifyToken,role("admin"),AdminControllerr.riwayatSurat);
 router.get("/diterima",verifyToken,role("admin"),AdminControllerr.formulirDiterima);
 router.get("/ditolak",verifyToken,role("admin"),AdminControllerr.formulirDitolak);
+router.post("/deletesurat/:nomorSurat/delete", verifyToken,role("admin"),AdminControllerr.hapusSurat);
+router.get("/riwayat/:angkatan",verifyToken,role("admin"),AdminControllerr.riwayatSuratByTahun);
+
 
 module.exports = router;

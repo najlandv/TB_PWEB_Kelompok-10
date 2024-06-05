@@ -2,16 +2,16 @@
 <%- include('./template', { content: riwayatContent }) %>
 
 <div class="container">
-    <h1 class="custom-heading">Riwayat Permintaan Surat</h1>
+    <h1 class="custom-heading">Riwayat Permintaan Surat Tahun <%= angkatan %>  </h1>
     <div class="dropdown">
         <button class="dropbtn">Angkatan</button>
         <div class="dropdown-content">
-          <a href="/admin/riwayat/2017">2017</a>
-          <a href="/admin/riwayat/2018">2018</a>
-          <a href="/admin/riwayat/2019">2019</a>
-          <a href="/admin/riwayat/2020">2020</a>
-          <a href="/admin/riwayat/2021">2021</a>
-          <a href="/admin/riwayat/2022">2022</a>
+            <a href="/admin/riwayat/2017">2017</a>
+            <a href="/admin/riwayat/2018">2018</a>
+            <a href="/admin/riwayat/2019">2019</a>
+            <a href="/admin/riwayat/2020">2020</a>
+            <a href="/admin/riwayat/2021">2021</a>
+            <a href="/admin/riwayat/2022">2022</a>
         </div>
       </div>
     <table id="data" data = "<%= JSON.stringify(riwayatSurat) %>">
@@ -52,3 +52,8 @@
        
     </table>
 </div>
+
+<script>
+    const url = new URL(window.location.url)
+    console.log(url)
+</script>
