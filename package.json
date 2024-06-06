@@ -5,6 +5,7 @@
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "docxtemplater": "^3.47.4",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
@@ -16,6 +17,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.9.8",
     "pdf-lib": "^1.17.1",
+    "pizzip": "^3.1.7",
     "preline": "^2.1.0",
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
@@ -24,7 +26,7 @@
   "scripts": {
     "start": "node ./bin/www & npx tailwindcss -i ./src/input.css ./public ./public/style.css --watch",
     "dev": "nodemon app.js ",
-    "build": "tailwindcss -i ./src/input.css -o ./public/style.css - watch"
+    "build": "tailwindcss -i ./src/input.css -o ./public/style.css --watch"
   },
   "devDependencies": {
     "daisyui": "^4.10.5",

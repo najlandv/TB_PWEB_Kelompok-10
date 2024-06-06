@@ -2,7 +2,11 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
 const {Formulir}  = require("../models/index");
-const { where } = require("sequelize");
+const fs = require('fs');
+const path = require('path');
+const PizZip = require('pizzip');
+const Docxtemplater = require('docxtemplater');
+
 
 const form = (req, res) => {
   res.render("login", { title: "Express" });
@@ -138,21 +142,69 @@ const tampilkanFormulir = async (req, res) => {
 
 const kirimFormulir = async (req, res) => {
   try {
-    const { penerima, instansi, judulTA } = req.body;
+    const { penerima, instansi, judulTA,namaFile } = req.body;
 
    // Memasukkan data formulir ke dalam basis data menggunakan model Formulir
     await Formulir.create({ 
       penerima: penerima,
       instansi: instansi,
       judulTA: judulTA,
+      // fileName: fileName,
       id_user:req.userId,
       tanggalDikirim: new Date()
     });
 
+    let templatePath = path.resolve("public/template", `template.docx`);
+    const content = fs.readFileSync(templatePath);
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, {
+      paragraphLoop: true,
+      linebreaks: true,
+    });
+
+
+  
+    const formulir = await Formulir.findOne({
+      where: { id_user: req.userId }
+    }); 
+    
+
+
+    doc.setData({
+      nomorSurat: formulir.nomorSurat,
+      penerima: penerima,
+      instansi: instansi,
+      nama: "ndv",
+      no_identitas: "2211521006",
+      judulTA: "bquwbduiqbwdibb",
+
+    });
+
+
+
+    doc.render();
+
+    const buf = doc.getZip().generate({
+      type: "nodebuffer",
+      compression: "DEFLATE",
+    });
+
+    const fileName = new Date().getTime() + '-' +`${namaFile}.docx`;
+    const userDir = path.resolve("public", "data", `surat`);
+    const outputPath = path.join(userDir, fileName);
+
+    if (!fs.existsSync(userDir)) {
+      fs.mkdirSync(userDir, { recursive: true });
+    }
+
+    fs.writeFileSync(outputPath, buf);
+
+
+
     return res.render('mahasiswa/isiformulir', { successMessage: "Formulir berhasil dikirim!" });
   } catch (error) {
     console.error(error);
-    return res.status(500).send('Terjadi Kesalahan Server');
+    return res.status(500).send('Terjadi Kesalahan Server'+error.message);
   }
 };
 
