@@ -1,4 +1,4 @@
-<% const persetujuanContent = '' %>
+<% const persetujuanContent = 'xa' %>
 <%- include('./template', { content: persetujuanContent }) %>
 
 <div class="container">
@@ -80,7 +80,7 @@
                         <div class="modal-footer">
                             <div class="custom-confirm">
                                 <button id="cancel-reject<%= index+1 %>" type="button" class="cancel-button">Cancel</button>
-                                <form action="/admin/persetujuan/<%= persetujuan.nomorSurat %>/tolak" method="POST">
+                                <form action="/kaprodi/persetujuan/<%= persetujuan.nomorSurat %>/tolak" method="POST">
                                     <button id="confirm-reject<%= index+1 %>" type="submit" class="confirm-button">Yes</button>
                                 </form>
                             </div>

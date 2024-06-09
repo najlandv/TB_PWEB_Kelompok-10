@@ -81,6 +81,9 @@ const aksesUpdateProfil = async (req, res) => {
 const lihatPersetujuan = async (req, res) => {
   try {
     const lihatPersetujuan = await Formulir.findAll({
+      where: {
+        acceptByAdmin: 1
+      },
       include:[{model:User}]
     });
     console.log(lihatPersetujuan)
@@ -115,15 +118,20 @@ const terimaFormulir = async (req,res)=> {
   }
 
 }
-
-const tolakFormulir = async (req,res)=> {
+const tolakFormulir = async (req, res) => {
   try {
-    const nomorSurat = req.params.nomorSurat;
-    const statusFormulir = await Formulir.findOne({where:{nomorSurat}});
-    statusFormulir.update({acceptByAdmin : 2,acceptByKaprodi : 2});
-    res.redirect ('/kaprodi/persetujuan')
+    const { nomorSurat } = req.params;
+    const statusFormulir = await Formulir.findOne({ where: { nomorSurat } });
+    
+    if (!statusFormulir) {
+      return res.status(404).json({ message: "Formulir not found" });
+    }
+
+    await statusFormulir.update({ acceptByAdmin: 2, acceptByKaprodi: 2 });
+
+    res.redirect('/kaprodi/persetujuan');
   } catch (error) {
-    console.error("Error during login: ", error);
+    console.error("Error during rejection: ", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
