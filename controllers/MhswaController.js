@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { User } = require("../models/index");
-const {Formulir}  = require("../models/index");
+const { User, Formulir, Notifikasi } = require("../models/index");
 const fs = require('fs');
 const path = require('path');
 const PizZip = require('pizzip');
@@ -142,19 +141,18 @@ const tampilkanFormulir = async (req, res) => {
 
 const kirimFormulir = async (req, res) => {
   try {
-    const { penerima, instansi, judulTA,namaFile } = req.body;
+    const { penerima, instansi, judulTA, namaFile } = req.body;
 
-   // Memasukkan data formulir ke dalam basis data menggunakan model Formulir
-    await Formulir.create({ 
-      penerima: penerima,
-      instansi: instansi,
-      judulTA: judulTA,
-      // fileName: fileName,
-      id_user:req.userId,
+    // Insert form data into the database using the Formulir model
+    const newFormulir = await Formulir.create({
+      penerima,
+      instansi,
+      judulTA,
+      id_user: req.userId,
       tanggalDikirim: new Date()
     });
 
-    let templatePath = path.resolve("public/template", `template.docx`);
+    const templatePath = path.resolve('public/template', 'template.docx');
     const content = fs.readFileSync(templatePath);
     const zip = new PizZip(content);
     const doc = new Docxtemplater(zip, {
@@ -162,35 +160,28 @@ const kirimFormulir = async (req, res) => {
       linebreaks: true,
     });
 
-
-  
     const formulir = await Formulir.findOne({
-      where: { id_user: req.userId }
-    }); 
-    
-
+      where: { id_user: req.userId },
+    });
 
     doc.setData({
       nomorSurat: formulir.nomorSurat,
-      penerima: penerima,
-      instansi: instansi,
+      penerima,
+      instansi,
       nama: "ndv",
       no_identitas: "2211521006",
-      judulTA: "bquwbduiqbwdibb",
-
+      judulTA,
     });
-
-
 
     doc.render();
 
     const buf = doc.getZip().generate({
-      type: "nodebuffer",
-      compression: "DEFLATE",
+      type: 'nodebuffer',
+      compression: 'DEFLATE',
     });
 
-    const fileName = new Date().getTime() + '-' +`${namaFile}.docx`;
-    const userDir = path.resolve("public", "data", `surat`);
+    const fileName = `${Date.now()}-${namaFile}.docx`;
+    const userDir = path.resolve('public', 'data', 'surat');
     const outputPath = path.join(userDir, fileName);
 
     if (!fs.existsSync(userDir)) {
@@ -199,12 +190,30 @@ const kirimFormulir = async (req, res) => {
 
     fs.writeFileSync(outputPath, buf);
 
+    const namaPengirim = await User.findByPk(req.userId);
 
+    const newNotification = await Notifikasi.create({
+      nomorSurat: newFormulir.nomorSurat,
+      tanggal: new Date(),
+      isRead: false,
+    });
+    console.log(newNotification);
 
-    return res.render('mahasiswa/isiformulir', { successMessage: "Formulir berhasil dikirim!" });
+    const io = req.app.get('io');
+    io.to('admin').emit('new_formulir', {
+      message: 'Pengajuan permintaan formulir baru!',
+      formulir: {
+        namaPengirim: namaPengirim.nama_depan,
+        nim: namaPengirim.no_identitas,
+        tanggalDikirim: new Date(),
+      },
+      
+    });
+
+    return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!' });
   } catch (error) {
-    console.error(error);
-    return res.status(500).send('Terjadi Kesalahan Server'+error.message);
+    console.error('Terjadi Kesalahan Server:', error);
+    return res.status(500).send('Terjadi Kesalahan Server: ' + error.message);
   }
 };
 
@@ -338,7 +347,9 @@ const tesHalaman = function (req, res) {
   res.render('mahasiswa/cobagenerate');
 }
 
-const  { PDFDocument, StandardFonts, rgb }  = require('pdf-lib')
+const  { PDFDocument, StandardFonts, rgb }  = require('pdf-lib');
+const { DATE } = require("sequelize");
+const { log } = require("console");
 const testpost =async (req,res) => {
   try {
     
@@ -364,6 +375,8 @@ const testpost =async (req,res) => {
     
   }
 }
+
+
 
 module.exports = {
   form,

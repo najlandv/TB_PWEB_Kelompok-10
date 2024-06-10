@@ -1,4 +1,3 @@
-/* profile.css */
 
 /* Resetting default styles */
 * {
@@ -82,10 +81,13 @@ body {
 .sidebar ul {
     list-style: none;
     padding: 0;
+    
+
 }
 
 .sidebar ul li {
     margin-bottom: 15px;
+    transition: all 0.3s ease;
 }
 
 .sidebar ul li a {
@@ -96,17 +98,33 @@ body {
     align-items: center;
     padding: 8px 0;
     transition: all 0.3s ease;
+    
 }
 
 .sidebar ul li a i {
     margin-right: 10px;
+    padding-left: 10px;
 }
 
-.sidebar ul li a:hover {
-    background-color: #134025; /* Darker green on hover */
+/* .sidebar ul li a:hover,  {
+    background-color: #134025; 
+    border-radius: 5px;
+} */
+
+.sidebar ul li:hover, .sidebar ul li.active {
+    background-color: #ffffff; /* White background */
+    color: #4F6F52; /* Dark green text */
     border-radius: 5px;
 }
 
+.sidebar ul li:hover a, .sidebar ul li.active a {
+    color: #4F6F52; /* Dark green text */
+}
+
+/* Specific hover state for links to override default color */
+.sidebar ul li a:hover {
+    background-color: transparent; /* Ensure link itself does not change background */
+}
 /* Logout link styling */
 .logout {
     position: absolute;
@@ -421,36 +439,70 @@ th {
 }
 
 .dropdown {
-    position: relative;
     display: inline-block;
+    padding-bottom: 10px;
   }
   
-  .dropbtn {
-    background-color: #3498db;
+.dropbtn {
+    background-color: #4F6F52;
     color: white;
-    padding: 16px;
+    padding: 10px;
     font-size: 16px;
     border: none;
+    border-radius: 5px; /* Rounded corners */
     cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    
   }
-  
+  .dropbtn:hover {
+    background-color: #678f6b; /* Darker green on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Box shadow on hover */
+}
   .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
+    background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
   }
   
   .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+    color: #4F6F52; /* Green text */
+    padding: 12px 16px; /* Padding */
+    text-decoration: none; /* No underline */
+    display: block; /* Block display */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
   }
-  
-  .dropdown:hover .dropdown-content {
+
+  /* Dropdown content links hover effect */
+.dropdown-content a:hover {
+    background-color: #678f6b; /* Green background on hover */
+    color: white; /* White text on hover */
+}
+.dropdown:hover .dropdown-content {
     display: block;
   }
 
+.notification-icon {
+    background-color: transparent;
+    padding-right: 30px;
+}
+
+  /* Styling untuk notifikasi */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    z-index: 1000;
+  }
+  
+.notification {
+    background-color: #f0f8ff;
+    border: 1px solid #dcdcdc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
