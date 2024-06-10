@@ -19,7 +19,7 @@
       <header>
           <!-- Navbar -->
           <nav class="navbar">
-            <div class="notification">
+            <div class="notification-icon">
                 <i class="fa-solid fa-bell fa-lg"></i>
             </div>
             <div class="profile-dropdown">
@@ -34,12 +34,12 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <ul>
-              <li><a href="/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-              <li><a href="/admin/persetujuan"><i class="fas fa-check-circle"></i> Persetujuan</a></li>
-              <li><a href="/admin/diterima"><i class="fa-regular fa-circle-check"></i>Diterima</a></li>
-              <li><a href="/admin/Ditolak"><i class="fa-regular fa-circle-xmark"></i>Ditolak</a></li>
-              <li><a href="/admin/riwayat"><i class="fas fa-history"></i> Riwayat</a></li>
-              <li><a href="/admin/akun"><i class="fa-solid fa-user"></i> Akun</a></li>
+              <li class="sidebar-item"><a href="/admin/dashboard" ><i class="fas fa-home"></i> Dashboard</a></li>
+              <li class="sidebar-item"><a href="/admin/persetujuan" ><i class="fas fa-check-circle"></i> Persetujuan</a></li>
+              <li class="sidebar-item"><a href="/admin/diterima" ><i class="fa-regular fa-circle-check"></i>Diterima</a></li>
+              <li class="sidebar-item"><a href="/admin/Ditolak" ><i class="fa-regular fa-circle-xmark"></i>Ditolak</a></li>
+              <li class="sidebar-item"><a href="/admin/riwayat" ><i class="fas fa-history"></i> Riwayat</a></li>
+              <li class="sidebar-item"><a href="/admin/akun" ><i class="fa-solid fa-user"></i> Akun</a></li>
             </ul>
 
             <!-- Form logout -->
@@ -64,6 +64,8 @@
       </div>
   </div>
 
+  <script src="/socket.io/socket.io.js"></script>
+
   <script>
       // Menampilkan modal saat tombol logout diklik
       document.getElementById('logout-button').addEventListener('click', function() {
@@ -79,14 +81,31 @@
       document.getElementById('cancel-logout').addEventListener('click', function() {
           document.getElementById('modal').classList.remove('show');
       });
+
+      document.querySelectorAll('.sidebar-item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.sidebar-item').forEach(function(item) {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+
+
   </script> 
           </div>
     </aside>
     <main>
       <%- content %>
   </main>
+      <!-- Kontainer untuk notifikasi -->
+      <div id="notification-container" class="notification-container"></div>
+
+      <!-- Menyertakan script untuk socket.io -->
+      <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+      <!-- Menyertakan script notifikasi -->
+      <script src="/notif.js"></script>
   </body>
-  
-    
-</body>
+ 
+ 
 </html>

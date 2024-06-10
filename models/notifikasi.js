@@ -13,10 +13,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Notifikasi.init({
-    nomorSurat: {
-      type :DataTypes.INTEGER,
+    id : {
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
+    },
+    nomorSurat: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Formulir',
+        key: 'nomorSurat'
+      }
     },
     tanggal: {
       type : DataTypes.DATE

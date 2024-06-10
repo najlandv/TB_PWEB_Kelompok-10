@@ -36,24 +36,57 @@
                 <td><%= riwayat.User.no_identitas %></td>
                 <td><%= riwayat.User.angkatan %></td>
                 <td>
-                    <button>Lihat Surat</button>
+                    <button class="btn">Lihat Surat</button>
                 </td>
                 <td>
-                    <form action="/admin/deletesurat/<%= riwayat.nomorSurat %>/delete" method="post" class="inline">
-                        <button onclick="return deleteConfirm()" type="submit" class="text-red-500"><i class="fas fa-trash"></i>Hapus</button>
-                    </form>
+                    <button id="hapus-button<%= index+1 %>" type="button" class="btn" ><i class="fas fa-trash"></i>Hapus</button>
                 </td>
                 <td>
                     <a href="#">Send To Email</a>
                 </td>
             </tr>
+            <!-- modal hapus -->
+            <div id="modalhapus<%= index+1 %>" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 id="modal-title">Accepted Confirmation</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p>Apakah Anda yakin menghapus surat ini?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="custom-confirm" >
+                            <button id="cancel-accept<%= index+1 %>" type="button" class="cancel-button">Cancel</button>
+                            <form action="/admin/deletesurat/<%= riwayat.nomorSurat %>/delete" method="POST">
+                                <button id="confirm-accept<%= index+1 %>" type="submit" class="confirm-button">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <% }) %>
         </tbody>
        
     </table>
-</div>
+    <script>
+        let data = document.getElementById('data').getAttribute('data')
+        data = JSON.parse(data)
 
-<script>
-    const url = new URL(window.location.url)
-    console.log(url)
-</script>
+        console.log(data.length)
+              
+        for(let i=1;i<=data.length;i++ ){
+        // Menampilkan modal saat tombol terima diklik
+        document.getElementById(`hapus-button${i}`).addEventListener('click', function() {
+                document.getElementById(`modalhapus${i}`).classList.add('show');
+            });
+            // Menangani klik tombol "terima" di modal
+            document.getElementById(`confirm-accept${i}`).addEventListener('click', function() {
+                document.getElementById(`accept-form${i}`).classList.add('show');
+            });
+            // Menangani klik tombol "Cancel" di modal
+            document.getElementById(`cancel-accept${i}`).addEventListener('click', function() {
+                document.getElementById(`modalhapus${i}`).classList.remove('show');
+            });
+        }
+    </script>
+</div>

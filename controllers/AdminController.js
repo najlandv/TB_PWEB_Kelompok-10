@@ -1,16 +1,15 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { User } = require("../models/index");
-const { Formulir } = require("../models/index");
+const { User, Formulir, Notifikasi } = require("../models/index");
 const { where } = require("sequelize");
 
 
 const lihatProfil = async (req, res) => {
   try {
-    console.log(req.userId);
+    // console.log(req.userId);
     // res.json(req.user)
     const lihatProfil = await User.findByPk(req.userId);
-    console.log(lihatProfil);
+    // console.log(lihatProfil);
     const userId = lihatProfil.id;
     const userRole = lihatProfil.role;
     const userEmail = lihatProfil.email;
@@ -97,7 +96,7 @@ const lihatPersetujuan = async (req, res) => {
     const lihatPersetujuan = await Formulir.findAll({
       include: [{ model: User }],
     });
-    console.log(lihatPersetujuan);
+    // console.log(lihatPersetujuan);
     // return res.json(lihatPersetujuan)
     const nomorSurat = lihatPersetujuan.nomorSurat;
     const tanggalDikirim = lihatPersetujuan.tanggalDikirim;
@@ -108,7 +107,7 @@ const lihatPersetujuan = async (req, res) => {
     const acceptByKaprodi = lihatPersetujuan.acceptByKaprodi;
     const judulTA = lihatPersetujuan.judulTA;
     const title = "Persetujuan";
-    console.log(lihatPersetujuan);
+    // console.log(lihatPersetujuan);
 
     res.render("admin/persetujuan", {
       lihatPersetujuan,
@@ -131,7 +130,7 @@ const lihatPersetujuan = async (req, res) => {
 const lihatAkun = async (req, res) => {
   try {
     const lihatAkun = await User.findAll({});
-    console.log(lihatAkun);
+    // console.log(lihatAkun);
     // return res.json(lihatAkun);
 
     const title = "Akun";
@@ -150,7 +149,7 @@ const lihatDetail = async (req, res) => {
       where: { nomorSurat },
       include: [{ model: User }],
     });
-    console.log(lihatDetail);
+    // console.log(lihatDetail);
     // return res.json(lihatDetail)
 
     const title = "Detail Formulir";
@@ -197,7 +196,7 @@ try {
     
   })
   const title = "Riwayat Surat";
-  console.log(riwayatSurat)
+  // console.log(riwayatSurat)
   res.render("admin/riwayat", { riwayatSurat: riwayatSurat, title });
   // return res.json(riwayatSurat)
   
@@ -248,8 +247,9 @@ const formulirDitolak = async (req,res) => {
 const hapusSurat = async (req,res) => {
   try {
     const nomorSurat = req.params.nomorSurat;
-    const updateSurat = await Formulir.findOne ({where : {nomorSurat}})
-    await updateSurat.destroy();
+    const hapusSurat = await Formulir.findOne ({where : {nomorSurat}});
+    await Notifikasi.destroy({ where: { nomorSurat } });
+    await hapusSurat.destroy();
 
     return res.redirect('/admin/riwayat');
     
