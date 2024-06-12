@@ -484,18 +484,72 @@ th {
     display: block;
   }
 
-.notification-icon {
+  .notification-icon {
     background-color: transparent;
     padding-right: 30px;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
 }
 
-  /* Styling untuk notifikasi */
+.notification-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #fff;
+    min-width: 350px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    overflow-y: auto;
+    text-align: left;
+    padding: 0;
+}
+
+.notification-header {
+    background-color:#4F6F52;
+    height: 50px;
+}
+
+.notification-header h3 {
+    padding-left:20px ;
+    padding-top: 10px;
+}
+
+.notification-content {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: black;
+}
+
+.notification-content li {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.notification-content li:last-child {
+    border-bottom: none;
+}
+
+.notification-content li:hover {
+    background-color: #f1f1f1;
+}
+
+.notification-icon:hover .notification-dropdown-content {
+    display: block;
+    overflow-y: auto;
+}
+
+/* Styling untuk notifikasi */
 .notification-container {
     position: fixed;
     top: 20px;
     right: 20px;
     width: 300px;
     z-index: 1000;
+    
   }
   
 .notification {

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User, Formulir, Notifikasi } = require("../models/index");
 const { where } = require("sequelize");
+var nodemailer = require('nodemailer');
 
 
 const lihatProfil = async (req, res) => {
@@ -268,7 +269,6 @@ const riwayatSuratByTahun = async(req, res) => {
       where: {
         acceptByAdmin: 1,
         acceptByKaprodi: 1,
-        
       },
       
     })
@@ -284,6 +284,50 @@ const riwayatSuratByTahun = async(req, res) => {
    
   } 
 
+const email = async(req,res) => {
+  try {
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'Admiin.siunand@gmail.com',
+        pass: 'ltdk zinr gwtq wotu'
+      }
+    });
+    
+    var mailOptions = {
+      from: 'Admiin.siunand@gmail.com',
+      to: '2211521004_nadia@student.unand.ac.id',
+      subject: 'Surat Permintaan Data',
+      text: 'Meisa gilo bana bana bana'
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+    res.json({succes: "berhasil mengirim surat"})
+    
+  } catch (error) {
+    console.error("Error during login: ", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+const lihatNotifikasi = async (req,res) => {
+  console.log(lihatNotifikasi)
+  try {
+    const lihatNotifikasi = await Notifikasi.findAll({
+      include:[{model: Formulir}]
+    });
+    res.render("admin/template",{notifikasi : lihatNotifikasi })
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+}
 
 module.exports = {
   updateProfilMhs,
@@ -298,5 +342,7 @@ module.exports = {
   formulirDiterima,
   formulirDitolak,
   hapusSurat,
-  riwayatSuratByTahun
+  riwayatSuratByTahun,
+  email,
+  lihatNotifikasi
 };

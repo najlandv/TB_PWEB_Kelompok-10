@@ -12,6 +12,7 @@
             <th>Nama Mahasiswa</th>
             <th>Detail</th>
             <th>Status</th>
+            <th>Surat</th>
         </tr>
         <tbody>
             <% formulirDiterima.forEach((diterima, index=0) => { %>
@@ -24,7 +25,9 @@
                     <a class="btn" href="detail/<%=diterima.nomorSurat %>"><i class="fa-solid fa-circle-info fa-lg"></i>Detail</a>
                 </td>
                 <td style="font-style: italic; font-size: small; color:#4F6F52; text-decoration: underline;">Diterima</td>
-
+                <td>
+                    <button class="btn"><i class="fa-solid fa-eye"></i>Lihat Surat</button>
+                </td>
              </tr>
             <% }) %>
         </tbody>
