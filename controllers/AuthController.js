@@ -8,7 +8,7 @@ const form = (req, res) => {
 };
 
 const checklogin = async (req, res) => {
-  console.log("Attempting to log in:", req.body);
+  // console.log("Attempting to log in:", req.body);
   const { email, password } = req.body;
   try {
     // Menggunakan nama variabel lain untuk menyimpan hasil pencarian user
@@ -38,6 +38,10 @@ const checklogin = async (req, res) => {
 
     // Redirect ke halaman sesuai dengan peran pengguna
     if (user.role == "mahasiswa"){
+      const io = req.app.get('io');
+      const id = user.id
+      console.log(id);
+      io.emit('new-mahasiswa-add', {id});
       return res.redirect("/mahasiswa/dashboard");
     } else if (user.role == "kaprodi"){
       return res.redirect("/kaprodi/dashboard");
@@ -57,10 +61,7 @@ const checklogin = async (req, res) => {
 function logout(req, res) {
   res.clearCookie("token");
   res.redirect("/");
- 
 }
-
-
 
 module.exports = {
   form,

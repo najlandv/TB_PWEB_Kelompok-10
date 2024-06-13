@@ -1,5 +1,6 @@
 <% const riwayatPermintaanContent = '' %>
-<%- include('./template', { content: riwayatPermintaanContent }) %>
+<% const id = user_id %>
+<%- include('./template', { content: riwayatPermintaanContent, user_id: user_id  }) %>
 
 <body>
     <div class="container mx-auto mt-5">

@@ -4,8 +4,7 @@ let activeUsers = [];
 
 socket.on('connect', () => {
   console.log('Connected to server');
-  socket.emit('joinRoom', 'admin');
-  socket.emit()
+  socket.emit('joinRoom', 'mahasiswa');
 });
 
 socket.on('new_formulir', (data) => {

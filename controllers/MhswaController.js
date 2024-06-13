@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
+const libre = require("libreoffice-convert");
 
 
 const form = (req, res) => {
@@ -35,7 +36,7 @@ const checklogin = async (req, res) => {
     res.cookie("token", token, { httpOnly: true });
 
     if (user.role == "mahasiswa") {
-      return res.redirect("/home");
+      return res.redirect("/dashboard");
     } else if (user.role == "kaprodi") {
       return res.redirect("/kaprodi/dashboard");
     } else if (user.role == "admin") {
@@ -66,7 +67,10 @@ const lihatProfil = async (req, res) => {
       userNo_Identitas: lihatProfil.no_identitas,
       userNo_Hp: lihatProfil.no_hp,
       userAlamat: lihatProfil.alamat,
+      user_id: req.userId  // Add this line
+      
     };
+    const user_id = req.userId;
 
     res.render('profil/profil', userData);
   } catch (error) {
@@ -77,7 +81,7 @@ const lihatProfil = async (req, res) => {
 
 const updateProfilMhs = async (req, res) => {
   try {
-    const { email, nama_depan, nama_belakang, no_identitas, no_hp, alamat } = req.body;
+    const { email, nama_depan, nama_belakang, no_identitas, no_hp, alamat} = req.body;
 
     // const user = await User.findOne({ where:{ id:req.userId}});
     // user.update({ email, nama_depan, nama_belakang, no_hp, alamat });
@@ -119,6 +123,8 @@ const aksesUpdateProfil = async (req, res) => {
       userNo_Identitas: lihatProfil.no_identitas,
       userNo_Hp: lihatProfil.no_hp,
       userAlamat: lihatProfil.alamat,
+      user_id: req.userId  // Add this line
+
     };
 
     res.render('profil/editprofil', userData);
@@ -130,8 +136,8 @@ const aksesUpdateProfil = async (req, res) => {
 
 const tampilkanFormulir = async (req, res) => {
   try {
-
-    res.render('mahasiswa/isiformulir');
+    const user_id = req.userId;
+    res.render('mahasiswa/isiformulir', {user_id});
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -141,7 +147,7 @@ const tampilkanFormulir = async (req, res) => {
 
 const kirimFormulir = async (req, res) => {
   try {
-    const { penerima, instansi, judulTA, namaFile } = req.body;
+    const { penerima, instansi, judulTA, namaFile, user_id} = req.body;
 
     // Insert form data into the database using the Formulir model
     const newFormulir = await Formulir.create({
@@ -161,34 +167,61 @@ const kirimFormulir = async (req, res) => {
     });
 
     const formulir = await Formulir.findOne({
+      include: [{ model: User }],
       where: { id_user: req.userId },
     });
+    
 
     doc.setData({
       nomorSurat: formulir.nomorSurat,
-      penerima,
-      instansi,
-      nama: "ndv",
-      no_identitas: "2211521006",
+      penerima: penerima,
+      instansi: instansi,
+      nama: formulir.User.nama_depan + formulir.User.nama_belakang,
+      no_identitas: formulir.User.no_identitas,
       judulTA,
     });
 
     doc.render();
 
     const buf = doc.getZip().generate({
-      type: 'nodebuffer',
-      compression: 'DEFLATE',
+      type: "nodebuffer",
+      compression: "DEFLATE",
     });
 
-    const fileName = `${Date.now()}-${namaFile}.docx`;
-    const userDir = path.resolve('public', 'data', 'surat');
+    const fileName = new Date().getTime() + '-' +`${namaFile}.docx`;
+    const userDir = path.resolve("public", "data", `surat`);
     const outputPath = path.join(userDir, fileName);
 
     if (!fs.existsSync(userDir)) {
       fs.mkdirSync(userDir, { recursive: true });
     }
+    const pdfName = new Date().getTime() + '-' +`${namaFile}.pdf`;
 
     fs.writeFileSync(outputPath, buf);
+
+    const pdfDir = path.resolve("public", "data", "surat");
+    const pdfPath = path.join(pdfDir, pdfName);
+
+    if (!fs.existsSync(pdfDir)) {
+      fs.mkdirSync(pdfDir, { recursive: true });
+    }
+
+    libre.convert(
+      fs.readFileSync(outputPath),
+      "pdf",
+      undefined,
+      async (err, result) => {
+        if (err) {
+          console.error("Error converting DOCX to PDF:", err);
+          return res.status(500).send("Error converting DOCX to PDF");
+        }
+
+        fs.writeFileSync(pdfPath, result);
+        console.log("File converted successfully");
+
+        await fs.promises.unlink(outputPath);
+    })
+
 
     const namaPengirim = await User.findByPk(req.userId);
 
@@ -210,7 +243,7 @@ const kirimFormulir = async (req, res) => {
       
     });
 
-    return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!' });
+    return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!', user_id });
   } catch (error) {
     console.error('Terjadi Kesalahan Server:', error);
     return res.status(500).send('Terjadi Kesalahan Server: ' + error.message);
@@ -221,9 +254,11 @@ const editFormulir = async (req, res) => {
   try {
     const nomorSurat = req.params.id;
     const updateFormulir = await Formulir.findOne({ where: { nomorSurat }})
+    const user_id = req.userId;
     const {penerima,instansi,judulTA} =  req.body
     
-    await updateFormulir.update({penerima,instansi,judulTA});
+    await updateFormulir.update({penerima,instansi,judulTA, user_id});
+
 
     return res.redirect('/mahasiswa/riwayatpermintaan')
   } catch (error) {
@@ -250,8 +285,9 @@ const updateFormulir = async (req, res) => {
   try {
 const nomorSurat = req.params.id;
 const updateFormulir = await Formulir.findOne({ where: { nomorSurat }})
+const user_id = req.userId;
 
-res.render('mahasiswa/editformulir', { requestDetail: updateFormulir });
+res.render('mahasiswa/editformulir', { requestDetail: updateFormulir, user_id });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Terjadi Kesalahan Server');
@@ -269,7 +305,8 @@ const riwayatPermintaan = async (req, res) => {
     const instansi = riwayatPermintaan.instansi;
     const judulTA = riwayatPermintaan.judulTA;
     const acceptByAdmin = riwayatPermintaan.acceptByAdmin;
-    res.render('mahasiswa/riwayatpermintaan', {riwayatPermintaan, nomorSurat, tanggalDikirim, penerima, instansi, judulTA, acceptByAdmin });
+    const user_id = req.userId;
+    res.render('mahasiswa/riwayatpermintaan', {riwayatPermintaan, nomorSurat, tanggalDikirim, penerima, instansi, judulTA, acceptByAdmin,user_id });
     
   } catch (error) {
     console.error(error);
@@ -287,7 +324,8 @@ const riwayatSurat = async (req, res) => {
     const instansi = riwayatSurat.instansi;
     const judulTA = riwayatSurat.judulTA;
     const acceptByAdmin = riwayatSurat.acceptByAdmin;
-    res.render('mahasiswa/riwayatsurat', {riwayatSurat, nomorSurat, tanggalDikirim, penerima, instansi, judulTA, acceptByAdmin });
+    const user_id = req.userId;
+    res.render('mahasiswa/riwayatsurat', {riwayatSurat, nomorSurat, tanggalDikirim, penerima, instansi, judulTA, acceptByAdmin, user_id });
     
   } catch (error) {
     console.error(error);
@@ -298,9 +336,13 @@ const riwayatSurat = async (req, res) => {
 
 const detailRiwayat = async (req, res) => {
   try {
-const nomorSurat = req.params.id;
+const nomorSurat = 
+req.params.id;
 const detailRiwayat = await Formulir.findOne({ where: { nomorSurat }})
-res.render('mahasiswa/detailriwayat', { requestDetail: detailRiwayat });
+const user_id = req.userId;
+
+
+res.render('mahasiswa/detailriwayat', { requestDetail: detailRiwayat, user_id  });
   } catch (error) {
     console.error(error);
     return res.status(500).send('Terjadi Kesalahan Server');
@@ -319,7 +361,8 @@ const riwayatPermintaanDisetujui = async (req, res) => {
           id_user: req.userId
       }
   });
-    res.render('mahasiswa/permintaandisetujui', {riwayatPermintaanDisetujui})
+  const user_id = req.userId;
+    res.render('mahasiswa/permintaandisetujui', {riwayatPermintaanDisetujui, user_id})
     
   } catch (error) {
     console.error(error);
@@ -334,7 +377,8 @@ const riwayatPermintaanDitolak = async (req, res) => {
          acceptByAdmin:2,
          id_user: req.userId
         }})
-    res.render('mahasiswa/permintaanditolak', {riwayatPermintaanDitolak})
+        const user_id = req.userId;
+    res.render('mahasiswa/permintaanditolak', {riwayatPermintaanDitolak, user_id})
     
   } catch (error) {
     console.error(error);
