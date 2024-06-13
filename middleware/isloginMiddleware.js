@@ -25,7 +25,7 @@ function isLogin(req, res, next) {
 
     });
     if (req.userRole == "mahasiswa") {
-      return res.redirect("/home");
+      return res.redirect("/mahasiswa/dashboard");
     } else if (req.userRole == "admin") {
       return res.redirect("/admin/dashboard");
     } else if (req.userRole == "kaprodi") {

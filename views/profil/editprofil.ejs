@@ -1,5 +1,6 @@
 <% const editProfilContent = '' %>
-<%- include('../mahasiswa/template', { content: editProfilContent }) %>
+<% const id = user_id %>
+<%- include('../mahasiswa/template', { content: editProfilContent, user_id: user_id }) %>
 
     <!-- Profile Content -->
         <div class="container">

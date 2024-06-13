@@ -39,17 +39,41 @@ app.get('/', (req, res) => {
   res.render('login');
 });
 
+
+let activeUsers = [];
+
 io.on('connection', (socket) => {
   console.log('New client connected');
+  
   socket.on('joinRoom', (role) => {
-    if (role === 'admin') {
-      socket.join('admin');
-    }
+      if (role === 'admin') {
+        socket.join('admin');
+      } else if (role === 'mahasiswa') {
+        socket.join('mahasiswa');
+        console.log('ini mhs');
+      } else if (role === 'kaprodi') {
+        socket.join('kaprodi');
+      }
   });
+    
+  socket.on("new-mahasiswa-add", (user_id) => {
+    // if user is not added previously
+    if (!activeUsers.some((user) => user.userId === user_id)) {
+      activeUsers.push({ userId: user_id, socketId: socket.id });
+      console.log("New User Connected");
+    }
+    io.emit('activeUsers', activeUsers);
+  });
+
+    socket.on('confirmation_form', (data) => {
+      console.log('ini di confirmation_form');
+      console.log('ini di confirmation_form', data);
+    })
   socket.on('disconnect', () => {
     console.log('Client disconnected');
   });
 });
+
 
 app.set('io', io);
 

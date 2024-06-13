@@ -32,7 +32,7 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <ul>
-                <li><a href="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="dashboard"><i class="fas fa-home"></i> Dashboard <%=user_id%></a></li>
                 <li><a href="isiformulir"><i class="fas fa-clipboard"></i> Formulir</a></li>
                 <!-- Ganti ikon permintaan menjadi ikon "envelope" -->
                 <li><a href="riwayatpermintaan"><i class="fas fa-envelope"></i> Permintaan</a></li>
@@ -77,10 +77,74 @@
                     document.getElementById('modal').classList.remove('show');
                 });
             </script> 
+             <script src="/socket.io/socket.io.js"></script>
         </div>
     </aside>
     <main>
         <%- content %>
     </main>
+    <!-- Kontainer untuk notifikasi -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- Menyertakan script untuk socket.io -->
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <!-- Menyertakan script notifikasi -->
+    <script>
+        const socket = io('http://localhost:3000');
+
+let activeUsers = [];
+
+socket.on('connect', () => {
+//   console.log('Connected to server');
+  socket.emit('joinRoom', 'mahasiswa');
+});
+
+socket.on('activeUsers', (users) => {
+        activeUsers = users;
+        console.log('Active Users:', activeUsers);
+    });
+
+socket.emit('new-mahasiswa-add', user_id );
+console.log(activeUsers, 'ini di tenplate mhs');
+
+socket.on('confirmation_form', (data) => {
+  console.log('Notifikasi baru:', data);
+  showNotification(data); // Panggil fungsi untuk menampilkan notifikasi
+});
+
+// mahasiswa
+function tampilNotifikasi(data) {
+    console.log('ini di tampil notifikasi');
+  const notifikasiContainer = document.getElementById('notification-container');
+  const notifikasi = document.createElement('div');
+  notifikasi.className = 'notification';
+  notifikasi.innerHTML = `
+    <strong>${data.message}</strong>
+    <p>Admin menerima formulir</p>
+  `;
+  notifikasiContainer.appendChild(notifikasi);
+
+  setTimeout(() => {
+    notifikasiContainer.removeChild(notifikasi);
+  }, 5000);
+}
+
+function showNotification(data) {
+    console.log('ini di show notification');
+  const notificationContainer = document.getElementById('notification-container');
+  const notification = document.createElement('div'); // Mengganti "notification" menjadi "notification"
+  notification.className = 'notification';
+  notification.innerHTML = `
+    <strong>${data.message}</strong>
+  `;
+  notificationContainer.appendChild(notification);
+
+  setTimeout(() => {
+    notificationContainer.removeChild(notification);
+  }, 5000);
+}
+
+
+    </script>
 </body>
 </html>

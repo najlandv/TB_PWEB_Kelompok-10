@@ -1,5 +1,7 @@
 <% const profilContent = '' %>
-<%- include('../mahasiswa/template', { content: profilContent }) %>
+<% const id = user_id %>
+<%- include('../mahasiswa/template', { content: profilContent, user_id: user_id}) %>
+
 
   <!-- Profile Content -->
   <div class="container">

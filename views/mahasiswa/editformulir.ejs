@@ -1,5 +1,6 @@
 <% const editFormulirContent = '' %>
-<%- include('./template', { content: editFormulirContent }) %>
+<% const id = user_id %>
+<%- include('./template', { content: editFormulirContent, user_id: user_id}) %>
     <div class="container">
       <h1>Isi Formulir</h1>
       <form
