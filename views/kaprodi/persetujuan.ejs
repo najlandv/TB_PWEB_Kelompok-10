@@ -22,7 +22,7 @@
                     <td><%= persetujuan.User.no_identitas %></td>
                     <td><%= persetujuan.User.nama_depan%> <%= persetujuan.User.nama_belakang %> </td>
                     <td>
-                        <a class="btn" href="detail"><i class="fa-solid fa-circle-info fa-lg"></i>Detail</a>
+                        <a class="btn" href="detail/<%=persetujuan.nomorSurat %>"><i class="fa-solid fa-circle-info fa-lg"></i>Detail</a>
                     </td>
                     <td>
                         <% if (persetujuan.acceptByKaprodi != false) { %>

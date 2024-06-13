@@ -143,7 +143,24 @@ function logout(req, res) {
  
 }
 
+const lihatDetail = async (req, res) => {
+  try {
+    const nomorSurat = req.params.nomorSurat;
+    const lihatDetail = await Formulir.findOne({
+      where: { nomorSurat },
+      include: [{ model: User }],
+    });
+    // console.log(lihatDetail);
+    // return res.json(lihatDetail)
 
+    const title = "Detail Formulir";
+
+    res.render("kaprodi/detail", { requestDetail: lihatDetail, title });
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports = {
   
@@ -153,5 +170,6 @@ module.exports = {
   aksesUpdateProfil,
   lihatPersetujuan,
   terimaFormulir,
-  tolakFormulir
+  tolakFormulir,
+  lihatDetail,
 };

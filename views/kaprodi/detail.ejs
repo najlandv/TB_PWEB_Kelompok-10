@@ -1,0 +1,61 @@
+<% const detailContent = ' ' %>
+<%- include('./template', { content: detailContent }) %>
+
+<div class="container">
+    <h1 class="custom-heading">Detail Formulir</h1>
+
+    <div class="detail-item">
+        <span class="detail-label">Tanggal Dikirim</span>
+        <span class="detail-value"><b style="font-weight: bold;
+            color: #333;">: </b> <%= requestDetail.tanggalDikirim %></span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">NIM</span>
+        <span class="detail-value"><b style="font-weight: bold;
+            color: #333;">: </b>  <%= requestDetail.User.no_identitas %></span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Nama Mahasiswa</span>
+        <span class="detail-value"><b style="font-weight: bold;
+            color: #333;">: </b>  <%= requestDetail.User.nama_depan %> <%= requestDetail.User.nama_belakang %></span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Penerima</span>
+        <span class="detail-value"><b style="font-weight: bold;
+            color: #333;">: </b>  <%= requestDetail.penerima%> </span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Instansi</span>
+        <span class="detail-value"><b style="font-weight: bold;
+            color: #333;">: </b>  <%= requestDetail.instansi%> </span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Judul Tugas Akhir</span>
+        <span class="detail-value"><b style="font-weight: bold;
+            color: #333;">: </b>  <%= requestDetail.judulTA%> </span>
+    </div>
+    <div class="detail-item">
+        <span class="detail-label">Status Oleh Admin </span>
+        <span class="detail-value" ><b style="font-weight: bold;
+            color: #333;">: </b> 
+            <% if (requestDetail.acceptByAdmin==0) { %>
+                Menunggu
+                <% } else if (requestDetail.acceptByAdmin==1) { %>
+    
+               Diterima
+               <% } else if (requestDetail.acceptByAdmin==2) { %>
+                Ditolak
+               <% } else { %>
+                undefined
+                   <% } %>
+        </span>
+    </div>
+    <div class="detail-item">
+        <% if (requestDetail.acceptByKaprodi==1) { %>
+            <span class="detail-label">Tanggal Disetujui:</span>
+            <span class="detail-value"><%= requestDetail.tanggalDisetujui%> </span>
+        <% } %>
+    </div>
+    
+    <a href="/admin/persetujuan" class="btn">Kembali</a>
+</div>
