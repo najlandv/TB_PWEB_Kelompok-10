@@ -4,6 +4,37 @@ const { User, Formulir, Notifikasi } = require("../models/index");
 const { where } = require("sequelize");
 var nodemailer = require('nodemailer');
 
+const dashboard = async(req, res)=>{
+  try {
+    const countPermohonan = await Formulir.count({
+      where: {
+        acceptByAdmin :0,
+        acceptByKaprodi : 0
+      }
+    })
+    const countTerima = await Formulir.count({
+      where: {
+        acceptByAdmin: 1
+      }
+    })
+    const countTolak = await Formulir.count({
+      where: {
+        acceptByAdmin: 2
+      }
+    })
+    const countRiwayat = await Formulir.count({
+      where: {
+        acceptByAdmin:1,
+        acceptByKaprodi:1
+      }
+    })
+    const title ="Dashborad";
+    res.render("admin/dashboard", {countPermohonan,countTerima,countTolak, countRiwayat,title})
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 const lihatProfil = async (req, res) => {
   try {
@@ -330,6 +361,7 @@ const lihatNotifikasi = async (req,res) => {
 }
 
 module.exports = {
+  dashboard,
   updateProfilMhs,
   lihatProfil,
   aksesUpdateProfil,

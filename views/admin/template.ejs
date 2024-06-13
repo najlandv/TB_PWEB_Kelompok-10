@@ -27,11 +27,14 @@
                     </div>
                     <ul class="notification-content">
                         <% notifikasi.forEach(function(notif) { %>
-                            <li>
-                                <div class="profile-dropdown">
+                            <li class="notification-item">
+                                <div class="profile">
                                     <a href="profile"><img src="/img/profil.png" alt="Foto Profil"></a>
                                     </div> <%= notif.Formulir.User.no_identitas %>-<%= notif.Formulir.User.nama_depan %> <%= notif.Formulir.User.nama_belakang %> mengirimkan formulir dengan Nomor Surat
                                 <%= notif.Formulir.nomorSurat %>
+                                <% if (notif.isRead == 0) { %>
+                                    <div class="indicator"></div>
+                                <% } %>
                             </li>
                         <% }); %>
                     </ul>

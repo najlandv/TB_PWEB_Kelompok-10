@@ -10,11 +10,7 @@ router.use(lihatNotifikasi);
 router.get("/notfound", verifyToken, function (req, res, next) {
   res.render("notfound");
 });
-
-router.get("/dashboard", verifyToken, role("admin"), function (req, res, next) {
-  const title = "Dashboard";
-  res.render("admin/dashboard", { title });
-});
+router.get("/dashboard", verifyToken, role("admin"),AdminControllerr.dashboard);
 
 router.get(
   "/profile",
