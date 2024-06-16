@@ -52,8 +52,7 @@ router.get("/diterima",verifyToken,role("admin"),AdminControllerr.formulirDiteri
 router.get("/ditolak",verifyToken,role("admin"),AdminControllerr.formulirDitolak);
 router.post("/deletesurat/:nomorSurat/delete", verifyToken,role("admin"),AdminControllerr.hapusSurat);
 router.get("/riwayat/:angkatan",verifyToken,role("admin"),AdminControllerr.riwayatSuratByTahun);
-router.post("/kirimemail", verifyToken,role("admin"),AdminControllerr.email);
 router.get('/notifikasi', verifyToken,role("admin"),AdminControllerr.lihatNotifikasi);
-
+router.post('/kirim-email/:nomorSurat', verifyToken,role("admin"),AdminControllerr.email);
 
 module.exports = router;

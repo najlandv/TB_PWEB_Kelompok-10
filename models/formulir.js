@@ -1,6 +1,7 @@
 'use strict';
 const {Model} = require('sequelize');
 const UserModel = require('./UserModel');
+const surat = require('./surat')
 module.exports = (sequelize, DataTypes) => {
   class Formulir extends Model {
     /**
@@ -12,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Formulir.belongsTo(models.User, {
         foreignKey : 'id_user'
+      }),
+      Formulir.hasOne(models.Surat,{
+        foreignKey:'nomorSurat'
       })
     }
   }

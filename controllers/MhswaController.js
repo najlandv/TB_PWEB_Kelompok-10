@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { User, Formulir, Notifikasi } = require("../models/index");
+const { User, Formulir, Notifikasi, Surat } = require("../models/index");
 const fs = require('fs');
 const path = require('path');
 const PizZip = require('pizzip');
@@ -216,6 +216,11 @@ const kirimFormulir = async (req, res) => {
           return res.status(500).send("Error converting DOCX to PDF");
         }
 
+        await Surat.create({
+          nama_file: pdfName,
+          nomorSurat: newFormulir.nomorSurat,
+        });
+
         fs.writeFileSync(pdfPath, result);
         console.log("File converted successfully");
 
@@ -242,6 +247,8 @@ const kirimFormulir = async (req, res) => {
       },
       
     });
+
+
 
     return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!', user_id });
   } catch (error) {

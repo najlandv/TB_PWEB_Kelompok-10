@@ -12,6 +12,14 @@ module.exports = {
       nama_file: {
         type: Sequelize.STRING
       },
+      nomorSurat: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Formulirs', 
+          key: 'nomorSurat'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

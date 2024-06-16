@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const formulir = require('./formulir');
 module.exports = (sequelize, DataTypes) => {
   class Surat extends Model {
     /**
@@ -10,11 +11,29 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Surat.belongsTo(models.Formulir, {
+        foreignKey : 'nomorSurat'
+      })
     }
   }
   Surat.init({
-    nama_file: DataTypes.STRING
+    id : {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    nama_file: {
+      type: DataTypes.STRING
+    },
+    nomorSurat: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+      references: {
+        model: 'Formulir',
+        key: 'nomorSurat'
+      }
+    },
   }, {
     sequelize,
     modelName: 'Surat',

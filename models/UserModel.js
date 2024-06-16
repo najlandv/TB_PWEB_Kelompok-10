@@ -10,6 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Formulir,{
+        foreignKey:'id_user'
+      })
     }
   }
   User.init(

@@ -42,9 +42,10 @@
                         <button id="hapus-button<%= index+1 %>" type="button" class="btn" ><i class="fas fa-trash"></i>Hapus</button>
                 </td>
                 <td>
-                    <form action ="/admin/kirimemail" method="post">
-                        <button class="btn" type="submit"> Send To Email</button>
-                    </form>
+                    
+                    <form action="/admin/kirim-email/<%= riwayat.nomorSurat %>" method="post">
+                        <button class="btn" type="submit">Send To Email</button>
+                      </form>
                 </td>
             </tr>
             <!-- modal hapus -->

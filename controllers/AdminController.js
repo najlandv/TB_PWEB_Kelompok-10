@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { User, Formulir, Notifikasi } = require("../models/index");
+const { User, Formulir, Notifikasi, Surat } = require("../models/index");
 const { where } = require("sequelize");
 var nodemailer = require('nodemailer');
+const path = require('path')
 
 const dashboard = async(req, res)=>{
   try {
@@ -35,38 +36,6 @@ const dashboard = async(req, res)=>{
     res.status(500).json({ message: "Internal server error" });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const lihatProfil = async (req, res) => {
   try {
@@ -273,7 +242,7 @@ const tolakFormulir = async (req, res) => {
 const riwayatSurat = async(req, res) => {
 try {
   const riwayatSurat = await Formulir.findAll({
-    include: [{ model: User }],
+    include: [{ model: User},{ model: Surat}],
     where: {
       acceptByAdmin: 1,
       acceptByKaprodi: 1
@@ -281,9 +250,9 @@ try {
     
   })
   const title = "Riwayat Surat";
-  // console.log(riwayatSurat)
+
+  console.log(riwayatSurat.Surat)
   res.render("admin/riwayat", { riwayatSurat: riwayatSurat, title });
-  // return res.json(riwayatSurat)
   
 } catch (error) {
   console.error("Error during login: ", error);
@@ -334,6 +303,7 @@ const hapusSurat = async (req,res) => {
     const nomorSurat = req.params.nomorSurat;
     const hapusSurat = await Formulir.findOne ({where : {nomorSurat}});
     await Notifikasi.destroy({ where: { nomorSurat } });
+    await Surat.destroy({where:{nomorSurat}})
     await hapusSurat.destroy();
 
     return res.redirect('/admin/riwayat');
@@ -368,8 +338,25 @@ const riwayatSuratByTahun = async(req, res) => {
    
   } 
 
+
 const email = async(req,res) => {
   try {
+    const nomorSurat = req.params.nomorSurat;
+    const surat= await Surat.findOne({
+      include: [{model: Formulir, include:[{model:User}]}],
+      where:{nomorSurat}
+    })
+
+    if (!surat) {
+      return res.status(404).json({ message: "Surat tidak ditemukan" });
+    }
+
+    const { Formulir: formulir, nama_file: pdfFileName } = surat;
+    const { User: user } = formulir;
+    const recipientEmail = user.email;
+
+    const pdfDir = path.resolve("public", "data", "surat");
+    const pdfPath = path.join(pdfDir, pdfFileName);
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -380,9 +367,15 @@ const email = async(req,res) => {
     
     var mailOptions = {
       from: 'Admiin.siunand@gmail.com',
-      to: '2211521004_nadia@student.unand.ac.id',
-      subject: 'Surat Permintaan Data',
-      text: 'Meisa gilo bana bana bana'
+      to: recipientEmail,
+      subject: 'Surat Permintaan Data Tugas Akhir Sistem Informasi ',
+      text: 'Berikut surat permintaan data untuk tugas akhir yang telah disetujui.',
+      attachments: [
+        {
+          filename: pdfFileName,
+          path: pdfPath
+        }
+      ]
     };
     
     transporter.sendMail(mailOptions, function(error, info){
@@ -412,6 +405,7 @@ const lihatNotifikasi = async (req,res) => {
     return res.status(500).send('Terjadi Kesalahan Server');
   }
 }
+
 
 module.exports = {
   dashboard,

@@ -8,7 +8,7 @@ async function lihatNotifikasi(req, res, next) {
             include: [{ model: Formulir ,include:{
                 model:User
             }}],
-            order: [['tanggal', 'DESC']]
+            order: [['createdAt', 'DESC']]
         });
 
         // Simpan notifikasi di res.locals
