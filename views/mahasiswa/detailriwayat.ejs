@@ -2,45 +2,55 @@
 <% const id = user_id %>
 <%- include('./template', { content: detailRiwayatContent, user_id: user_id}) %>
 
-<body class="bg-gray-100">
-    <div class="container mx-auto mt-5">
-        <h2 class="text-2xl font-semibold mb-4">Detail Permintaan</h2>
-        <div class="bg-white shadow-md rounded-lg p-6 mb-4">
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="nomorSurat">
-                    Nomor Surat
-                </label>
-                <p class="text-gray-900"><%= requestDetail.nomorSurat %></p>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="tanggalDikirim">
-                    Tanggal Dikirim
-                </label>
-                <p class="text-gray-900"><%= requestDetail.tanggalDikirim %></p>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="penerima">
-                    Penerima
-                </label>
-                <p class="text-gray-900"><%= requestDetail.penerima %></p>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="instansi">
-                    Instansi
-                </label>
-                <p class="text-gray-900"><%= requestDetail.instansi %></p>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="judulTA">
-                    Judul TA
-                </label>
-                <p class="text-gray-900"><%= requestDetail.judulTA %></p>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Permintaan</title>
+    <link rel="stylesheet" href="/detail.css"> <!-- Referensi CSS eksternal dari folder public -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-2/0TzUpw/mW7JVRlGh1+ehd12DvcMr2rD9nInWTPiVTv+QGFyf8+JjUzKUpm8kHqVdFez98kE4C4sac6YhUn2w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="container">
+        <h2>Detail Permintaan</h2>
+        <div class="card">
+            <table>
+                <tr>
+                    <th>Informasi</th>
+                    <th>Detail</th>
+                </tr>
+                <tr>
+                    <td>Nomor Surat</td>
+                    <td><%= requestDetail.nomorSurat %></td>
+                </tr>
+                <tr>
+                    <td>Tanggal Dikirim</td>
+                    <td><%= requestDetail.tanggalDikirim %></td>
+                </tr>
+                <tr>
+                    <td>Penerima</td>
+                    <td><%= requestDetail.penerima %></td>
+                </tr>
+                <tr>
+                    <td>Instansi</td>
+                    <td><%= requestDetail.instansi %></td>
+                </tr>
+                <tr>
+                    <td>Judul TA</td>
+                    <td><%= requestDetail.judulTA %></td>
+                </tr>
+            </table>
         </div>
-        <a href="/mahasiswa/riwayatpermintaan" class="text-blue-500 hover:underline flex items-center">
-            <i class="fas fa-arrow-left mr-2"></i>Kembali ke Riwayat Permintaan
+        <a href="/mahasiswa/riwayatpermintaan" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Kembali ke Riwayat Permintaan
         </a>
     </div>
     <script src="https://unpkg.com/preline/dist/preline.js"></script>
 </body>
+
 </html>

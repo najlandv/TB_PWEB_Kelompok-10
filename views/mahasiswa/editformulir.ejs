@@ -1,68 +1,55 @@
 <% const editFormulirContent = '' %>
 <% const id = user_id %>
 <%- include('./template', { content: editFormulirContent, user_id: user_id}) %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Formulir</title>
+    <link rel="stylesheet" href="/detail.css"> <!-- Referensi CSS eksternal dari folder public -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-2/0TzUpw/mW7JVRlGh1+ehd12DvcMr2rD9nInWTPiVTv+QGFyf8+JjUzKUpm8kHqVdFez98kE4C4sac6YhUn2w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
     <div class="container">
-      <h1>Isi Formulir</h1>
-      <form
-        action="/mahasiswa/editformulir/<%= requestDetail.nomorSurat %>/update"
-        method="POST"
-      >
-        <input type="hidden" name="id" />
+        <h1>Edit Formulir</h1>
+        <form action="/mahasiswa/editformulir/<%= requestDetail.nomorSurat %>/update" method="POST">
+            <input type="hidden" name="id" />
 
-        <!-- <div class="form-group">
-                <label for="tanggalDikirim">Tanggal Dikirim:</label>
-                <input type="date" id="tanggalDikirim" name="tanggalDikirim">
+            <div class="form-group">
+                <label for="penerima">Penerima:</label>
+                <input value="<%= requestDetail?.penerima %>" type="text" id="penerima" name="penerima" />
             </div>
-             -->
-        <!-- <div class="form-group">
-                <label for="tanggalDisetujui">Tanggal Disetujui:</label>
-                <input type="date" id="tanggalDisetujui" name="tanggalDisetujui">
-            </div> -->
 
-        <div class="form-group">
-          <label for="penerima">Penerima:</label>
-          <input
-            value="<%= requestDetail?.penerima %>"
-            type="text"
-            id="penerima"
-            name="penerima"
-          />
-        </div>
+            <div class="form-group">
+                <label for="instansi">Instansi:</label>
+                <input value="<%= requestDetail?.instansi %>" type="text" id="instansi" name="instansi" />
+            </div>
 
-        <div class="form-group">
-          <label for="instansi">Instansi:</label>
-          <input
-            value="<%= requestDetail?.instansi %>"
-            type="text"
-            id="instansi"
-            name="instansi"
-          />
-        </div>
+            <div class="form-group">
+                <label for="judulTA">Judul TA:</label>
+                <input value="<%= requestDetail?.judulTA %>" type="text" id="judulTA" name="judulTA" />
+            </div>
 
-        <div class="form-group">
-          <label for="judulTA">Judul TA:</label>
-          <input
-            value="<%= requestDetail?.judulTA %>"
-            type="text"
-            id="judulTA"
-            name="judulTA"
-          />
-        </div>
+            <input type="hidden" name="id_user" />
 
-        <input type="hidden" name="id_user" />
-
-        <button type="submit">Submit</button>
-      </form>
+            <button type="submit" class="btn-submit">Submit</button>
+            <a href="/mahasiswa/riwayatpermintaan" onclick="return deleteConfirm()" class="btn-delete">
+                <i class="fas fa-trash-alt"></i> Hapus
+            </a>
+        </form>
     </div>
-  </body>
-</html>
 
-<script>
-  function deleteConfirm() {
-    if (window.confirm("apakah yakinaskdjasld")) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-</script>
+    <script>
+        function deleteConfirm() {
+            return confirm("Apakah Anda yakin ingin menghapus?");
+        }
+    </script>
+</body>
+
+</html>
