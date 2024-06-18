@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
+const ImageModule = require('docxtemplater-image-module');
 const libre = require("libreoffice-convert");
 
 
@@ -145,9 +146,119 @@ const tampilkanFormulir = async (req, res) => {
 };
 
 
+// const kirimFormulir = async (req, res) => {
+//   try {
+//     const { penerima, instansi, judulTA, namaFile, user_id} = req.body;
+
+//     // Insert form data into the database using the Formulir model
+//     const newFormulir = await Formulir.create({
+//       penerima,
+//       instansi,
+//       judulTA,
+//       id_user: req.userId,
+//       tanggalDikirim: new Date()
+//     });
+
+//     const templatePath = path.resolve('public/template', 'template.docx');
+//     const content = fs.readFileSync(templatePath);
+//     const zip = new PizZip(content);
+//     const doc = new Docxtemplater(zip, {
+//       paragraphLoop: true,
+//       linebreaks: true,
+//     });
+
+//     const formulir = await Formulir.findOne({
+//       include: [{ model: User }],
+//       where: { id_user: req.userId },
+//     });
+    
+
+//     doc.setData({
+//       nomorSurat: formulir.nomorSurat,
+//       penerima: penerima,
+//       instansi: instansi,
+//       nama: formulir.User.nama_depan + formulir.User.nama_belakang,
+//       no_identitas: formulir.User.no_identitas,
+//       judulTA,
+//     });
+
+//     doc.render();
+
+//     const buf = doc.getZip().generate({
+//       type: "nodebuffer",
+//       compression: "DEFLATE",
+//     });
+
+//     const fileName = new Date().getTime() + '-' +`${namaFile}.docx`;
+//     const userDir = path.resolve("public", "data", `surat`);
+//     const outputPath = path.join(userDir, fileName);
+
+//     if (!fs.existsSync(userDir)) {
+//       fs.mkdirSync(userDir, { recursive: true });
+//     }
+//     const pdfName = new Date().getTime() + '-' +`${namaFile}.pdf`;
+
+//     fs.writeFileSync(outputPath, buf);
+
+//     const pdfDir = path.resolve("public", "data", "surat");
+//     const pdfPath = path.join(pdfDir, pdfName);
+
+//     if (!fs.existsSync(pdfDir)) {
+//       fs.mkdirSync(pdfDir, { recursive: true });
+//     }
+
+//     libre.convert(
+//       fs.readFileSync(outputPath),
+//       "pdf",
+//       undefined,
+//       async (err, result) => {
+//         if (err) {
+//           console.error("Error converting DOCX to PDF:", err);
+//           return res.status(500).send("Error converting DOCX to PDF");
+//         }
+
+//         await Surat.create({
+//           nama_file: pdfName,
+//           nomorSurat: newFormulir.nomorSurat,
+//         });
+
+//         fs.writeFileSync(pdfPath, result);
+//         console.log("File converted successfully");
+
+//         await fs.promises.unlink(outputPath);
+//     })
+//     const namaPengirim = await User.findByPk(req.userId);
+
+//     const newNotification = await Notifikasi.create({
+//       nomorSurat: newFormulir.nomorSurat,
+//       tanggal: new Date(),
+//       isRead: false,
+//     });
+//     console.log(newNotification);
+
+//     const io = req.app.get('io');
+//     io.to('admin').emit('new_formulir', {
+//       message: 'Pengajuan permintaan formulir baru!',
+//       formulir: {
+//         namaPengirim: namaPengirim.nama_depan,
+//         nim: namaPengirim.no_identitas,
+//         tanggalDikirim: new Date(),
+//       },
+      
+//     });
+
+
+
+//     return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!', user_id });
+//   } catch (error) {
+//     console.error('Terjadi Kesalahan Server:', error);
+//     return res.status(500).send('Terjadi Kesalahan Server: ' + error.message);
+//   }
+// };
+
 const kirimFormulir = async (req, res) => {
   try {
-    const { penerima, instansi, judulTA, namaFile, user_id} = req.body;
+    const { penerima, instansi, judulTA, namaFile, user_id } = req.body;
 
     // Insert form data into the database using the Formulir model
     const newFormulir = await Formulir.create({
@@ -158,99 +269,105 @@ const kirimFormulir = async (req, res) => {
       tanggalDikirim: new Date()
     });
 
-    const templatePath = path.resolve('public/template', 'template.docx');
+    const templatePath = path.resolve('public/template', 'template-1.docx');
     const content = fs.readFileSync(templatePath);
     const zip = new PizZip(content);
+
+    const imageOpts = {
+      centered: false,
+      getImage: function (tagValue, tagName) {
+        // Read and return image data synchronously
+        return fs.readFileSync(tagValue);
+      },
+      getSize: function (img, tagValue, tagName) {
+        // Customize the size of the image here if needed
+        return [150, 50]; // Width, Height in pixels
+      },
+    };
+
     const doc = new Docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
+      modules: [new ImageModule(imageOpts)],
     });
 
     const formulir = await Formulir.findOne({
       include: [{ model: User }],
       where: { id_user: req.userId },
     });
-    
 
+    if (!formulir || !formulir.User) {
+      throw new Error('Formulir atau pengguna tidak ditemukan');
+    }
+
+    const tanda_tangan_path = path.resolve('public', 'img', 'ttd ex.png');
+    
     doc.setData({
       nomorSurat: formulir.nomorSurat,
       penerima: penerima,
       instansi: instansi,
-      nama: formulir.User.nama_depan + formulir.User.nama_belakang,
+      nama: `${formulir.User.nama_depan} ${formulir.User.nama_belakang}`,
       no_identitas: formulir.User.no_identitas,
       judulTA,
+      tanda_tangan: tanda_tangan_path,
     });
+
 
     doc.render();
 
     const buf = doc.getZip().generate({
-      type: "nodebuffer",
-      compression: "DEFLATE",
+      type: 'nodebuffer',
+      compression: 'DEFLATE',
     });
 
-    const fileName = new Date().getTime() + '-' +`${namaFile}.docx`;
-    const userDir = path.resolve("public", "data", `surat`);
-    const outputPath = path.join(userDir, fileName);
+    const docxFileName = `${new Date().getTime()}-${namaFile}.docx`;
+    const docxFilePath = path.join('public', 'data', 'surat', docxFileName);
+    fs.writeFileSync(docxFilePath, buf);
 
-    if (!fs.existsSync(userDir)) {
-      fs.mkdirSync(userDir, { recursive: true });
-    }
-    const pdfName = new Date().getTime() + '-' +`${namaFile}.pdf`;
+    // Convert DOCX to PDF using LibreOffice
+    const pdfFileName = `${new Date().getTime()}-${namaFile}.pdf`;
+    const pdfFilePath = path.join('public', 'data', 'surat', pdfFileName);
 
-    fs.writeFileSync(outputPath, buf);
+    libre.convert(fs.readFileSync(docxFilePath), '.pdf', undefined, async (err, result) => {
+      if (err) {
+        console.error('Error converting DOCX to PDF:', err);
+        return res.status(500).send('Error converting DOCX to PDF');
+      }
 
-    const pdfDir = path.resolve("public", "data", "surat");
-    const pdfPath = path.join(pdfDir, pdfName);
+      fs.writeFileSync(pdfFilePath, result);
+      console.log('File converted successfully to PDF:', pdfFilePath);
 
-    if (!fs.existsSync(pdfDir)) {
-      fs.mkdirSync(pdfDir, { recursive: true });
-    }
+      // Create entry in Surat table
+      await Surat.create({
+        nama_file: pdfFileName,
+        nomorSurat: newFormulir.nomorSurat,
+      });
 
-    libre.convert(
-      fs.readFileSync(outputPath),
-      "pdf",
-      undefined,
-      async (err, result) => {
-        if (err) {
-          console.error("Error converting DOCX to PDF:", err);
-          return res.status(500).send("Error converting DOCX to PDF");
-        }
+      // Create notification
+      const namaPengirim = await User.findByPk(req.userId);
+      await Notifikasi.create({
+        nomorSurat: newFormulir.nomorSurat,
+        tanggal: new Date(),
+        isRead: false,
+      });
 
-        await Surat.create({
-          nama_file: pdfName,
-          nomorSurat: newFormulir.nomorSurat,
-        });
+      // Emit socket.io event
+      const io = req.app.get('io');
+      io.to('admin').emit('new_formulir', {
+        message: 'Pengajuan permintaan formulir baru!',
+        formulir: {
+          namaPengirim: namaPengirim.nama_depan,
+          nim: namaPengirim.no_identitas,
+          tanggalDikirim: new Date(),
+        },
+      });
 
-        fs.writeFileSync(pdfPath, result);
-        console.log("File converted successfully");
-
-        await fs.promises.unlink(outputPath);
-    })
-
-
-    const namaPengirim = await User.findByPk(req.userId);
-
-    const newNotification = await Notifikasi.create({
-      nomorSurat: newFormulir.nomorSurat,
-      tanggal: new Date(),
-      isRead: false,
-    });
-    console.log(newNotification);
-
-    const io = req.app.get('io');
-    io.to('admin').emit('new_formulir', {
-      message: 'Pengajuan permintaan formulir baru!',
-      formulir: {
-        namaPengirim: namaPengirim.nama_depan,
-        nim: namaPengirim.no_identitas,
-        tanggalDikirim: new Date(),
-      },
-      
+      // Render success message after everything is done
+      return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!', user_id });
     });
 
-
-
-    return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!', user_id });
+    // Cleanup: delete the generated DOCX file after conversion
+    fs.unlinkSync(docxFilePath);
   } catch (error) {
     console.error('Terjadi Kesalahan Server:', error);
     return res.status(500).send('Terjadi Kesalahan Server: ' + error.message);

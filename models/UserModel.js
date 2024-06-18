@@ -10,36 +10,38 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.Formulir,{
-        foreignKey:'id_user'
-      })
+      User.hasMany(models.Formulir, {
+        foreignKey: 'id_user'
+      });
     }
   }
   User.init(
     {
-      id : {
-        type : DataTypes.INTEGER,
-        autoIncrement : true,
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true
       },
       email: {
         type: DataTypes.STRING,
-        unique: true,
+        unique: true
       },
       password: DataTypes.STRING,
       role: DataTypes.STRING,
       nama_depan: DataTypes.STRING,
       nama_belakang: DataTypes.STRING,
-      foto_profil : DataTypes.STRING,
+      foto_profil: DataTypes.STRING,
       no_identitas: DataTypes.STRING,
       no_hp: DataTypes.STRING,
       alamat: DataTypes.STRING,
-      angkatan : DataTypes.STRING,
-    
+      angkatan: DataTypes.STRING,
+      tanda_tangan: { // Tambahkan kolom ini
+        type: DataTypes.STRING
+      }
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "User"
     }
   );
   return User;

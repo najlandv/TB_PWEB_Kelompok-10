@@ -37,7 +37,10 @@ module.exports = {
       alamat: {
         type: Sequelize.STRING
       },
-      angkatan : {
+      angkatan: {
+        type: Sequelize.STRING
+      },
+      tanda_tangan: { 
         type: Sequelize.STRING
       },
       createdAt: {
