@@ -100,7 +100,7 @@ const updateProfilMhs = async (req, res) => {
 const aksesUpdateProfil = async (req, res) => {
   try {
     const lihatProfil = await User.findByPk(req.userId);
-    console.log(lihatProfil);
+    // console.log(lihatProfil);
     const userId = lihatProfil.id;
     const userRole = lihatProfil.role;
     const userEmail = lihatProfil.email;
@@ -205,8 +205,9 @@ const terimaFormulir = async (req, res) => {
       nomorSurat: nomorSurat,
       tanggal: new Date(),
       isRead: false,
+      penerima: 'Mahasiswa'
     });
-    console.log(newNotification);
+    // console.log(newNotification);
 
     const io = req.app.get('io');
     io.emit('confirmation_form', {
@@ -251,7 +252,7 @@ try {
   })
   const title = "Riwayat Surat";
 
-  console.log(riwayatSurat.Surat)
+  // console.log(riwayatSurat.Surat)
   res.render("admin/riwayat", { riwayatSurat: riwayatSurat, title });
   
 } catch (error) {
@@ -271,7 +272,7 @@ const formulirDiterima = async (req,res) => {
       },     
     })
     const title = "Formulir yang Diterima";
-    console.log(formulirDiterima);
+    // console.log(formulirDiterima);
     res.render("admin/diterima", {formulirDiterima, title})
 
   } catch (error) {
@@ -289,7 +290,7 @@ const formulirDitolak = async (req,res) => {
       },     
     })
     const title = "Formulir yang Ditolak";
-    console.log(formulirDitolak);
+    // console.log(formulirDitolak);
     res.render("admin/ditolak", {formulirDitolak, title})
 
   } catch (error) {
@@ -315,7 +316,7 @@ const hapusSurat = async (req,res) => {
 }
 
 const riwayatSuratByTahun = async(req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   try {
     const angkatan = req.params.angkatan;
     const riwayatSurat = await Formulir.findAll({
@@ -327,7 +328,6 @@ const riwayatSuratByTahun = async(req, res) => {
       
     })
     const title = "Riwayat Surat";
-    // console.log(riwayatSurat)
     res.render("admin/riwayatbytahun", { riwayatSurat: riwayatSurat, title, angkatan });
     // return res.json(riwayatSurat)
     
@@ -394,15 +394,39 @@ const email = async(req,res) => {
 }
 
 const lihatNotifikasi = async (req,res) => {
-  console.log(lihatNotifikasi)
+  // console.log(lihatNotifikasi)
   try {
     const lihatNotifikasi = await Notifikasi.findAll({
-      include:[{model: Formulir}]
+      include:[{model: Formulir}],
+      where: {
+        penerima: 'Admin',
+      },
     });
     res.render("admin/template",{notifikasi : lihatNotifikasi })
   } catch (error) {
     console.error(error);
     return res.status(500).send('Terjadi Kesalahan Server');
+  }
+}
+
+const readNotifikasi = async (req,res) => {
+  try {
+    // Temukan notifikasi berdasarkan id
+    const notifikasi = await Notifikasi.findByPk(req.params.id);
+    
+    if (notifikasi) {
+      // Update status isRead menjadi 1
+      notifikasi.isRead = 1;
+      await notifikasi.save();
+      
+      // Kirim respons OK
+      res.sendStatus(200);
+    } else {
+      res.status(404).send('Notifikasi tidak ditemukan');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Terjadi Kesalahan Server');
   }
 }
 
@@ -423,5 +447,6 @@ module.exports = {
   hapusSurat,
   riwayatSuratByTahun,
   email,
-  lihatNotifikasi
+  lihatNotifikasi,
+  readNotifikasi
 };

@@ -32,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
     isRead: {
       type : DataTypes.BOOLEAN
     },
+    penerima: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     createdAt:{
       type : DataTypes.DATE
     }

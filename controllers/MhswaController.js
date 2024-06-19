@@ -349,6 +349,7 @@ const kirimFormulir = async (req, res) => {
         nomorSurat: newFormulir.nomorSurat,
         tanggal: new Date(),
         isRead: false,
+        penerima: 'Admin'
       });
 
       // Emit socket.io event

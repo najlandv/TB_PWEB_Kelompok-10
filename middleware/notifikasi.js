@@ -5,6 +5,7 @@ async function lihatNotifikasi(req, res, next) {
     try {
         // Ambil notifikasi dari database
         const notifikasi = await Notifikasi.findAll({
+            where:{penerima: 'Admin'},
             include: [{ model: Formulir ,include:{
                 model:User
             }}],
