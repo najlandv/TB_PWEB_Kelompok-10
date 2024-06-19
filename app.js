@@ -40,14 +40,12 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('Admin connected');
-  
   socket.on('joinRoom', (role) => {
       if (role === 'admin') {
+        console.log('Admin connected');
         socket.join('admin');
       }
   });
-
   socket.on("join",(userId)=>{
     console.log(`User with id ${userId} joined room`);
     socket.join(userId)

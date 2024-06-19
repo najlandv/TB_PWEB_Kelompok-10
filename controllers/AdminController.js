@@ -199,7 +199,7 @@ const terimaFormulir = async (req, res) => {
     const nomorSurat = req.params.nomorSurat;
     const statusFormulir = await Formulir.findOne({ where: { nomorSurat } });
     statusFormulir.update({ acceptByAdmin: 1 });
-    const namaPengirim = await User.findByPk(req.userId);
+    const userId = User.id;
 
     const newNotification = await Notifikasi.create({
       nomorSurat: nomorSurat,
@@ -209,18 +209,10 @@ const terimaFormulir = async (req, res) => {
     });
     // console.log(newNotification);
 
-    const io = req.app.get('io');
-    io.emit('confirmation_form', {
-      message: 'Surat Anda Telah Diterima Admin!',
-      formulir: {
-        namaPengirim: namaPengirim.nama_depan,
-        nim: namaPengirim.no_identitas,
-        tanggalDikirim: new Date(),
-      },
-      
+    const io = req.app.get("io");
+    io.to(userId).emit("permintaan_formulir", {
+      message: `Pengajuan Formulir Diterima!`,
     });
-
-
     res.redirect("/admin/persetujuan");
   } catch (error) {
     console.error("Error during login: ", error);
