@@ -24,7 +24,9 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'Formulir',
         key: 'nomorSurat'
-      }
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'NO ACTION',
     },
     tanggal: {
       type : DataTypes.DATE

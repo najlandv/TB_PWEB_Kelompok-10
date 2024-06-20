@@ -15,14 +15,7 @@ router.get('/notfound', verifyToken, function(req, res, next) {
 // });
 
 
-router.get('/dashboard', verifyToken, role('mahasiswa'), function(req, res, next) {
-  const title = 'Dashboard';
-  const user_id = req.userId;
-
-  res.render('mahasiswa/dashboard', {user_id,title}); 
-});
-
-
+router.get('/dashboard', verifyToken, role('mahasiswa'), MhswaController.dashboard)
 router.get('/profil', verifyToken,role('mahasiswa'), MhswaController.lihatProfil)
 router.get('/editprofil', verifyToken,role('mahasiswa'), MhswaController.aksesUpdateProfil)
 router.patch('/editprofil', verifyToken,role('mahasiswa'), MhswaController.updateProfilMhs)

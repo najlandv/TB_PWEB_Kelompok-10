@@ -8,7 +8,24 @@ const Docxtemplater = require('docxtemplater');
 const ImageModule = require('docxtemplater-image-module');
 const libre = require("libreoffice-convert");
 
+const dashboard = async (req, res) => {
+  try {
+    const title = 'Dashboard';
+    const user_id = req.userId;
 
+    // const countPermohonan = await Formulir.count({
+    //   where: {
+    //     acceptByAdmin :0,
+    //     acceptByKaprodi : 0
+    //   }
+    // })
+  
+    res.render('mahasiswa/dashboard', {user_id,title}); 
+  } catch (error) {
+    console.error("Error during login: ", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 const form = (req, res) => {
   res.render("login", { title: "Express" });
 };
@@ -37,7 +54,7 @@ const checklogin = async (req, res) => {
     res.cookie("token", token, { httpOnly: true });
 
     if (user.role == "mahasiswa") {
-      return res.redirect("/dashboard");
+      return res.redirect("/mahasiswa/dashboard");
     } else if (user.role == "kaprodi") {
       return res.redirect("/kaprodi/dashboard");
     } else if (user.role == "admin") {
@@ -441,7 +458,10 @@ const riwayatPermintaan = async (req, res) => {
 }
 const riwayatSurat = async (req, res) => {
   try {
-    const riwayatSurat = await Formulir.findAll({ where: { id_user: req.userId } });
+    const riwayatSurat = await Formulir.findAll({
+      include: [{ model: Surat }],
+      where: { id_user: req.userId } 
+    });
     console.log(riwayatSurat)
     const nomorSurat = riwayatSurat.nomorSurat;
     const tanggalDikirim = riwayatSurat.tanggalDikirim;
@@ -549,6 +569,7 @@ const testpost =async (req,res) => {
 
 module.exports = {
   form,
+  dashboard,
   checklogin,
   logout,
   updateProfilMhs,
