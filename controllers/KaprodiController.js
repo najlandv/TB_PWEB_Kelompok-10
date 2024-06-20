@@ -2,6 +2,11 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
 const { Formulir } = require("../models/index");
+const { Surat } = require("../models/index");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+const { log } = require("console");
 
 const lihatProfil = async (req, res) => {
   try {
@@ -160,6 +165,121 @@ const lihatDetail = async (req, res) => {
     console.error("Error during login: ", error);
     res.status(500).json({ message: "Internal server error" });
   }
+
+  
+};
+const formulirDiterima = async (req,res) => {
+  try {
+    
+    const formulirDiterima = await Formulir.findAll({
+      include: [{ model: User }],
+      where: {
+        acceptByKaprodi: 1,
+      },     
+    })
+    const title = "Formulir yang Diterima";
+    // console.log(formulirDiterima);
+    res.render("kaprodi/diterima", {formulirDiterima, title})
+
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+const formulirDitolak = async (req,res) => {
+  try {
+    const formulirDitolak = await Formulir.findAll({
+      include: [{ model: User }],
+      where: {
+        acceptByKaprodi: 2,
+      },     
+    })
+    const title = "Formulir yang Ditolak";
+    // console.log(formulirDitolak);
+    res.render("kaprodi/ditolak", {formulirDitolak, title})
+
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// Middleware untuk menyimpan file
+// Middleware untuk menyimpan file
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+// File filter untuk hanya mengizinkan PDF
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'application/pdf') {
+    cb(null, true);
+  } else {
+    cb(new Error('Hanya file PDF yang diizinkan'), false);
+  }
+};
+
+// Konfigurasi multer
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+}).single('surat');
+
+// Endpoint untuk menampilkan halaman upload
+const uploadFile = (req, res) => {
+  const title = 'Upload File';
+  const { nomorSurat } = req.params;
+  res.render('kaprodi/upload', { nomorSurat, title });
+};
+
+// Endpoint untuk mengunggah file
+const kirimFile = async (req, res) => {
+  console.log("agyysxgysxgysyxggguxgusuixusuxsux");
+  const nomorSurat = req.params.nomorSurat;
+  console.log(nomorSurat);
+  upload(req, res, async (err) => {
+    if (err) {
+      res.cookie('error', err.message, {
+        maxAge: 1000,
+        httpOnly: true,
+      });
+      return res.status(400).redirect(`/kaprodi/detail/${nomorSurat}`);
+    }
+
+    if (!req.file) {
+      res.cookie('error', 'Tidak ada file yang diunggah.', {
+        maxAge: 1000,
+        httpOnly: true,
+      });
+      return res.status(400).redirect(`/kaprodi/detail/${nomorSurat}`);
+    }
+
+    try {
+      const document = await Surat.create({
+        nomorSurat: nomorSurat,
+        nama_file: req.file.filename,
+      });
+      if(!document){
+        console.log("error");
+      }
+      res.cookie('success', 'File Berhasil Di Upload', {
+        maxAge: 1000,
+        httpOnly: true,
+      });
+      return res.redirect('/kaprodi/persetujuan');
+    } catch (dbError) {
+      res.cookie('error', 'Terjadi kesalahan saat menyimpan data ke database.', {
+        maxAge: 1000,
+        httpOnly: true,
+      });
+      return res.status(500).redirect(`/kaprodi/upload/${nomorSurat}`);
+    }
+  });
 };
 
 module.exports = {
@@ -172,4 +292,8 @@ module.exports = {
   terimaFormulir,
   tolakFormulir,
   lihatDetail,
+  formulirDiterima,
+  formulirDitolak,
+  uploadFile,
+  kirimFile
 };

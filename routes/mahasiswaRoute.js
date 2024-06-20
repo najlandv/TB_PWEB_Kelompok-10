@@ -3,6 +3,7 @@ var router = express.Router();
 const verifyToken= require ('../middleware/validtokenMiddleware');
 const role= require ('../middleware/checkroleMiddleware');
 const MhswaController = require('../controllers/MhswaController');
+const panduanController = require('../controllers/panduanController')
 
 
 router.get('/notfound', verifyToken, function(req, res, next) {
@@ -36,7 +37,7 @@ router.post('/editformulir/:id/update', verifyToken,role('mahasiswa'), MhswaCont
 router.post('/editformulir/:id/delete', verifyToken,role('mahasiswa'), MhswaController.deleteFormulir); 
 router.get('/permintaandisetujui', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaanDisetujui);
 router.get('/permintaanditolak', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaanDitolak);
-
+router.get('/panduan', verifyToken,role('mahasiswa'), panduanController.panduan)
 
 router.get('/test', MhswaController.tesHalaman)
 router.post('/test', MhswaController.testpost)

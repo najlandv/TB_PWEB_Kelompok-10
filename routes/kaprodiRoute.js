@@ -31,10 +31,15 @@ router.get('/dashboard', verifyToken, role('kaprodi'), function(req, res, next) 
 router.get('/profile', verifyToken,role('kaprodi'), KaprodiControllerr.lihatProfil);
 router.get('/editprofil', verifyToken,role('kaprodi'), KaprodiControllerr.aksesUpdateProfil)
 router.patch('/editprofil', verifyToken,role('kaprodi'), KaprodiControllerr.updateProfilMhs)
+router.get('/diterima', verifyToken,role('kaprodi'), KaprodiControllerr.formulirDiterima)
+router.get('/ditolak', verifyToken,role('kaprodi'), KaprodiControllerr.formulirDitolak)
 router.get('/ubahPassword', verifyToken, passcontroller.formchangepass)
 router.get('/persetujuan', verifyToken,role('kaprodi'), KaprodiControllerr.lihatPersetujuan);
 router.get('/detail/:nomorSurat', verifyToken,role('kaprodi'), KaprodiControllerr.lihatDetail);
 router.post('/persetujuan/:nomorSurat/terima',verifyToken,role('kaprodi'), KaprodiControllerr.terimaFormulir)
+router.get('/upload/:nomorSurat', verifyToken,role('kaprodi'), KaprodiControllerr.uploadFile)
+router.post('/upload/:nomorSurat', verifyToken,role('kaprodi'), KaprodiControllerr.kirimFile)
 router.post('/persetujuan/:nomorSurat/tolak',verifyToken,role('kaprodi'), KaprodiControllerr.tolakFormulir)
+
 module.exports = router;
 
