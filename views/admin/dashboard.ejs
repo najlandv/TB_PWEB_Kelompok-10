@@ -1,7 +1,19 @@
 <% const dashboardContent = ' ' %>
 <%- include('./template', { content: dashboardContent }) %>
 
+<!-- Socket.io Client Script -->
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+
 <div class="container">
+    <script>
+  const socket = io("http://localhost:3000");
+
+
+  socket.on("connect", () => {
+    console.log("Connected to server");
+    socket.emit("join", 1);
+  });
+    </script>
     <h1 class="custom-heading">Dashboard admin</h1>
 
     <div class="dashboard-container">

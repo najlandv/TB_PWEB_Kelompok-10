@@ -10,7 +10,7 @@
 <!-- Socket.io Client Script -->
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 <div class="container">
-<script>
+<!-- <script>
   const socket = io("http://localhost:3000");
   const userId = "<%= user_id %>";
 
@@ -20,9 +20,12 @@
   });
 
   socket.on("permintaan_formulir", (data) => {
-    console.log("Notifikasi baru:", data);
+    console.log("Notifikasi baru:");
     showNotification(data, "formulir");
   });
+  socket.on("permintaan_test", (data) => {
+    console.log("Notifikasi test");
+  })
 
   function showNotification(data, type) {
     const notificationContainer = document.getElementById("notification-container");
@@ -45,7 +48,7 @@
       }, 300);
     }, 5000);
   }
-</script>
+</script> -->
     <h1 class="custom-heading">Dashboard Mahasiswa <%= user_id %> </h1>
 
     <div class="dashboard-container">

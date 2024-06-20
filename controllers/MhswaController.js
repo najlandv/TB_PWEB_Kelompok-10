@@ -411,6 +411,9 @@ const editFormulir = async (req, res) => {
 const deleteFormulir = async (req, res) => {
   try {
     const nomorSurat = req.params.id;
+    await Notifikasi.destroy({ where: { nomorSurat } });
+    await Surat.destroy({ where: { nomorSurat } });
+    
     const updateFormulir = await Formulir.findOne({ where: { nomorSurat }})
    
     await updateFormulir.destroy();
@@ -421,6 +424,7 @@ const deleteFormulir = async (req, res) => {
     return res.status(500).send('Terjadi Kesalahan Server');
   }
 };
+
 
 
 const updateFormulir = async (req, res) => {

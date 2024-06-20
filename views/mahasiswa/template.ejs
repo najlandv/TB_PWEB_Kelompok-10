@@ -13,10 +13,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"> 
 </head>
 <body>
+    <div id="notification-container" class="notification-container"></div>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
     <header>
         <!-- Navbar -->
         <nav class="navbar">
             <div class="notification-logo">
+                <!-- <div id="notification-container" class="notification-container"></div> -->
                 <i class="fas fa-bell fa-lg"></i>
             </div>
             <div class="profile-dropdown">
@@ -79,6 +82,50 @@
             </script> 
              <script src="/socket.io/socket.io.js"></script>
         </div>
+        <script>
+            const socket = io("http://localhost:3000");
+            const userId = "<%= user_id %>";
+          
+            socket.on("connect", () => {
+              console.log("Connected to server");
+              socket.emit("join", userId);
+            });
+          
+            socket.on("permintaan_formulir", (data) => {
+              showNotification(data, "formulir");
+            });
+            socket.on("permintaan_test", (data) => {
+              console.log("Notifikasi test");
+            })
+          
+            function showNotification(data, type) {
+
+              const notificationContainer = document.getElementById("notification-container");
+              const notification = document.createElement("div");
+              notification.className = "notification";
+              console.log("Notifikasi baru:", data);
+              
+            //   if (type === "formulir") {
+                console.log('tes di dalam if formulir');
+                notification.innerHTML = `
+                <br>
+                <br>
+
+                  <strong>${data.message}</strong>
+                  <p>Admin menyetujui permintaan formulir</p>
+                `;
+            //   }
+              
+              notificationContainer.appendChild(notification);
+          
+              setTimeout(() => {
+                notification.classList.add("notification-fade-out");
+                setTimeout(() => {
+                  notificationContainer.removeChild(notification);
+                }, 300);
+              }, 5000);
+            }
+          </script>
     </aside>
     <main>
         <%- content %>
