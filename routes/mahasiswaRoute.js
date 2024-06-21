@@ -3,8 +3,10 @@ var router = express.Router();
 const verifyToken= require ('../middleware/validtokenMiddleware');
 const role= require ('../middleware/checkroleMiddleware');
 const MhswaController = require('../controllers/MhswaController');
+const showNotification = require('../middleware/notifikasimhs');
 
 
+router.use(showNotification);
 router.get('/notfound', verifyToken, function(req, res, next) {
   res.render('notfound');
 });

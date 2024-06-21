@@ -26,6 +26,24 @@ const dashboard = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+const showNotification = async (req,res) => {
+  // console.log(lihatNotifikasi)
+  try {
+    const showNotification = await Notifikasi.findAll({
+      include:[{model: Formulir}],
+      where: {
+        penerima: 'Mahasiswa',
+      },
+    });
+    res.render("mahasiswa/template",{notifikasimhs : showNotification })
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+}
+
+
 const form = (req, res) => {
   res.render("login", { title: "Express" });
 };
@@ -590,6 +608,7 @@ module.exports = {
   riwayatPermintaanDitolak,
   riwayatSurat,
   tesHalaman,
+  showNotification,
     testpost,
     tesHalaman
 };

@@ -18,9 +18,76 @@
     <header>
         <!-- Navbar -->
         <nav class="navbar">
-            <div class="notification-logo">
-                <!-- <div id="notification-container" class="notification-container"></div> -->
-                <i class="fas fa-bell fa-lg"></i>
+            <div class="notification-icon">
+                <i class="fa-solid fa-bell fa-lg"></i>
+                <div class="notification-dropdown-content">
+                    <div class="notification-header">
+                        <h3>Notifikasi</h3>
+                    </div>
+                    <ul class="notification-content">
+                        <% notifikasimhs.forEach(function(notif) { %>
+                            <li class="notification-item" data-notif-id="<%= notif.id %>">
+                                <div class="profile">
+                                    <a href="profile"><img src="/img/profil.png" alt="Foto Profil"></a>
+                                    </div> 
+                                    <% if (notif.Formulir.acceptByAdmin == 1) { %>
+                                        <%= notif.Formulir.User.nama_depan %> Admin menerima formulir permintaan Anda!!!
+                                    <% } else if (notif.Formulir.acceptByAdmin == 2) { %>
+                                        Admin menolak formulir permintaan Anda!!!
+                                    <% } else { %>
+                                        Menunggu proses pemeriksaan permintaan Anda!!!
+                                    <% } %>
+                                    
+                                     
+                                <% if (notif.isRead == 0) { %>
+                                    <div class="indicator"></div>
+                                <% } %>
+                            </li>
+                        <% }); %>
+                    </ul>
+                    <div>
+                    <script>
+                        const socket = io("http://localhost:3000");
+                        const userId = "<%= user_id %>";
+                      
+                        socket.on("connect", () => {
+                          console.log("Connected to server");
+                          socket.emit("join", userId);
+                        });
+                      
+                        socket.on("permintaan_formulir", (data) => {
+                          showNotification(data, "formulir");
+                        });
+                        socket.on("permintaan_test", (data) => {
+                          console.log("Notifikasi test");
+                        });
+                      
+                        function showNotification(data, type) {
+                          const notificationContainer = document.getElementById("notification-container");
+                          const notification = document.createElement("div");
+                          notification.className = "notification";
+                          console.log("Notifikasi baru:", data);
+                          
+                          console.log('tes di dalam if formulir');
+                          notification.innerHTML = `
+                            <br>
+                            <br>
+                            <strong>${data.message}</strong>
+                            <p>Admin menyetujui permintaan formulir</p>
+                          `;
+                          
+                          notificationContainer.appendChild(notification);
+                      
+                          setTimeout(() => {
+                            notification.classList.add("notification-fade-out");
+                            setTimeout(() => {
+                              notificationContainer.removeChild(notification);
+                            }, 300);
+                          }, 5000);
+                        }
+                      </script>
+                    </div>
+                </div>
             </div>
             <div class="profile-dropdown">
                 <a href="profil"><img src="/img/profil.png" alt="Foto Profil"></a>
@@ -37,18 +104,14 @@
             <ul>
                 <li><a href="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="isiformulir"><i class="fas fa-clipboard"></i> Formulir</a></li>
-                <!-- Ganti ikon permintaan menjadi ikon "envelope" -->
                 <li><a href="riwayatpermintaan"><i class="fas fa-envelope"></i> Permintaan</a></li>
                 <li><a href="permintaandisetujui"><i class="fas fa-check-circle"></i> Diterima</a></li>
                 <li><a href="permintaanditolak"><i class="fas fa-times"></i> Ditolak</a></li>
                 <li><a href="riwayatsurat"><i class="fas fa-history"></i> Riwayat</a></li>
             </ul>
-            <!-- Logout link at the bottom -->
-            <!-- Form logout -->
             <form id="logout-form" method="POST" action="/auth/logout">
                 <button type="button" class="logout" id="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </form>
-            <!-- Modal konfirmasi -->
             <div id="modal" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -65,71 +128,62 @@
                 </div>
             </div>
             <script>
-                // Menampilkan modal saat tombol logout diklik
                 document.getElementById('logout-button').addEventListener('click', function() {
                     document.getElementById('modal').classList.add('show');
                 });
 
-                // Menangani klik tombol "Logout" di modal
                 document.getElementById('confirm-logout').addEventListener('click', function() {
                     document.getElementById('logout-form').submit();
                 });
 
-                // Menangani klik tombol "Cancel" di modal
                 document.getElementById('cancel-logout').addEventListener('click', function() {
                     document.getElementById('modal').classList.remove('show');
                 });
             </script> 
              <script src="/socket.io/socket.io.js"></script>
+             <script>
+                // Menangani klik pada setiap notifikasi
+                document.querySelectorAll('.notification-item').forEach(item => {
+                  item.addEventListener('click', async (event) => {
+                    const notifId = item.getAttribute('data-notif-id');
+                    const isRead = item.getAttribute('data-is-read'); // Menambahkan atribut data-is-read
+                    // Tambahkan validasi jika isRead sudah 1, tidak lakukan apa-apa
+                    if (isRead === 1) {
+                      console.log('Notifikasi sudah dibaca, tidak bisa diklik lagi');
+                      return;
+                    }
+                    try {
+                      // Kirim permintaan untuk menandai notifikasi sebagai sudah dibaca
+                      const response = await fetch(`/admin/notifikasi/${notifId}/read`, {
+                        method: 'POST'
+                      });
+                      if (!response.ok) {
+                        throw new Error('Gagal menandai notifikasi sudah dibaca');
+                      }
+                      
+                      // Hapus indikator visual dari notifikasi yang sudah dibaca
+                      const indicator = item.querySelector('.indicator');
+                      if (indicator) {
+                        indicator.remove();
+                      } else {
+                        console.warn('Indikator visual tidak ditemukan untuk notifikasi ini');
+                      }
+                      
+                      // Setelah berhasil menandai, atur atribut data-is-read menjadi 1
+                      item.setAttribute('data-is-read', '1');
+            
+                    } catch (error) {
+                      console.error('Terjadi kesalahan:', error);
+                      // Tampilkan pesan kesalahan kepada pengguna jika terjadi masalah
+                      alert('Terjadi kesalahan saat menandai notifikasi');
+                    }
+                  });
+                });
+            </script>
         </div>
-        <script>
-            const socket = io("http://localhost:3000");
-            const userId = "<%= user_id %>";
-          
-            socket.on("connect", () => {
-              console.log("Connected to server");
-              socket.emit("join", userId);
-            });
-          
-            socket.on("permintaan_formulir", (data) => {
-              showNotification(data, "formulir");
-            });
-            socket.on("permintaan_test", (data) => {
-              console.log("Notifikasi test");
-            })
-          
-            function showNotification(data, type) {
-
-              const notificationContainer = document.getElementById("notification-container");
-              const notification = document.createElement("div");
-              notification.className = "notification";
-              console.log("Notifikasi baru:", data);
-              
-            //   if (type === "formulir") {
-                console.log('tes di dalam if formulir');
-                notification.innerHTML = `
-                <br>
-                <br>
-
-                  <strong>${data.message}</strong>
-                  <p>Admin menyetujui permintaan formulir</p>
-                `;
-            //   }
-              
-              notificationContainer.appendChild(notification);
-          
-              setTimeout(() => {
-                notification.classList.add("notification-fade-out");
-                setTimeout(() => {
-                  notificationContainer.removeChild(notification);
-                }, 300);
-              }, 5000);
-            }
-          </script>
     </aside>
     <main>
         <%- content %>
     </main>
-   
 </body>
 </html>

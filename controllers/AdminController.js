@@ -205,7 +205,7 @@ const terimaFormulir = async (req, res) => {
       nomorSurat: nomorSurat,
       tanggal: new Date(),
       isRead: false,
-      penerima: 'Mahasiswa'
+      penerima: userId
     });
     // console.log(newNotification);
 
@@ -229,24 +229,24 @@ const tolakFormulir = async (req, res) => {
     const nomorSurat = req.params.nomorSurat;
     const statusFormulir = await Formulir.findOne({ where: { nomorSurat } });
     statusFormulir.update({ acceptByAdmin: 2, acceptByKaprodi: 2 });
-    // const userId = User.id;
+    const userId = User.id;
 
-    // const newNotification = await Notifikasi.create({
-    //   nomorSurat: nomorSurat,
-    //   tanggal: new Date(),
-    //   isRead: false,
-    //   penerima: 'Mahasiswa'
-    // });
-    // // console.log(newNotification);
+    const newNotification = await Notifikasi.create({
+      nomorSurat: nomorSurat,
+      tanggal: new Date(),
+      isRead: false,
+      penerima: 'Mahasiswa'
+    });
+    // console.log(newNotification);
 
-    // const io = req.app.get("io");
-    // io.emit("permintaan_ditolak", {
-    //   userId: userId,
+    const io = req.app.get("io");
+    io.emit("permintaan_formulir", {
+      userId: userId,
+    });
+    // io.to(userId).emit("permintaan_formulir", {
+    //   message: `Pengajuan Formulir Diterima!`,
     // });
-    // // io.to(userId).emit("permintaan_formulir", {
-    // //   message: `Pengajuan Formulir Diterima!`,
-    // // });
-    // io.emit("permintaan_ditolak", {message: `Pengajuan Formulir Ditolak!`,})
+    io.emit("permintaan_test", {message: `Pengajuan Formulir Ditolak!`,})
     res.redirect("/admin/persetujuan");
   } catch (error) {
     console.error("Error during login: ", error);

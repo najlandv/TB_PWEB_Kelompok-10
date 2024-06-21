@@ -1,11 +1,12 @@
 const { where } = require("sequelize");
 const { User, Formulir, Notifikasi } = require("../models/index");
 
-async function lihatNotifikasi(req, res, next) {
+async function showNotification(req, res, next) {
     try {
+        // const userId = req.user.id;
         // Ambil notifikasi dari database
-        const notifikasi = await Notifikasi.findAll({
-            where:{penerima: 'Admin'},
+        const notifikasimhs = await Notifikasi.findAll({
+            where:{penerima: 4},
             include: [{ model: Formulir ,include:{
                 model:User
             }}],
@@ -13,7 +14,7 @@ async function lihatNotifikasi(req, res, next) {
         });
 
         // Simpan notifikasi di res.locals
-        res.locals.notifikasi = notifikasi;
+        res.locals.notifikasimhs = notifikasimhs;
 
         // Lanjut ke middleware berikutnya
         next();
@@ -21,9 +22,9 @@ async function lihatNotifikasi(req, res, next) {
         next(error);
     }
 
-    
+
 
 }
 
 
-module.exports = lihatNotifikasi;
+module.exports = showNotification;
