@@ -167,8 +167,8 @@
   
         socket.on("connect", () => {
           console.log("Connected to Admin");
-          // socket.emit("joinRoom", "admin");
-          socket.emit("join", 1);
+          socket.emit("joinRoom", "admin");
+          // socket.emit("join", 1);
 
         });
   
