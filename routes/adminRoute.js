@@ -54,6 +54,6 @@ router.post("/deletesurat/:nomorSurat/delete", verifyToken,role("admin"),AdminCo
 router.get("/riwayat/:angkatan",verifyToken,role("admin"),AdminControllerr.riwayatSuratByTahun);
 router.get('/notifikasi', verifyToken,role("admin"),AdminControllerr.lihatNotifikasi);
 router.post('/kirim-email/:nomorSurat', verifyToken,role("admin"),AdminControllerr.email);
-router.post('/notifikasi/:id/read',verifyToken,role("admin"),AdminControllerr.readNotifikasi)
+router.post('/notifikasi/:id/read',verifyToken,role("admin"),AdminControllerr.readNotifikasi);
 
 module.exports = router;

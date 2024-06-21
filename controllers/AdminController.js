@@ -334,7 +334,7 @@ const riwayatSuratByTahun = async(req, res) => {
   try {
     const angkatan = req.params.angkatan;
     const riwayatSurat = await Formulir.findAll({
-      include: [{ model: User, where : {angkatan : angkatan}  }],
+      include: [{ model: User, where : {angkatan : angkatan}  },{ model: Surat}],
       where: {
         acceptByAdmin: 1,
         acceptByKaprodi: 1,
