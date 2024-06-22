@@ -67,13 +67,11 @@
                           const notification = document.createElement("div");
                           notification.className = "notification";
                           console.log("Notifikasi baru:", data);
-                          
-                          console.log('tes di dalam if formulir');
                           notification.innerHTML = `
                             <br>
                             <br>
                             <strong>${data.message}</strong>
-                            <p>Admin menyetujui permintaan formulir</p>
+                            <p>Admin permintaan formulir</p>
                           `;
                           
                           notificationContainer.appendChild(notification);

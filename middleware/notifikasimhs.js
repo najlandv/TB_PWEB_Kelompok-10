@@ -3,10 +3,10 @@ const { User, Formulir, Notifikasi } = require("../models/index");
 
 async function showNotification(req, res, next) {
     try {
-        // const userId = req.user.id;
-        // Ambil notifikasi dari database
+        const userId = req.userId;
+
         const notifikasimhs = await Notifikasi.findAll({
-            where:{penerima: 4},
+            where:{penerima: userId},
             include: [{ model: Formulir ,include:{
                 model:User
             }}],

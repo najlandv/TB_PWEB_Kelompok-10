@@ -10,72 +10,34 @@
 <!-- Socket.io Client Script -->
 <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
 <div class="container">
-<!-- <script>
-  const socket = io("http://localhost:3000");
-  const userId = "<%= user_id %>";
 
-  socket.on("connect", () => {
-    console.log("Connected to server");
-    socket.emit("join", userId);
-  });
-
-  socket.on("permintaan_formulir", (data) => {
-    console.log("Notifikasi baru:");
-    showNotification(data, "formulir");
-  });
-  socket.on("permintaan_test", (data) => {
-    console.log("Notifikasi test");
-  })
-
-  function showNotification(data, type) {
-    const notificationContainer = document.getElementById("notification-container");
-    const notification = document.createElement("div");
-    notification.className = "notification";
-    
-    if (type === "formulir") {
-      notification.innerHTML = `
-        <strong>${data.message}</strong>
-        <p>Admin menyetujui permintaan formulir</p>
-      `;
-    }
-    
-    notificationContainer.appendChild(notification);
-
-    setTimeout(() => {
-      notification.classList.add("notification-fade-out");
-      setTimeout(() => {
-        notificationContainer.removeChild(notification);
-      }, 300);
-    }, 5000);
-  }
-</script> -->
     <h1 class="custom-heading">Dashboard Mahasiswa <%= user_id %> </h1>
 
     <div class="dashboard-container">
 
             <div class="dashboard-box">
-                <a href="/mahasiswa/riwayatpermintaan">
+                <a class="dashboard-box" href="/mahasiswa/riwayatpermintaan">
                     <!-- <i class="fas fa-check-circle"></i> -->
                     <h3>Permintaan</h3>
-                    <p>Status Permintaan</p>
+                    <p><%= countPermohonan %></p>
                 </a>
             </div>
             <div class="dashboard-box">
-                <a href="/mahasiswa/permintaandisetujui">
+                <a class="dashboard-box" href="/mahasiswa/permintaandisetujui">
                     <!-- <i class="fas fa-check"></i> -->
                     <h3>Disetujui</h3>
                     <p>Formulir Disetujui</p>
                 </a>
             </div>
             <div class="dashboard-box">
-                <a href="/mahasiswa/permintaanditolak">
+                <a class="dashboard-box" href="/mahasiswa/permintaanditolak">
                     <!-- <i class="fas fa-times"></i> -->
                     <h3>Ditolak</h3>
                     <p>Formulir Ditolak</p>
                 </a>
             </div>
             <div class="dashboard-box">
-                <a href="/mahasiswa/riwayatsurat">
+                <a  class="dashboard-box" href="/mahasiswa/riwayatsurat">
                     <!-- <i class="fas fa-history"></i> -->
                     <h3>Riwayat</h3>
                     <p>Riwayat Surat</p>
