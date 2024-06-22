@@ -19,6 +19,28 @@
       <header>
           <!-- Navbar -->
           <nav class="navbar">
+            <div class="notification-icon">
+                <i class="fa-solid fa-bell fa-lg"></i>
+                <div class="notification-dropdown-content">
+                    <div class="notification-header">
+                        <h3>Notifikasi</h3>
+                    </div>
+                    <ul class="notification-content">
+                        <% notifikasi.forEach(function(notif) { %>
+                            <li class="notification-item" data-notif-id="<%= notif.id %>">
+                                <div class="profile">
+                                    <a href="profile"><img src="/img/profil.png" alt="Foto Profil"></a>
+                                    </div> 
+                                    <%= notif.Formulir.User.no_identitas %>-<%= notif.Formulir.User.nama_depan %> <%= notif.Formulir.User.nama_belakang %> mengirimkan formulir dengan 
+                                    Nomor Surat <%= notif.Formulir.nomorSurat %>
+                                <% if (notif.isRead == 0) { %>
+                                    <div class="indicator"></div>
+                                <% } %>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </div>
+            </div> 
             <div class="navbar-toggle" onclick="toggleSidebar()">
               <div class="strip"></div>
               <div class="strip"></div>
@@ -39,11 +61,10 @@
           
             <ul>
               <li><a href="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-              <li><a href="#"><i class="fas fa-clipboard"></i> Formulir</a></li>
               <li><a href="persetujuan"><i class="fas fa-check-circle"></i> Persetujuan</a></li>
               <li><a href="diterima"><i class="fas fa-check"></i> Diterima</a></li>
               <li><a href="ditolak"><i class="fas fa-times"></i> Ditolak</a></li>
-              <li><a href="#"><i class="fas fa-history"></i> Riwayat</a></li>
+              <li><a href="riwayat"><i class="fas fa-history"></i> Riwayat</a></li>
             </ul>
             <!-- Logout link at the bottom -->
                  <!-- Form logout -->
@@ -67,6 +88,7 @@
           </div>
       </div>
   </div>
+  <script src="/socket.io/socket.io.js"></script>
 
   <script>
       // Menampilkan modal saat tombol logout diklik
@@ -83,12 +105,88 @@
       document.getElementById('cancel-logout').addEventListener('click', function() {
           document.getElementById('modal').classList.remove('show');
       });
+
   </script> 
+  <script>
+    // Menangani klik pada setiap notifikasi
+    document.querySelectorAll('.notification-item').forEach(item => {
+      item.addEventListener('click', async (event) => {
+        const notifId = item.getAttribute('data-notif-id');
+        const isRead = item.getAttribute('data-is-read'); // Menambahkan atribut data-is-read
+        // Tambahkan validasi jika isRead sudah 1, tidak lakukan apa-apa
+        if (isRead === 1) {
+          console.log('Notifikasi sudah dibaca, tidak bisa diklik lagi');
+          return;
+        }
+        try {
+          // Kirim permintaan untuk menandai notifikasi sebagai sudah dibaca
+          const response = await fetch(`/kaprodi/notifikasi/${notifId}/read`, {
+            method: 'POST'
+          });
+          if (!response.ok) {
+            throw new Error('Gagal menandai notifikasi sudah dibaca');
+          }
+          
+          // Hapus indikator visual dari notifikasi yang sudah dibaca
+          const indicator = item.querySelector('.indicator');
+          if (indicator) {
+            indicator.remove();
+          } else {
+            console.warn('Indikator visual tidak ditemukan untuk notifikasi ini');
+          }
+          
+          // Setelah berhasil menandai, atur atribut data-is-read menjadi 1
+          item.setAttribute('data-is-read', '1');
+
+        } catch (error) {
+          console.error('Terjadi kesalahan:', error);
+          // Tampilkan pesan kesalahan kepada pengguna jika terjadi masalah
+          alert('Terjadi kesalahan saat menandai notifikasi');
+        }
+      });
+    });
+</script>
           </div>
     </aside>
     <main>
       <%= content %>
   </main>
+  <!-- Kontainer untuk notifikasi -->
+  <div id="notification-container" class="notification-container"></div>
+
+  <!-- Menyertakan script untuk socket.io -->
+  <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+  <!-- Menyertakan script notifikasi -->
+  <script>
+    const socket = io("http://localhost:3000");
+
+    socket.on("connect", () => {
+      console.log("Connected to Kaprodi");
+      socket.emit("joinRoom", "kaprodi");
+    });
+
+    socket.on("new_formulir", (data) => {
+      console.log(data);
+      console.log("Notifikasi baru:", data);
+      showNotification(data, "kegiatan");
+    });
+
+    function showNotification(data) {
+    const notificationContainer = document.getElementById('notification-container');
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `
+        <strong>${data.message}</strong>
+        <p>${data.formulir.nim} mengirimkan formulir</p>
+    `;
+    notificationContainer.appendChild(notification);
+
+    setTimeout(() => {
+        notificationContainer.removeChild(notification);
+    }, 5000);
+    }
+
+  </script>
   </body>
   
     

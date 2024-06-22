@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
 const { Formulir } = require("../models/index");
 const { Surat } = require("../models/index");
+const { Notifikasi} = require ("../models/index");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
@@ -217,10 +218,10 @@ const storage = multer.diskStorage({
 
 // File filter untuk hanya mengizinkan PDF
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'application/pdf') {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {
-    cb(new Error('Hanya file PDF yang diizinkan'), false);
+    cb(new Error('Hanya file image yang diizinkan'), false);
   }
 };
 
@@ -228,27 +229,24 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-}).single('surat');
+}).single('ttd');
 
 // Endpoint untuk menampilkan halaman upload
 const uploadFile = (req, res) => {
   const title = 'Upload File';
-  const { nomorSurat } = req.params;
-  res.render('kaprodi/upload', { nomorSurat, title });
+  res.render('kaprodi/upload', {  title });
 };
 
 // Endpoint untuk mengunggah file
 const kirimFile = async (req, res) => {
   console.log("agyysxgysxgysyxggguxgusuixusuxsux");
-  const nomorSurat = req.params.nomorSurat;
-  console.log(nomorSurat);
   upload(req, res, async (err) => {
     if (err) {
       res.cookie('error', err.message, {
         maxAge: 1000,
         httpOnly: true,
       });
-      return res.status(400).redirect(`/kaprodi/detail/${nomorSurat}`);
+      return res.status(400).redirect('/kaprodi/profile');
     }
 
     if (!req.file) {
@@ -256,31 +254,93 @@ const kirimFile = async (req, res) => {
         maxAge: 1000,
         httpOnly: true,
       });
-      return res.status(400).redirect(`/kaprodi/detail/${nomorSurat}`);
+      return res.status(400).redirect('/kaprodi/profile');
     }
 
     try {
-      const document = await Surat.create({
-        nomorSurat: nomorSurat,
-        nama_file: req.file.filename,
+      const idUser = req.userId
+      const sendTtd = await User.update({
+        tanda_tangan: req.file.filename,
+      },{
+        where:{
+          id: idUser
+        }
       });
-      if(!document){
+      
+      if(!sendTtd){
         console.log("error");
       }
       res.cookie('success', 'File Berhasil Di Upload', {
         maxAge: 1000,
         httpOnly: true,
       });
-      return res.redirect('/kaprodi/persetujuan');
+      return res.redirect('/kaprodi/profile');
     } catch (dbError) {
       res.cookie('error', 'Terjadi kesalahan saat menyimpan data ke database.', {
         maxAge: 1000,
         httpOnly: true,
       });
-      return res.status(500).redirect(`/kaprodi/upload/${nomorSurat}`);
+      return res.status(500).redirect('/kaprodi/profile');
     }
   });
 };
+
+const riwayatSurat = async(req, res) => {
+  try {
+    const riwayatSurat = await Formulir.findAll({
+      include: [{ model: User},{ model: Surat}],
+      where: {
+        acceptByAdmin: 1,
+        acceptByKaprodi: 1
+      },
+      
+    })
+    const title = "Riwayat Surat";
+  
+    // console.log(riwayatSurat.Surat)
+    res.render("kaprodi/riwayat", { riwayatSurat: riwayatSurat, title });
+    
+  } catch (error) {
+    console.error("Error during login: ", error);
+      res.status(500).json({ message: "Internal server error" });
+  }
+   
+}
+const lihatNotifikasi = async (req,res) => {
+  console.log("anjay")
+  try {
+    const lihatNotifikasi = await Notifikasi.findAll({
+      include:[{model: Formulir}],
+      where: {
+        penerima: 'Kaprodi',
+      },
+    });
+    res.render("kaprodi/template",{notifikasi : lihatNotifikasi })
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+}
+const readNotifikasi = async (req,res) => {
+  try {
+    // Temukan notifikasi berdasarkan id
+    const notifikasi = await Notifikasi.findByPk(req.params.id);
+    
+    if (notifikasi) {
+      // Update status isRead menjadi 1
+      notifikasi.isRead = 1;
+      await notifikasi.save();
+      
+      // Kirim respons OK
+      res.sendStatus(200);
+    } else {
+      res.status(404).send('Notifikasi tidak ditemukan');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Terjadi Kesalahan Server');
+  }
+}
 
 module.exports = {
   
@@ -295,5 +355,8 @@ module.exports = {
   formulirDiterima,
   formulirDitolak,
   uploadFile,
-  kirimFile
+  kirimFile,
+  riwayatSurat,
+  lihatNotifikasi,
+  readNotifikasi
 };
