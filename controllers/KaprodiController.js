@@ -307,7 +307,6 @@ const riwayatSurat = async(req, res) => {
    
 }
 const lihatNotifikasi = async (req,res) => {
-  console.log("anjay")
   try {
     const lihatNotifikasi = await Notifikasi.findAll({
       include:[{model: Formulir}],
