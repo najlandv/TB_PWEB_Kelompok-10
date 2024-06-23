@@ -31,9 +31,9 @@
                                     <a href="profile"><img src="/img/profil.png" alt="Foto Profil"></a>
                                     </div> 
                                     <% if (notif.Formulir.acceptByAdmin == 1) { %>
-                                        <%= notif.Formulir.User.nama_depan %>, Admin menerima formulir permintaan Anda!!!
+                                        <%= notif.Formulir.User.nama_depan %>, Admin menerima formulir permintaan dengan nomor surat <%= notif.Formulir.nomorSurat %>
                                     <% } else if (notif.Formulir.acceptByAdmin == 2) { %>
-                                      <%= notif.Formulir.User.nama_depan %>, Admin menolak formulir permintaan Anda!!!
+                                      <%= notif.Formulir.User.nama_depan %>, Admin menolak formulir permintaan dengan nomor surat <%= notif.Formulir.nomorSurat %>
                                     <% } else { %>
                                         Menunggu proses pemeriksaan permintaan Anda!!!
                                     <% } %>
