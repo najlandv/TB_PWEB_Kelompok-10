@@ -13,11 +13,7 @@ const dashboard = async (req, res) => {
     const title = 'Dashboard';
     const user_id = req.userId;
 
-    const countPermohonan = await Formulir.count({
-      where: {
-        id_user : user_id
-      }
-    })
+
     const countTerima = await Formulir.count({
       where: {
         acceptByAdmin: 1
@@ -30,13 +26,12 @@ const dashboard = async (req, res) => {
     })
     const countRiwayat = await Formulir.count({
       where: {
-        acceptByAdmin:1,
-        acceptByKaprodi:1
-    }
+        id_user : user_id
+      }
     })
 
           // const userId = req.user;
-    res.render("mahasiswa/dashboard", {user_id, countPermohonan,countTerima,countTolak, countRiwayat,title})
+    res.render("mahasiswa/dashboard", {user_id, countTerima,countTolak, countRiwayat,title})
   } catch (error) {
     console.error("Error during login: ", err);
     res.status(500).json({ message: "Internal server error" });
@@ -53,6 +48,7 @@ const showNotification = async (req, res) => {
         penerima: userId, 
       },
     });
+    console.log(showNotification)
 
     res.render("mahasiswa/template", { notifikasimhs: showNotification });
   } catch (error) {
@@ -209,9 +205,10 @@ const kirimFormulir = async (req, res) => {
       instansi,
       judulTA,
       id_user: req.userId,
-      tanggalDikirim: new Date()
+      tanggalDikirim: new Date(),
     });
-
+    // Retrieve the nomorSurat from the newly created Formulir
+    const { nomorSurat } = newFormulir;
     const templatePath = path.resolve('public/template', 'template-1.docx');
     const content = fs.readFileSync(templatePath);
     const zip = new PizZip(content);
@@ -236,15 +233,26 @@ const kirimFormulir = async (req, res) => {
 
     const formulir = await Formulir.findOne({
       include: [{ model: User }],
-      where: { id_user: req.userId },
+      where: { id_user: req.userId, nomorSurat: nomorSurat },
     });
+
 
     if (!formulir || !formulir.User) {
       throw new Error('Formulir atau pengguna tidak ditemukan');
     }
 
-    const tanda_tangan_path = path.resolve('public', 'img', 'ttdex.png');
-    
+    // Retrieve the signature of the Kaprodi (user_id = 2)
+    const kaprodi = await User.findByPk(2);
+
+    if (!kaprodi || !kaprodi.tanda_tangan) {
+      throw new Error('Tanda tangan Kaprodi tidak ditemukan');
+    }
+
+    const tanda_tangan_path = kaprodi.tanda_tangan; // Assumes tanda_tangan stores the file path
+
+    // Convert `tanggalDikirim` to a JavaScript Date object and format it
+    const tanggalDikirim = new Date(formulir.tanggalDikirim).toLocaleDateString('id-ID');
+
     doc.setData({
       nomorSurat: formulir.nomorSurat,
       penerima: penerima,
@@ -252,9 +260,9 @@ const kirimFormulir = async (req, res) => {
       nama: `${formulir.User.nama_depan} ${formulir.User.nama_belakang}`,
       no_identitas: formulir.User.no_identitas,
       judulTA,
+      tanggalDikirim, // Use the formatted date
       tanda_tangan: tanda_tangan_path,
     });
-
 
     doc.render();
 
@@ -317,6 +325,8 @@ const kirimFormulir = async (req, res) => {
     return res.status(500).send('Terjadi Kesalahan Server: ' + error.message);
   }
 };
+
+
 
 const editFormulir = async (req, res) => {
   try {
@@ -389,10 +399,11 @@ const riwayatPermintaan = async (req, res) => {
 const riwayatSurat = async (req, res) => {
   try {
     const riwayatSurat = await Formulir.findAll({
-      include: [{ model: Surat }],
-      where: { id_user: req.userId } 
+      where: { id_user: req.userId },
+      include:[{model: Surat}]
     });
-    console.log(riwayatSurat)
+
+    console.log(riwayatSurat.Surat)
     const nomorSurat = riwayatSurat.nomorSurat;
     const tanggalDikirim = riwayatSurat.tanggalDikirim;
     const penerima = riwayatSurat.penerima;

@@ -31,13 +31,12 @@
                                     <a href="profile"><img src="/img/profil.png" alt="Foto Profil"></a>
                                     </div> 
                                     <% if (notif.Formulir.acceptByAdmin == 1) { %>
-                                        <%= notif.Formulir.User.nama_depan %> Admin menerima formulir permintaan Anda!!!
+                                        <%= notif.Formulir.User.nama_depan %>, Admin menerima formulir permintaan Anda!!!
                                     <% } else if (notif.Formulir.acceptByAdmin == 2) { %>
-                                        Admin menolak formulir permintaan Anda!!!
+                                      <%= notif.Formulir.User.nama_depan %>, Admin menolak formulir permintaan Anda!!!
                                     <% } else { %>
                                         Menunggu proses pemeriksaan permintaan Anda!!!
                                     <% } %>
-                                    
                                      
                                 <% if (notif.isRead == 0) { %>
                                     <div class="indicator"></div>
@@ -58,20 +57,17 @@
                         socket.on("permintaan_formulir", (data) => {
                           showNotification(data, "formulir");
                         });
-                        socket.on("permintaan_test", (data) => {
-                          console.log("Notifikasi test");
-                        });
+                        // socket.on("permintaan_test", (data) => {
+                        //   console.log("Notifikasi test");
+                        // });
                       
                         function showNotification(data, type) {
                           const notificationContainer = document.getElementById("notification-container");
                           const notification = document.createElement("div");
                           notification.className = "notification";
-                          console.log("Notifikasi baru:", data);
                           notification.innerHTML = `
-                            <br>
-                            <br>
-                            <strong>${data.message}</strong>
-                            <p>Admin permintaan formulir</p>
+
+                          <strong>${data.message}</strong>
                           `;
                           
                           notificationContainer.appendChild(notification);
@@ -83,6 +79,7 @@
                             }, 300);
                           }, 5000);
                         }
+                        
                       </script>
                     </div>
                 </div>

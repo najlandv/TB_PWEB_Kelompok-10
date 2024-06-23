@@ -9,7 +9,8 @@
             <table class="w-full border-collapse border border-gray-300">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2">Nomor Surat</th>
+                        <!-- <th class="border border-gray-300 px-4 py-2">Nomor Surat</th> -->
+                        <th>No.</th>
                         <th class="border border-gray-300 px-4 py-2">Tanggal Dikirim</th>
                         <th class="border border-gray-300 px-4 py-2">Penerima</th>
                         <th class="border border-gray-300 px-4 py-2">Instansi</th>
@@ -18,23 +19,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% riwayatPermintaan.forEach(function(request) { %>
+
+                    <% riwayatPermintaan.forEach(function(request, index=0) { %>
                         <tr>
-                            <td class="border border-gray-300 px-4 py-2"><%= request.nomorSurat %></td>
+                            <!-- <td class="border border-gray-300 px-4 py-2"><%= request.nomorSurat %></td> -->
+                            <td><%= index+1 %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.tanggalDikirim %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.penerima %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.instansi %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.judulTA %></td>
                             <td class="border border-gray-300 px-4 py-2">
-                                <a href="/mahasiswa/detailriwayat/<%= request.nomorSurat %>" class="text-blue-500"><i class="fas fa-info-circle"></i></a>
-                                <% if (request.acceptByAdmin!=1) { %>
-                                    <a href="/mahasiswa/updateformulir/<%= request.nomorSurat %>" class="text-blue-500"><i class="fas fa-edit"></i></a>
-
+                                <a href="/mahasiswa/detailriwayat/<%= request.nomorSurat %>" class="action-link">
+                                    <button type="button" class="action-button action-detail">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
+                                            <path fill="currentColor" d="M256 48c-114.7 0-208 93.3-208 208s93.3 208 208 208 208-93.3 208-208S370.7 48 256 48zm0 368c-88.4 0-160-71.6-160-160S167.6 96 256 96s160 71.6 160 160-71.6 160-160 160zm0-240c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24-10.7-24-24-24z"/>
+                                        </svg>
+                                    </button>
+                                </a>
+                                
+                                <% if (request.acceptByAdmin != 1) { %>
+                                    <a href="/mahasiswa/updateformulir/<%= request.nomorSurat %>" class="action-link">
+                                        <button type="button" class="action-button action-edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
+                                                <path fill="currentColor" d="M504 151.3L360.7 8c-9.3-9.3-24.6-9.3-33.9 0L8 326.7c-9.4 9.4-9.3 24.6.1 34L70 427.1c9.5 9.5 24.8 9.6 34.2.2l318.6-318.6c9.4-9.4 9.3-24.6-.1-34z"/>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                    
                                     <form action="/mahasiswa/editformulir/<%= request.nomorSurat %>/delete" method="post" class="inline">
-                                        <button onclick="return deleteConfirm()" type="submit" class="text-red-500"><i class="fas fa-trash"></i></button>
+                                        <button onclick="return deleteConfirm()" type="submit" class="action-button action-delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 448 512">
+                                                <path fill="currentColor" d="M424 64H312l-28-32H164l-28 32H24c-13.3 0-24 10.7-24 24v16c0 13.3 10.7 24 24 24h24v336c0 26.5 21.5 48 48 48h256c26.5 0 48-21.5 48-48V128h24c13.3 0 24-10.7 24-24V88c0-13.3-10.7-24-24-24zM180 432h-40c-6.6 0-12-5.4-12-12V244c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v176c0 6.6-5.4 12-12 12zm88 0h-40c-6.6 0-12-5.4-12-12V300c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v120c0 6.6-5.4 12-12 12zm88 0h-40c-6.6 0-12-5.4-12-12V356c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v64c0 6.6-5.4 12-12 12z"/>
+                                            </svg>
+                                        </button>
                                     </form>
                                 <% } %>
-                                 
+                                
+                                
 
                             </td>
                         </tr>
