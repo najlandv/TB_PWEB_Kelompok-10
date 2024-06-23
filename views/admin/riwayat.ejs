@@ -36,15 +36,20 @@
                 <td><%= riwayat.User.no_identitas %></td>
                 <td><%= riwayat.User.angkatan %></td>
                 <td>
+                    <% if (riwayat.Surat.nama_file) { %>
                     <a href="/data/surat/<%= riwayat.Surat.nama_file %>" target="_blank" class="btn">Lihat Surat</a>
+                <% } else { %>
+                    <p>Surat tidak tersedia</p>
+                <% } %>
+                    
                 </td>
                 <td>
                         <button id="hapus-button<%= index+1 %>" type="button" class="btn" ><i class="fas fa-trash"></i>Hapus</button>
                 </td>
                 <td>                    
-                    <form action="/admin/kirim-email/<%= riwayat.nomorSurat %>" method="post">
+                    <form id="email-form<%= index + 1 %>" action="/admin/kirim-email/<%= riwayat.nomorSurat %>" method="post">
                         <button class="btn" type="submit">Send To Email</button>
-                      </form>
+                    </form>
                 </td>
             </tr>
             <!-- modal hapus -->
@@ -66,6 +71,18 @@
                     </div>
                 </div>
             </div>
+                        <!-- modal success -->
+                        <div id="modalSuccess<%= index + 1 %>" class="modal" aria-labelledby="modal-success-title" role="dialog" aria-modal="true">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <i class="fa-regular fa-circle-check custom-icon"></i>
+                                    <p id="modal-success-title">Email Berhasil Dikirim</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="close-success<%= index + 1 %>" type="button" class="btn">Close</button>
+                                </div>
+                            </div>
+                        </div>
             <% }) %>
         </tbody>
     </table>
@@ -88,6 +105,28 @@
             document.getElementById(`cancel-accept${i}`).addEventListener('click', function() {
                 document.getElementById(`modalhapus${i}`).classList.remove('show');
             });
+            // Menangani pengiriman form email
+        document.getElementById(`email-form${i}`).addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const response = await fetch(this.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const result = await response.json();
+            if (result.success) {
+                console.log(response)
+                document.getElementById(`modalSuccess${i}`).classList.add('show');
+            } else {
+                alert('Gagal mengirim email.');
+            }
+        });
+
+        // Menutup modal success
+        document.getElementById(`close-success${i}`).addEventListener('click', function () {
+            document.getElementById(`modalSuccess${i}`).classList.remove('show');
+        });
         }
     </script>
 </div>

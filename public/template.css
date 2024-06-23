@@ -223,6 +223,8 @@ body {
     overflow: auto;
     color : #333;
     background-color: rgba(0, 0, 0, 0.5); /* Tambahkan lapisan transparan di belakang modal */
+    align-items: center; /* Posisi tengah vertikal */
+    justify-content: center; 
 }
 
 .modal-content {
@@ -240,10 +242,15 @@ body {
 .modal-header {
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
+    text-align: center;
 }
 
 .modal-header h2 {
     margin: 0;
+    font-size: 1.5rem;
+    font-family: Poppins;
+    color: #1A4D2E;
+
 }
 
 .modal-body {
@@ -253,6 +260,7 @@ body {
 .modal-footer {
     border-top: 1px solid #ddd;
     padding-top: 10px;
+    text-align: center;
 }
 
 .confirm-button, .cancel-button {
@@ -674,4 +682,47 @@ th {
 
 .action-delete {
     background-color: #ef4444; /* Warna latar belakang untuk Delete */
+}
+.custom-icon {
+    font-size: 5em; /* Sesuaikan dengan ukuran yang Anda inginkan */
+    color: #1A4D2E; /* Warna ikon */
+}
+
+#modal-success-title {
+    font-size: 1.5em; /* Ukuran font lebih besar dari ukuran default */
+    font-weight: bold; /* Memperkuat teks */
+    color: #333; /* Warna teks */
+    text-align: center; /* Posisi teks di tengah */
+    margin-top: 10px; /* Jarak bawah dari elemen lain */
+}
+
+/* Animasi muncul modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animasi menghilang modal */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Efek muncul modal */
+.show {
+    display: flex; /* Tampilan fleksibel */
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Efek menghilang modal */
+.hide {
+    animation: fadeOut 0.3s ease-in-out forwards;
 }
