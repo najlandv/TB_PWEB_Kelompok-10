@@ -10,10 +10,8 @@ const form = (req, res) => {
 };
 
 const checklogin = async (req, res) => {
-  // console.log("Attempting to log in:", req.body);
   const { email, password } = req.body;
   try {
-    // Menggunakan nama variabel lain untuk menyimpan hasil pencarian user
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
@@ -21,28 +19,24 @@ const checklogin = async (req, res) => {
       return res.status(404).render("login",{ title:"Express", error: "Email atau Passward salah! Silahkan coba lagi" });
     }
 
-    // Verifikasi password
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
       return res.status(401).render("login", { title: "Express",layout:false, error: "Email atau Passward salah! Silahkan coba lagi" });
     }
 
-    // Buat token JWT
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role, nama_depan: user.nama_depan, no_identitas: user.no_identitas, alamat: user.alamat, no_hp: user.no_hp},
       process.env.JWT_SECRET_TOKEN,
       { expiresIn: 86400 }
     );
 
-    // Set cookie dengan token
 
     res.cookie("token", token, { httpOnly: true });
 
     const io = req.app.get('io');
     const userId = user.id.toString();
 
-    // Menggunakan emit dari client untuk bergabung ke room yang sesuai
     io.on('connection', (socket) => {
       socket.emit('join', userId);
     });
@@ -57,7 +51,6 @@ const checklogin = async (req, res) => {
     }
 
 
-    // Jika tidak ada peran yang cocok, berikan respons standar
     res.status(200).send({ auth: true, token: token });
 
   } catch (err) {

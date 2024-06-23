@@ -39,10 +39,8 @@ const dashboard = async(req, res)=>{
 
 const lihatProfil = async (req, res) => {
   try {
-    // console.log(req.userId);
-    // res.json(req.user)
+  
     const lihatProfil = await User.findByPk(req.userId);
-    // console.log(lihatProfil);
     const userId = lihatProfil.id;
     const userRole = lihatProfil.role;
     const userEmail = lihatProfil.email;
@@ -76,7 +74,6 @@ const updateProfilMhs = async (req, res) => {
     const { email, nama, no_identitas, no_hp, alamat } = req.body;
 
     console.log(req.userId);
-    // res.json(req.user)
     await User.update(
       {
         email: email,
@@ -100,7 +97,6 @@ const updateProfilMhs = async (req, res) => {
 const aksesUpdateProfil = async (req, res) => {
   try {
     const lihatProfil = await User.findByPk(req.userId);
-    // console.log(lihatProfil);
     const userId = lihatProfil.id;
     const userRole = lihatProfil.role;
     const userEmail = lihatProfil.email;
@@ -129,8 +125,6 @@ const lihatPersetujuan = async (req, res) => {
     const lihatPersetujuan = await Formulir.findAll({
       include: [{ model: User }],
     });
-    // console.log(lihatPersetujuan);
-    // return res.json(lihatPersetujuan)
     const nomorSurat = lihatPersetujuan.nomorSurat;
     const tanggalDikirim = lihatPersetujuan.tanggalDikirim;
     const tanggalDisetujui = lihatPersetujuan.tanggalDisetujui;
@@ -140,7 +134,6 @@ const lihatPersetujuan = async (req, res) => {
     const acceptByKaprodi = lihatPersetujuan.acceptByKaprodi;
     const judulTA = lihatPersetujuan.judulTA;
     const title = "Persetujuan";
-    // console.log(lihatPersetujuan);
 
     res.render("admin/persetujuan", {
       lihatPersetujuan,
@@ -163,8 +156,6 @@ const lihatPersetujuan = async (req, res) => {
 const lihatAkun = async (req, res) => {
   try {
     const lihatAkun = await User.findAll({});
-    // console.log(lihatAkun);
-    // return res.json(lihatAkun);
 
     const title = "Akun";
 
@@ -182,8 +173,6 @@ const lihatDetail = async (req, res) => {
       where: { nomorSurat },
       include: [{ model: User }],
     });
-    // console.log(lihatDetail);
-    // return res.json(lihatDetail)
 
     const title = "Detail Formulir";
 
@@ -210,15 +199,11 @@ const terimaFormulir = async (req, res) => {
       penerima: penerima,
 
     });
-    // console.log(newNotification);
 
     const io = req.app.get("io");
     io.emit("permintaan_formulir", {
       userId: userId,
     });
-    // io.to(userId).emit("permintaan_formulir", {
-    //   message: `Pengajuan Formulir Diterima!`,
-    // });
     io.emit("permintaan_formulir", {message: `Pengajuan Formulir Diterima!`,})
     res.redirect("/admin/persetujuan");
   } catch (error) {
@@ -267,7 +252,6 @@ try {
   })
   const title = "Riwayat Surat";
 
-  // console.log(riwayatSurat.Surat)
   res.render("admin/riwayat", { riwayatSurat: riwayatSurat, title });
   
 } catch (error) {
@@ -287,7 +271,6 @@ const formulirDiterima = async (req,res) => {
       },     
     })
     const title = "Formulir yang Diterima";
-    // console.log(formulirDiterima);
     res.render("admin/diterima", {formulirDiterima, title})
 
   } catch (error) {
@@ -305,7 +288,6 @@ const formulirDitolak = async (req,res) => {
       },     
     })
     const title = "Formulir yang Ditolak";
-    // console.log(formulirDitolak);
     res.render("admin/ditolak", {formulirDitolak, title})
 
   } catch (error) {
@@ -331,7 +313,6 @@ const hapusSurat = async (req,res) => {
 }
 
 const riwayatSuratByTahun = async(req, res) => {
-  // console.log(req.params);
   try {
     const angkatan = req.params.angkatan;
     const riwayatSurat = await Formulir.findAll({
@@ -344,7 +325,6 @@ const riwayatSuratByTahun = async(req, res) => {
     })
     const title = "Riwayat Surat";
     res.render("admin/riwayatbytahun", { riwayatSurat: riwayatSurat, title, angkatan });
-    // return res.json(riwayatSurat)
     
   } catch (error) {
     console.error("Error during login: ", error);
@@ -409,7 +389,6 @@ const email = async(req,res) => {
 }
 
 const lihatNotifikasi = async (req,res) => {
-  // console.log(lihatNotifikasi)
   try {
     const lihatNotifikasi = await Notifikasi.findAll({
       include:[{model: Formulir}],
@@ -426,15 +405,12 @@ const lihatNotifikasi = async (req,res) => {
 
 const readNotifikasi = async (req,res) => {
   try {
-    // Temukan notifikasi berdasarkan id
     const notifikasi = await Notifikasi.findByPk(req.params.id);
     
     if (notifikasi) {
-      // Update status isRead menjadi 1
       notifikasi.isRead = 1;
       await notifikasi.save();
       
-      // Kirim respons OK
       res.sendStatus(200);
     } else {
       res.status(404).send('Notifikasi tidak ditemukan');

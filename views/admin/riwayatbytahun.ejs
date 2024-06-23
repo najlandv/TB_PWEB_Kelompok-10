@@ -52,7 +52,7 @@
                     </form>
                 </td>
             </tr>
-            <!-- modal hapus -->
+            
             <div id="modalhapus<%= index+1 %>" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </div>
-             <!-- modal success -->
+            
              <div id="modalSuccess<%= index + 1 %>" class="modal" aria-labelledby="modal-success-title" role="dialog" aria-modal="true">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -94,20 +94,20 @@
         console.log(data.length)
               
         for(let i=1;i<=data.length;i++ ){
-        // Menampilkan modal saat tombol terima diklik
-        document.getElementById(`hapus-button${i}`).addEventListener('click', function() {
+        
+            document.getElementById(`hapus-button${i}`).addEventListener('click', function() {
                 document.getElementById(`modalhapus${i}`).classList.add('show');
             });
-            // Menangani klik tombol "terima" di modal
+         
             document.getElementById(`confirm-accept${i}`).addEventListener('click', function() {
                 document.getElementById(`accept-form${i}`).classList.add('show');
             });
-            // Menangani klik tombol "Cancel" di modal
+            
             document.getElementById(`cancel-accept${i}`).addEventListener('click', function() {
                 document.getElementById(`modalhapus${i}`).classList.remove('show');
             });
-            // Menangani pengiriman form email
-        document.getElementById(`email-form${i}`).addEventListener('submit', async function (event) {
+       
+            document.getElementById(`email-form${i}`).addEventListener('submit', async function (event) {
             event.preventDefault();
             const response = await fetch(this.action, {
                 method: 'POST',
@@ -124,7 +124,6 @@
             }
         });
 
-        // Menutup modal success
         document.getElementById(`close-success${i}`).addEventListener('click', function () {
             document.getElementById(`modalSuccess${i}`).classList.remove('show');
         });

@@ -1,5 +1,4 @@
 
-/* Resetting default styles */
 * {
     margin: 0;
     padding: 0;
@@ -7,10 +6,9 @@
     font-family: "Poppins", sans-serif;
 }
 
-/* Setting font family */
 body {
     font-family: "Poppins", sans-serif;
-    background-color: #f3f3f3; /* Cream color */
+    background-color: #f3f3f3; 
 }
 .poppins-light{
     font-family: "Poppins", sans-serif;
@@ -18,22 +16,20 @@ body {
     font-style: normal;
   }
   
-
-/* Navbar styling */
 .navbar {
-    position: fixed; /* Membuat navbar menempel */
-    top: 0; /* Menempatkan navbar di bagian atas halaman */
+    position: fixed; 
+    top: 0; 
     left: 0;
-    width: 100%; /* Lebar navbar mengikuti lebar layar */
+    width: 100%; 
     background-color: #1A4D2E;
     color: white;
     padding: 10px;
     text-align: center;
     height: 60px;
     display: flex;
-    justify-content: right; /* Mengatur jarak antara elemen di dalam navbar */
+    justify-content: right; 
     align-items: center;
-    z-index: 1000; /* Menentukan urutan tumpukan (z-index) navbar */
+    z-index: 1000; 
 }
 
 .navbar-toggle {
@@ -65,24 +61,21 @@ body {
     margin-right: 10px;
 }
 
-/* Sidebar styling */
+
 .sidebar {
     position: fixed;
     left: 0;
     top:50px;
     width: 200px;
     height: calc(100vh - 50px); 
-    background-color: #4F6F52; /* Dark green */
+    background-color: #4F6F52;
     padding: 20px;
-    color: #ffffff; /* White */
+    color: #ffffff; 
 }
 
-/* Sidebar links styling */
 .sidebar ul {
     list-style: none;
     padding: 0;
-    
-
 }
 
 .sidebar ul li {
@@ -92,7 +85,7 @@ body {
 
 .sidebar ul li a {
     text-decoration: none;
-    color: #ffffff; /* White */
+    color: #ffffff; 
     font-size: 16px;
     display: flex;
     align-items: center;
@@ -106,32 +99,26 @@ body {
     padding-left: 10px;
 }
 
-/* .sidebar ul li a:hover,  {
-    background-color: #134025; 
-    border-radius: 5px;
-} */
-
 .sidebar ul li:hover, .sidebar ul li.active {
-    background-color: #ffffff; /* White background */
-    color: #4F6F52; /* Dark green text */
+    background-color: #ffffff; 
+    color: #4F6F52; 
     border-radius: 5px;
 }
 
 .sidebar ul li:hover a, .sidebar ul li.active a {
-    color: #4F6F52; /* Dark green text */
+    color: #4F6F52; 
 }
 
-/* Specific hover state for links to override default color */
 .sidebar ul li a:hover {
-    background-color: transparent; /* Ensure link itself does not change background */
+    background-color: transparent; 
 }
-/* Logout link styling */
+
 .logout {
     position: absolute;
     bottom: 20px;
     left: 20px;
     text-decoration: none;
-    color: #ffffff; /* White */
+    color: #ffffff; 
     display: flex;
     align-items: center;
 }
@@ -140,7 +127,6 @@ body {
     margin-right: 10px;
 }
 
-/* Container styling */
 .container {
     margin-left: 220px; 
     margin-top: 80px;
@@ -152,34 +138,30 @@ body {
     min-height: calc(100vh - 70px);
 }
 
-/* Heading styling */
 .heading {
     font-size: 32px;
     text-align: center;
     margin-bottom: 20px;
-    color: #1A4D2E; /* Dark green */
+    color: #1A4D2E;
 }
 
 /* Profile info styling */
 .profile-info {
-    background-color: #f3f3f3; /* Cream color */
+    background-color: #f3f3f3;
     padding: 20px;
     border-radius: 8px;
 }
 
-/* Individual info row styling */
+
 .info-row {
     margin-bottom: 10px;
 }
 
-/* Info label styling */
+
 .info-label {
     font-weight: bold;
 }
 
-#sidebar.active {
-    left: 0; /* Tampilkan sidebar */
-}
 
 .logout {
     background: none;
@@ -194,10 +176,10 @@ body {
   }
   
   .logout i {
-    margin-right: 8px; /* Optional: Adjust space between icon and text */
+    margin-right: 8px; 
   }
 
-  /* CSS untuk tombol logout */
+
   .logout {
     cursor: pointer;
     background: none;
@@ -210,9 +192,8 @@ body {
     margin: 0;
 }
 
-/* CSS untuk modal */
 .modal {
-    display: none; /* Sembunyikan modal secara default */
+    display: none; 
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -222,15 +203,15 @@ body {
     font-family: "Poppins", sans-serif;
     overflow: auto;
     color : #333;
-    background-color: rgba(0, 0, 0, 0.5); /* Tambahkan lapisan transparan di belakang modal */
-    align-items: center; /* Posisi tengah vertikal */
+    background-color: rgba(0, 0, 0, 0.5); 
+    align-items: center; 
     justify-content: center; 
 }
 
 .modal-content {
     font-size: small;
     background-color: #fefefe;
-    margin: 15% auto; /* Letakkan modal di tengah halaman */
+    margin: 15% auto; 
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
@@ -273,7 +254,7 @@ body {
 }
 
 .confirm-button {
-    background-color: #4CAF50; /* Hijau */
+    background-color: #4CAF50; 
     color: white;
 }
 
@@ -282,7 +263,7 @@ body {
 }
 
 .cancel-button {
-    background-color: #949494; /* Merah */
+    background-color: #949494; 
     color: white;
 }
 
@@ -295,11 +276,7 @@ body {
     display: block;
 }
 
-/* .notification {
-    margin-right: 15px;
-} */
 
-/* Profile dropdown styling */
 .profile-dropdown {
     position: relative;
     display: inline-block;
@@ -368,15 +345,15 @@ th {
 
 .btn {
     background-color: #4F6F52;
-    color: #f1f1f1; /* Light text */
-    border: none; /* Remove default border */
-    font-size: 12px; /* Font size */
-    padding: 10px 10px; /* Padding for the button */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    margin: 5px; /* Add some margin around the buttons */
+    color: #f1f1f1;
+    border: none; 
+    font-size: 12px; 
+    padding: 10px 10px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    margin: 5px; 
     text-align: center;
-    display: inline-block; /* Ensure buttons stay inline */
+    display: inline-block; 
 }
 
 .btn i {
@@ -428,7 +405,6 @@ th {
 .detail-item {
     display: flex;
     justify-content: space-between;
-    /* align-items: center; */
     padding: 10px;
     border-bottom: 1px solid #ddd;
     margin-bottom: 20px;
@@ -459,14 +435,14 @@ th {
     padding: 10px;
     font-size: 16px;
     border: none;
-    border-radius: 5px; /* Rounded corners */
+    border-radius: 5px; 
     cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; 
     
   }
   .dropbtn:hover {
-    background-color: #678f6b; /* Darker green on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Box shadow on hover */
+    background-color: #678f6b; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
   .dropdown-content {
     display: none;
@@ -478,17 +454,17 @@ th {
   }
   
   .dropdown-content a {
-    color: #4F6F52; /* Green text */
-    padding: 12px 16px; /* Padding */
-    text-decoration: none; /* No underline */
-    display: block; /* Block display */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    color: #4F6F52; 
+    padding: 12px 16px; 
+    text-decoration: none; 
+    display: block; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
   }
 
-  /* Dropdown content links hover effect */
+
 .dropdown-content a:hover {
-    background-color: #678f6b; /* Green background on hover */
-    color: white; /* White text on hover */
+    background-color: #678f6b; 
+    color: white; 
 }
 .dropdown:hover .dropdown-content {
     display: block;
@@ -560,7 +536,7 @@ th {
     padding: 12px 16px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
-    position: relative; /* Pastikan posisi relatif untuk indikator */
+    position: relative; 
 }
 
 .notification-item:last-child {
@@ -579,7 +555,6 @@ th {
     margin-right: 10px; 
 }
 
-/* Styling untuk notifikasi */
 .notification-container {
     position: fixed;
     top: 20px;
@@ -618,7 +593,7 @@ th {
 }
 
 .view-button button {
-    background-color:  #28a745; /* Primary color */
+    background-color:  #28a745; 
     color: white;
     border: none;
     padding: 8px 16px;
@@ -632,13 +607,13 @@ th {
 }
 
 .download-icon {
-    margin-left: 10px; /* Space between button and icon */
+    margin-left: 10px; 
     text-decoration: none;
     vertical-align: middle;
 }
 
 .download-icon svg {
-    fill:#3b82f6; /* Matching color with the button */
+    fill:#3b82f6;
     display: inline-block;
     vertical-align: middle;
 }
@@ -649,19 +624,19 @@ th {
 
 .action-button {
     border: none;
-    font-size: 0; /* Menghilangkan ukuran font untuk menyembunyikan teks */
+    font-size: 0; 
     cursor: pointer;
     display: inline-block;
-    padding: 6px; /* Mengurangi padding */
-    width: 30px; /* Mengurangi lebar tombol */
-    height: 30px; /* Mengurangi tinggi tombol */
+    padding: 6px; 
+    width: 30px; 
+    height: 30px;
     border-radius: 5px;
 }
 
 .action-button .icon {
     width: 20px;
     height: 20px;
-    fill: white; /* Warna ikon */
+    fill: white; 
 }
 
 .action-button:focus {
@@ -669,34 +644,34 @@ th {
 }
 
 .action-button:hover {
-    opacity: 0.8; /* Contoh efek hover */
+    opacity: 0.8; 
 }
 
 .action-detail {
-    background-color: #3b82f6; /* Warna latar belakang untuk Detail */
+    background-color: #3b82f6; 
 }
 
 .action-edit {
-    background-color: #f59e0b; /* Warna latar belakang untuk Edit */
+    background-color: #f59e0b; 
 }
 
 .action-delete {
-    background-color: #ef4444; /* Warna latar belakang untuk Delete */
+    background-color: #ef4444; 
 }
 .custom-icon {
-    font-size: 5em; /* Sesuaikan dengan ukuran yang Anda inginkan */
-    color: #1A4D2E; /* Warna ikon */
+    font-size: 5em; 
+    color: #1A4D2E; 
 }
 
 #modal-success-title {
-    font-size: 1.5em; /* Ukuran font lebih besar dari ukuran default */
-    font-weight: bold; /* Memperkuat teks */
-    color: #333; /* Warna teks */
-    text-align: center; /* Posisi teks di tengah */
-    margin-top: 10px; /* Jarak bawah dari elemen lain */
+    font-size: 1.5em; 
+    font-weight: bold; 
+    color: #333; 
+    text-align: center; 
+    margin-top: 10px; 
 }
 
-/* Animasi muncul modal */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -706,7 +681,6 @@ th {
     }
 }
 
-/* Animasi menghilang modal */
 @keyframes fadeOut {
     from {
         opacity: 1;
@@ -716,13 +690,12 @@ th {
     }
 }
 
-/* Efek muncul modal */
+
 .show {
-    display: flex; /* Tampilan fleksibel */
+    display: flex; 
     animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Efek menghilang modal */
 .hide {
     animation: fadeOut 0.3s ease-in-out forwards;
 }
