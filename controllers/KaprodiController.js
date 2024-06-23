@@ -116,7 +116,7 @@ const terimaFormulir = async (req,res)=> {
   try {
     const nomorSurat = req.params.nomorSurat;
     const statusFormulir = await Formulir.findOne({where:{nomorSurat}});
-    statusFormulir.update({acceptByKaprodi : 1});
+    statusFormulir.update({acceptByKaprodi : 1, tanggalDisetujui : new Date()});
     res.redirect ('/kaprodi/persetujuan')
   } catch (error) {
     console.error("Error during login: ", error);
@@ -133,7 +133,7 @@ const tolakFormulir = async (req, res) => {
       return res.status(404).json({ message: "Formulir not found" });
     }
 
-    await statusFormulir.update({ acceptByAdmin: 2, acceptByKaprodi: 2 });
+    await statusFormulir.update({ acceptByKaprodi: 2 });
 
     res.redirect('/kaprodi/persetujuan');
   } catch (error) {

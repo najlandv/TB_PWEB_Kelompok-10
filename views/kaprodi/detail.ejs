@@ -35,15 +35,15 @@
             color: #333;">: </b>  <%= requestDetail.judulTA%> </span>
     </div>
     <div class="detail-item">
-        <span class="detail-label">Status Oleh Admin </span>
+        <span class="detail-label">Status Oleh Kaprodi </span>
         <span class="detail-value" ><b style="font-weight: bold;
             color: #333;">: </b> 
-            <% if (requestDetail.acceptByAdmin==0) { %>
+            <% if (requestDetail.acceptByKaprodi==0) { %>
                 Menunggu
-                <% } else if (requestDetail.acceptByAdmin==1) { %>
+                <% } else if (requestDetail.acceptByKaprodi==1) { %>
     
                Diterima
-               <% } else if (requestDetail.acceptByAdmin==2) { %>
+               <% } else if (requestDetail.acceptByKaprodi==2) { %>
                 Ditolak
                <% } else { %>
                 undefined
@@ -52,8 +52,8 @@
     </div>
     <div class="detail-item">
         <% if (requestDetail.acceptByKaprodi==1) { %>
-            <span class="detail-label">Tanggal Disetujui:</span>
-            <span class="detail-value"><%= requestDetail.tanggalDisetujui%> </span>
+            <span class="detail-label">Tanggal Disetujui</span>
+            <span class="detail-value">: <%= requestDetail.tanggalDisetujui%> </span>
         <% } %>
     </div>
     
