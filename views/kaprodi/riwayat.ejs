@@ -24,7 +24,11 @@
                     <a class="btn" href="detail/<%=riwayatSurat.nomorSurat %>"><i class="fa-solid fa-circle-info fa-lg"></i>Detail</a>
                 </td>
                 <td>
-                    <a class="btn" href="#"><i class="fa-solid fa-circle-info fa-lg"></i>Lihat Surat</a>
+                    <% if (riwayatSurat.Surat.nama_file) { %>
+                        <a href="/data/surat/<%= riwayatSurat.Surat.nama_file %>" target="_blank" class="btn"></i>Lihat Surat</a>
+                    <% } else { %>
+                        <p>Surat tidak tersedia</p>
+                    <% } %>
                 </td>
              </tr>
             <% }) %>

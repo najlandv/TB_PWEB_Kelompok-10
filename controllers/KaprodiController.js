@@ -12,7 +12,7 @@ const dashboard = async(req, res)=>{
   try {
     const countPermohonan = await Formulir.count({
       where: {
-        acceptByAdmin :0,
+        acceptByAdmin :1,
         acceptByKaprodi : 0
       }
     })
