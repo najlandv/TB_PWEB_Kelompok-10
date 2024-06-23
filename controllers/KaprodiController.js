@@ -3,11 +3,43 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
 const { Formulir } = require("../models/index");
 const { Surat } = require("../models/index");
-const { Notifikasi} = require ("../models/index");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 const { log } = require("console");
+
+const dashboard = async(req, res)=>{
+  try {
+    const countPermohonan = await Formulir.count({
+      where: {
+        acceptByAdmin :0,
+        acceptByKaprodi : 0
+      }
+    })
+    const countTerima = await Formulir.count({
+      where: {
+        acceptByAdmin: 1,
+        acceptByKaprodi: 1
+      }
+    })
+    const countTolak = await Formulir.count({
+      where: {
+        acceptByKaprodi: 2
+      }
+    })
+    const countRiwayat = await Formulir.count({
+      where: {
+        acceptByAdmin:1,
+        acceptByKaprodi:1
+      }
+    })
+    const title ="Dashborad";
+    res.render("kaprodi/dashboard", {countPermohonan,countTerima,countTolak, countRiwayat,title})
+  } catch (error) {
+    console.error("Error during login: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 const lihatProfil = async (req, res) => {
   try {
@@ -306,40 +338,6 @@ const riwayatSurat = async(req, res) => {
   }
    
 }
-const lihatNotifikasi = async (req,res) => {
-  try {
-    const lihatNotifikasi = await Notifikasi.findAll({
-      include:[{model: Formulir}],
-      where: {
-        penerima: 'Kaprodi',
-      },
-    });
-    res.render("kaprodi/template",{notifikasi : lihatNotifikasi })
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send('Terjadi Kesalahan Server');
-  }
-}
-const readNotifikasi = async (req,res) => {
-  try {
-    // Temukan notifikasi berdasarkan id
-    const notifikasi = await Notifikasi.findByPk(req.params.id);
-    
-    if (notifikasi) {
-      // Update status isRead menjadi 1
-      notifikasi.isRead = 1;
-      await notifikasi.save();
-      
-      // Kirim respons OK
-      res.sendStatus(200);
-    } else {
-      res.status(404).send('Notifikasi tidak ditemukan');
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Terjadi Kesalahan Server');
-  }
-}
 
 module.exports = {
   
@@ -356,6 +354,5 @@ module.exports = {
   uploadFile,
   kirimFile,
   riwayatSurat,
-  lihatNotifikasi,
-  readNotifikasi
+  dashboard,
 };
