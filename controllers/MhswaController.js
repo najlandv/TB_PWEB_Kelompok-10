@@ -16,11 +16,13 @@ const dashboard = async (req, res) => {
 
     const countTerima = await Formulir.count({
       where: {
+        id_user : user_id,
         acceptByAdmin: 1
       }
     })
     const countTolak = await Formulir.count({
       where: {
+        id_user : user_id,
         acceptByAdmin: 2
       }
     })
