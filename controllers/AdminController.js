@@ -400,7 +400,7 @@ const email = async(req,res) => {
         console.log('Email sent: ' + info.response);
       }
     });
-    res.json({succes: "berhasil mengirim surat"})
+    res.json({ success: true, message: "berhasil mengirim surat" });
     
   } catch (error) {
     console.error("Error during login: ", error);
