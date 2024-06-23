@@ -31,8 +31,6 @@ const dashboard = async (req, res) => {
         id_user : user_id
       }
     })
-
-          // const userId = req.user;
     res.render("mahasiswa/dashboard", {user_id, countTerima,countTolak, countRiwayat,title})
   } catch (error) {
     console.error("Error during login: ", err);
@@ -42,7 +40,7 @@ const dashboard = async (req, res) => {
 
 const showNotification = async (req, res) => {
   try {
-    const userId = req.user.id; // Ambil userId dari objek req, pastikan user sudah di-authenticate
+    const userId = req.user.id; 
 
     const showNotification = await Notifikasi.findAll({
       include: [{ model: Formulir }],
@@ -134,9 +132,6 @@ const lihatProfil = async (req, res) => {
 const updateProfilMhs = async (req, res) => {
   try {
     const { email, nama_depan, nama_belakang, no_identitas, no_hp, alamat} = req.body;
-
-    // const user = await User.findOne({ where:{ id:req.userId}});
-    // user.update({ email, nama_depan, nama_belakang, no_hp, alamat });
     await User.update(
       {
         email: email,
@@ -175,7 +170,7 @@ const aksesUpdateProfil = async (req, res) => {
       userNo_Identitas: lihatProfil.no_identitas,
       userNo_Hp: lihatProfil.no_hp,
       userAlamat: lihatProfil.alamat,
-      user_id: req.userId  // Add this line
+      user_id: req.userId  
 
     };
 
@@ -200,7 +195,6 @@ const tampilkanFormulir = async (req, res) => {
 const kirimFormulir = async (req, res) => {
   const { penerima, instansi, judulTA, namaFile, user_id } = req.body;
   
-  // Validasi manual
   let errors = [];
   if (!penerima || penerima.trim() === '') errors.push({ msg: 'Penerima tidak boleh kosong' });
   if (!instansi || instansi.trim() === '') errors.push({ msg: 'Instansi tidak boleh kosong' });
@@ -208,10 +202,9 @@ const kirimFormulir = async (req, res) => {
   if (!namaFile || namaFile.trim() === '') errors.push({ msg: 'Nama file tidak boleh kosong' });
 
   if (errors.length > 0) {
-    // Kirim kembali ke halaman dengan pesan kesalahan
     return res.render('mahasiswa/isiformulir', {
       errors,
-      user_id, // Pastikan user_id tersedia di form
+      user_id, 
       penerima,
       instansi,
       judulTA,
@@ -222,7 +215,6 @@ const kirimFormulir = async (req, res) => {
 
     const { penerima, instansi, judulTA, namaFile, user_id } = req.body;
 
-    // Masukkan data formulir ke dalam database menggunakan model Formulir
 
     const newFormulir = await Formulir.create({
       penerima,
@@ -232,7 +224,6 @@ const kirimFormulir = async (req, res) => {
       tanggalDikirim: new Date(),
     });
 
-    // Ambil nomorSurat dari Formulir yang baru dibuat
     const { nomorSurat } = newFormulir;
     const templatePath = path.resolve('public/template', 'template-1.docx');
     const content = fs.readFileSync(templatePath);
@@ -241,12 +232,12 @@ const kirimFormulir = async (req, res) => {
     const imageOpts = {
       centered: false,
       getImage: function (tagValue) {
-        // Baca dan kembalikan data gambar secara sinkron
+
         return fs.readFileSync(path.resolve('uploads', tagValue));
       },
       getSize: function (img, tagValue) {
-        // Sesuaikan ukuran gambar di sini jika diperlukan
-        return [150, 50]; // Lebar, Tinggi dalam piksel
+
+        return [150, 50]; 
       },
     };
 
@@ -265,17 +256,16 @@ const kirimFormulir = async (req, res) => {
       throw new Error('Formulir atau pengguna tidak ditemukan');
     }
 
-    // Ambil tanda tangan Kaprodi (user_id = 2)
     const kaprodi = await User.findByPk(2);
 
     if (!kaprodi || !kaprodi.tanda_tangan) {
       throw new Error('Tanda tangan Kaprodi tidak ditemukan');
     }
 
-    const tanda_tangan_file = kaprodi.tanda_tangan; // Nama file dari database
-    const tanda_tangan_path = path.resolve('uploads', tanda_tangan_file); // Path lengkap ke file
+    const tanda_tangan_file = kaprodi.tanda_tangan; 
+    const tanda_tangan_path = path.resolve('uploads', tanda_tangan_file); 
 
-    // Ubah `tanggalDikirim` menjadi objek Date JavaScript dan format tanggalnya
+
     const tanggalDikirim = new Date(formulir.tanggalDikirim).toLocaleDateString('id-ID');
 
     doc.setData({
@@ -285,8 +275,8 @@ const kirimFormulir = async (req, res) => {
       nama: `${formulir.User.nama_depan} ${formulir.User.nama_belakang}`,
       no_identitas: formulir.User.no_identitas,
       judulTA,
-      tanggalDikirim, // Gunakan tanggal yang sudah diformat
-      tanda_tangan: tanda_tangan_path, // Nama file gambar
+      tanggalDikirim, 
+      tanda_tangan: tanda_tangan_path, 
     });
 
     doc.render();
@@ -300,7 +290,6 @@ const kirimFormulir = async (req, res) => {
     const docxFilePath = path.join('public', 'data', 'surat', docxFileName);
     fs.writeFileSync(docxFilePath, buf);
 
-    // Konversi DOCX ke PDF menggunakan LibreOffice
     const pdfFileName = `${new Date().getTime()}-${namaFile}.pdf`;
     const pdfFilePath = path.join('public', 'data', 'surat', pdfFileName);
 
@@ -313,13 +302,13 @@ const kirimFormulir = async (req, res) => {
       fs.writeFileSync(pdfFilePath, result);
       console.log('File converted successfully to PDF:', pdfFilePath);
 
-      // Buat entri di tabel Surat
+
       await Surat.create({
         nama_file: pdfFileName,
         nomorSurat: newFormulir.nomorSurat,
       });
 
-      // Buat notifikasi
+
       const namaPengirim = await User.findByPk(req.userId);
       await Notifikasi.create({
         nomorSurat: newFormulir.nomorSurat,
@@ -328,7 +317,7 @@ const kirimFormulir = async (req, res) => {
         penerima: 'Admin'
       });
 
-      // Emit event socket.io
+
       const io = req.app.get('io');
       io.to('admin').emit('new_formulir', {
         message: 'Pengajuan permintaan formulir baru!',
@@ -339,11 +328,11 @@ const kirimFormulir = async (req, res) => {
         },
       });
 
-      // Tampilkan pesan sukses setelah semua selesai
+
       return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!', user_id });
     });
 
-    // Pembersihan: hapus file DOCX yang dihasilkan setelah konversi
+ 
     fs.unlinkSync(docxFilePath);
   } catch (error) {
     console.error('Terjadi Kesalahan Server:', error);
@@ -498,42 +487,6 @@ const riwayatPermintaanDitolak = async (req, res) => {
   }
 }
 
-const tesHalaman = function (req, res) {
-  res.render('mahasiswa/cobagenerate');
-}
-
-const  { PDFDocument, StandardFonts, rgb }  = require('pdf-lib');
-const { DATE } = require("sequelize");
-const { log } = require("console");
-const testpost =async (req,res) => {
-  try {
-    
-    const pdfDoc = await PDFDocument.create()
-    const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
-    
-    const page = pdfDoc.addPage()
-    const { width, height } = page.getSize()
-    const fontSize = 30
-    page.drawText('Creating PDFs in JavaScript is awesome!', {
-      x: 50,
-      y: height - 4 * fontSize,
-      size: fontSize,
-      font: timesRomanFont,
-      color: rgb(0, 0.53, 0.71),
-    })
-
-    const pdfBytes = await pdfDoc.save()
-    res.send(pdfBytes)
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send('Terjadi Kesalahan Server');
-    
-  }
-}
-
-
-
-
 
 module.exports = {
   form,
@@ -553,8 +506,5 @@ module.exports = {
   riwayatPermintaanDisetujui,
   riwayatPermintaanDitolak,
   riwayatSurat,
-  tesHalaman,
-  showNotification,
-    testpost,
-    tesHalaman
+  showNotification
 };

@@ -11,8 +11,6 @@ router.use(showNotification);
 router.get('/notfound', verifyToken, function(req, res, next) {
   res.render('notfound');
 });
-
-
 router.get('/dashboard', role('mahasiswa'), MhswaController.dashboard)
 router.get('/profil',role('mahasiswa'), MhswaController.lihatProfil)
 router.get('/editprofil',role('mahasiswa'), MhswaController.aksesUpdateProfil)
@@ -28,9 +26,4 @@ router.post('/editformulir/:id/delete',role('mahasiswa'), MhswaController.delete
 router.get('/permintaandisetujui',role('mahasiswa'), MhswaController.riwayatPermintaanDisetujui);
 router.get('/permintaanditolak',role('mahasiswa'), MhswaController.riwayatPermintaanDitolak);
 router.get('/panduan', verifyToken,role('mahasiswa'), panduanController.panduan)
-
-
-
-router.get('/test', MhswaController.tesHalaman)
-router.post('/test', MhswaController.testpost)
 module.exports = router;

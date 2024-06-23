@@ -16,7 +16,6 @@
     <div id="notification-container" class="notification-container"></div>
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
     <header>
-        <!-- Navbar -->
         <nav class="navbar">
             <div class="notification-icon">
                 <i class="fa-solid fa-bell fa-lg"></i>
@@ -33,7 +32,7 @@
                                     <% if (notif.Formulir.acceptByAdmin == 1) { %>
                                         <%= notif.Formulir.User.nama_depan %>, Admin menerima formulir permintaan dengan nomor surat <%= notif.Formulir.nomorSurat %>
                                     <% } else if (notif.Formulir.acceptByAdmin == 2) { %>
-                                      <%= notif.Formulir.User.nama_depan %>, Admin menolak formulir permintaan dengan nomor surat <%= notif.Formulir.nomorSurat %>
+                                      <%= notif.Formulir.User.nama_depan %>, Admin menolak formulir permintaan dengan nomor surat <%= notif.Formulir.nomorSurat %> Silahkan ajukan permintaan formulir kembali!!
                                     <% } else { %>
                                         Menunggu proses pemeriksaan permintaan Anda!!!
                                     <% } %>
@@ -57,9 +56,6 @@
                         socket.on("permintaan_formulir", (data) => {
                           showNotification(data, "formulir");
                         });
-                        // socket.on("permintaan_test", (data) => {
-                        //   console.log("Notifikasi test");
-                        // });
                       
                         function showNotification(data, type) {
                           const notificationContainer = document.getElementById("notification-container");
@@ -94,7 +90,6 @@
         </nav>   
     </header>
     <aside>
-        <!-- Sidebar -->
         <div class="sidebar">
             <ul>
                 <li><a href="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
@@ -137,39 +132,31 @@
             </script> 
              <script src="/socket.io/socket.io.js"></script>
              <script>
-                // Menangani klik pada setiap notifikasi
                 document.querySelectorAll('.notification-item').forEach(item => {
                   item.addEventListener('click', async (event) => {
                     const notifId = item.getAttribute('data-notif-id');
-                    const isRead = item.getAttribute('data-is-read'); // Menambahkan atribut data-is-read
-                    // Tambahkan validasi jika isRead sudah 1, tidak lakukan apa-apa
+                    const isRead = item.getAttribute('data-is-read'); 
                     if (isRead === 1) {
                       console.log('Notifikasi sudah dibaca, tidak bisa diklik lagi');
                       return;
                     }
                     try {
-                      // Kirim permintaan untuk menandai notifikasi sebagai sudah dibaca
                       const response = await fetch(`/admin/notifikasi/${notifId}/read`, {
                         method: 'POST'
                       });
                       if (!response.ok) {
                         throw new Error('Gagal menandai notifikasi sudah dibaca');
                       }
-                      
-                      // Hapus indikator visual dari notifikasi yang sudah dibaca
                       const indicator = item.querySelector('.indicator');
                       if (indicator) {
                         indicator.remove();
                       } else {
                         console.warn('Indikator visual tidak ditemukan untuk notifikasi ini');
                       }
-                      
-                      // Setelah berhasil menandai, atur atribut data-is-read menjadi 1
                       item.setAttribute('data-is-read', '1');
             
                     } catch (error) {
                       console.error('Terjadi kesalahan:', error);
-                      // Tampilkan pesan kesalahan kepada pengguna jika terjadi masalah
                       alert('Terjadi kesalahan saat menandai notifikasi');
                     }
                   });
