@@ -1,5 +1,7 @@
+const { User } = require("../models/index");
 const panduan = (req, res) => {
-    res.render("mahasiswa/ panduan", { title: "Express" });
+  const user_id = req.userId;
+  res.render("mahasiswa/panduan", { user_id, title: "Express" });
   };
 
   module.exports={
