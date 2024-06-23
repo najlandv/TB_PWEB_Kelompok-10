@@ -1,6 +1,29 @@
-<% const dashboardContent = 'kaprodi/dashboard' %>
+<% const dashboardContent = ' ' %>
 <%- include('./template', { content: dashboardContent }) %>
 
+<!-- Socket.io Client Script -->
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+
 <div class="container">
-    <h1>Dasboard kaprodi</h1>
+    <h1 class="custom-heading">Dashboard kaprodi</h1>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; justify-content: center;margin-left: 10px; max-width: 800px;width: 100%;">
+        <a class="dashboard-box" href="persetujuan">
+            <h3>Permohonan Persetujuan</h3>
+            <p><%= countPermohonan %></p>
+        </a>
+        <a class="dashboard-box" href="riwayat">
+            <h3>Riwayat Permintaan Surat</h3>
+            <p><%= countRiwayat %></p>
+        </a>
+        <a class="dashboard-box" href="diterima">
+            <h3>Formulir yang Diterima</h3>
+            <p><%= countTerima %></p>
+        </a>
+        <a class="dashboard-box" href="ditolak">
+            <h3>Formulir yang Ditolak</h3>
+            <p><%= countTolak %></p>
+        </a>
+    </div>
+    
 </div>

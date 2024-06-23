@@ -4,22 +4,19 @@ const verifyToken= require ('../middleware/validtokenMiddleware');
 const KaprodiControllerr= require('../controllers/KaprodiController');
 const role = require ('../middleware/checkroleMiddleware');
 const passcontroller = require('../controllers/UbahpassController')
-const lihatNotifikasi = require("../middleware/notifikasi");
+
 
 
 
 router.get('/notfound', verifyToken, function(req, res, next) {
   res.render('notfound');
 });
+router.get("/dashboard", verifyToken, role("kaprodi"),KaprodiControllerr.dashboard);
 
-router.use(lihatNotifikasi);
-router.get('/notifikasi', verifyToken,role("kaprodi"),KaprodiControllerr.lihatNotifikasi);
-router.post('/notifikasi/:id/read',verifyToken,role("kaprodi"),KaprodiControllerr.readNotifikasi);
-
-router.get('/dashboard', verifyToken, role('kaprodi'), function(req, res, next) {
-  const title = 'Dashboard';
-  res.render('kaprodi/dashboard', {title}); 
-});
+//router.get('/dashboard', verifyToken, role('kaprodi'), function(req, res, next) {
+//  const title = 'Dashboard';
+//  res.render('kaprodi/dashboard', {title}); 
+//});
 
 
 
