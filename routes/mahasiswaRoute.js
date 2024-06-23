@@ -3,41 +3,33 @@ var router = express.Router();
 const verifyToken= require ('../middleware/validtokenMiddleware');
 const role= require ('../middleware/checkroleMiddleware');
 const MhswaController = require('../controllers/MhswaController');
+const showNotification = require('../middleware/notifikasimhs');
 const panduanController = require('../controllers/panduanController')
 
-
+router.use(verifyToken);
+router.use(showNotification);
 router.get('/notfound', verifyToken, function(req, res, next) {
   res.render('notfound');
 });
 
-// router.use(role('mahasiswa'));
-// router.get('/home', verifyToken,role('mahasiswa'), function(req, res, next) {
-//   res.render('mahasiswa/home');
-// });
 
-
-router.get('/dashboard', verifyToken, role('mahasiswa'), function(req, res, next) {
-  const title = 'Dashboard';
-  const user_id = req.userId;
-
-  res.render('mahasiswa/dashboard', {user_id,title}); 
-});
-
-
-router.get('/profil', verifyToken,role('mahasiswa'), MhswaController.lihatProfil)
-router.get('/editprofil', verifyToken,role('mahasiswa'), MhswaController.aksesUpdateProfil)
-router.patch('/editprofil', verifyToken,role('mahasiswa'), MhswaController.updateProfilMhs)
-router.get('/isiformulir', verifyToken,role('mahasiswa'), MhswaController.tampilkanFormulir);
-router.post('/kirimformulir', verifyToken,role('mahasiswa'), MhswaController.kirimFormulir);
-router.get('/riwayatpermintaan', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaan);
-router.get('/riwayatsurat', verifyToken,role('mahasiswa'), MhswaController.riwayatSurat);
-router.get('/detailriwayat/:id', verifyToken,role('mahasiswa'), MhswaController.detailRiwayat);
-router.get('/updateformulir/:id', verifyToken,role('mahasiswa'), MhswaController.updateFormulir);
-router.post('/editformulir/:id/update', verifyToken,role('mahasiswa'), MhswaController.editFormulir);
-router.post('/editformulir/:id/delete', verifyToken,role('mahasiswa'), MhswaController.deleteFormulir); 
-router.get('/permintaandisetujui', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaanDisetujui);
-router.get('/permintaanditolak', verifyToken,role('mahasiswa'), MhswaController.riwayatPermintaanDitolak);
+router.get('/dashboard', role('mahasiswa'), MhswaController.dashboard)
+router.get('/profil',role('mahasiswa'), MhswaController.lihatProfil)
+router.get('/editprofil',role('mahasiswa'), MhswaController.aksesUpdateProfil)
+router.patch('/editprofil',role('mahasiswa'), MhswaController.updateProfilMhs)
+router.get('/isiformulir',role('mahasiswa'), MhswaController.tampilkanFormulir);
+router.post('/kirimformulir',role('mahasiswa'), MhswaController.kirimFormulir);
+router.get('/riwayatpermintaan',role('mahasiswa'), MhswaController.riwayatPermintaan);
+router.get('/riwayatsurat',role('mahasiswa'), MhswaController.riwayatSurat);
+router.get('/detailriwayat/:id',role('mahasiswa'), MhswaController.detailRiwayat);
+router.get('/updateformulir/:id',role('mahasiswa'), MhswaController.updateFormulir);
+router.post('/editformulir/:id/update',role('mahasiswa'), MhswaController.editFormulir);
+router.post('/editformulir/:id/delete',role('mahasiswa'), MhswaController.deleteFormulir); 
+router.get('/permintaandisetujui',role('mahasiswa'), MhswaController.riwayatPermintaanDisetujui);
+router.get('/permintaanditolak',role('mahasiswa'), MhswaController.riwayatPermintaanDitolak);
 router.get('/panduan', verifyToken,role('mahasiswa'), panduanController.panduan)
+
+
 
 router.get('/test', MhswaController.tesHalaman)
 router.post('/test', MhswaController.testpost)

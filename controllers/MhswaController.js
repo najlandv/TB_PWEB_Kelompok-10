@@ -8,6 +8,55 @@ const Docxtemplater = require('docxtemplater');
 const ImageModule = require('docxtemplater-image-module');
 const libre = require("libreoffice-convert");
 
+const dashboard = async (req, res) => {
+  try {
+    const title = 'Dashboard';
+    const user_id = req.userId;
+
+
+    const countTerima = await Formulir.count({
+      where: {
+        acceptByAdmin: 1
+      }
+    })
+    const countTolak = await Formulir.count({
+      where: {
+        acceptByAdmin: 2
+      }
+    })
+    const countRiwayat = await Formulir.count({
+      where: {
+        id_user : user_id
+      }
+    })
+
+          // const userId = req.user;
+    res.render("mahasiswa/dashboard", {user_id, countTerima,countTolak, countRiwayat,title})
+  } catch (error) {
+    console.error("Error during login: ", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+const showNotification = async (req, res) => {
+  try {
+    const userId = req.user.id; // Ambil userId dari objek req, pastikan user sudah di-authenticate
+
+    const showNotification = await Notifikasi.findAll({
+      include: [{ model: Formulir }],
+      where: {
+        penerima: userId, 
+      },
+    });
+    console.log(showNotification)
+
+    res.render("mahasiswa/template", { notifikasimhs: showNotification });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Terjadi Kesalahan Server');
+  }
+};
+
 
 const form = (req, res) => {
   res.render("login", { title: "Express" });
@@ -37,7 +86,7 @@ const checklogin = async (req, res) => {
     res.cookie("token", token, { httpOnly: true });
 
     if (user.role == "mahasiswa") {
-      return res.redirect("/dashboard");
+      return res.redirect("/mahasiswa/dashboard");
     } else if (user.role == "kaprodi") {
       return res.redirect("/kaprodi/dashboard");
     } else if (user.role == "admin") {
@@ -146,116 +195,6 @@ const tampilkanFormulir = async (req, res) => {
 };
 
 
-// const kirimFormulir = async (req, res) => {
-//   try {
-//     const { penerima, instansi, judulTA, namaFile, user_id} = req.body;
-
-//     // Insert form data into the database using the Formulir model
-//     const newFormulir = await Formulir.create({
-//       penerima,
-//       instansi,
-//       judulTA,
-//       id_user: req.userId,
-//       tanggalDikirim: new Date()
-//     });
-
-//     const templatePath = path.resolve('public/template', 'template.docx');
-//     const content = fs.readFileSync(templatePath);
-//     const zip = new PizZip(content);
-//     const doc = new Docxtemplater(zip, {
-//       paragraphLoop: true,
-//       linebreaks: true,
-//     });
-
-//     const formulir = await Formulir.findOne({
-//       include: [{ model: User }],
-//       where: { id_user: req.userId },
-//     });
-    
-
-//     doc.setData({
-//       nomorSurat: formulir.nomorSurat,
-//       penerima: penerima,
-//       instansi: instansi,
-//       nama: formulir.User.nama_depan + formulir.User.nama_belakang,
-//       no_identitas: formulir.User.no_identitas,
-//       judulTA,
-//     });
-
-//     doc.render();
-
-//     const buf = doc.getZip().generate({
-//       type: "nodebuffer",
-//       compression: "DEFLATE",
-//     });
-
-//     const fileName = new Date().getTime() + '-' +`${namaFile}.docx`;
-//     const userDir = path.resolve("public", "data", `surat`);
-//     const outputPath = path.join(userDir, fileName);
-
-//     if (!fs.existsSync(userDir)) {
-//       fs.mkdirSync(userDir, { recursive: true });
-//     }
-//     const pdfName = new Date().getTime() + '-' +`${namaFile}.pdf`;
-
-//     fs.writeFileSync(outputPath, buf);
-
-//     const pdfDir = path.resolve("public", "data", "surat");
-//     const pdfPath = path.join(pdfDir, pdfName);
-
-//     if (!fs.existsSync(pdfDir)) {
-//       fs.mkdirSync(pdfDir, { recursive: true });
-//     }
-
-//     libre.convert(
-//       fs.readFileSync(outputPath),
-//       "pdf",
-//       undefined,
-//       async (err, result) => {
-//         if (err) {
-//           console.error("Error converting DOCX to PDF:", err);
-//           return res.status(500).send("Error converting DOCX to PDF");
-//         }
-
-//         await Surat.create({
-//           nama_file: pdfName,
-//           nomorSurat: newFormulir.nomorSurat,
-//         });
-
-//         fs.writeFileSync(pdfPath, result);
-//         console.log("File converted successfully");
-
-//         await fs.promises.unlink(outputPath);
-//     })
-//     const namaPengirim = await User.findByPk(req.userId);
-
-//     const newNotification = await Notifikasi.create({
-//       nomorSurat: newFormulir.nomorSurat,
-//       tanggal: new Date(),
-//       isRead: false,
-//     });
-//     console.log(newNotification);
-
-//     const io = req.app.get('io');
-//     io.to('admin').emit('new_formulir', {
-//       message: 'Pengajuan permintaan formulir baru!',
-//       formulir: {
-//         namaPengirim: namaPengirim.nama_depan,
-//         nim: namaPengirim.no_identitas,
-//         tanggalDikirim: new Date(),
-//       },
-      
-//     });
-
-
-
-//     return res.render('mahasiswa/isiformulir', { successMessage: 'Formulir berhasil dikirim!', user_id });
-//   } catch (error) {
-//     console.error('Terjadi Kesalahan Server:', error);
-//     return res.status(500).send('Terjadi Kesalahan Server: ' + error.message);
-//   }
-// };
-
 const kirimFormulir = async (req, res) => {
   try {
     const { penerima, instansi, judulTA, namaFile, user_id } = req.body;
@@ -266,9 +205,10 @@ const kirimFormulir = async (req, res) => {
       instansi,
       judulTA,
       id_user: req.userId,
-      tanggalDikirim: new Date()
+      tanggalDikirim: new Date(),
     });
-
+    // Retrieve the nomorSurat from the newly created Formulir
+    const { nomorSurat } = newFormulir;
     const templatePath = path.resolve('public/template', 'template-1.docx');
     const content = fs.readFileSync(templatePath);
     const zip = new PizZip(content);
@@ -293,15 +233,26 @@ const kirimFormulir = async (req, res) => {
 
     const formulir = await Formulir.findOne({
       include: [{ model: User }],
-      where: { id_user: req.userId },
+      where: { id_user: req.userId, nomorSurat: nomorSurat },
     });
+
 
     if (!formulir || !formulir.User) {
       throw new Error('Formulir atau pengguna tidak ditemukan');
     }
 
-    const tanda_tangan_path = path.resolve('public', 'img', 'ttd ex.png');
-    
+    // Retrieve the signature of the Kaprodi (user_id = 2)
+    const kaprodi = await User.findByPk(2);
+
+    if (!kaprodi || !kaprodi.tanda_tangan) {
+      throw new Error('Tanda tangan Kaprodi tidak ditemukan');
+    }
+
+    const tanda_tangan_path = kaprodi.tanda_tangan; // Assumes tanda_tangan stores the file path
+
+    // Convert `tanggalDikirim` to a JavaScript Date object and format it
+    const tanggalDikirim = new Date(formulir.tanggalDikirim).toLocaleDateString('id-ID');
+
     doc.setData({
       nomorSurat: formulir.nomorSurat,
       penerima: penerima,
@@ -309,9 +260,9 @@ const kirimFormulir = async (req, res) => {
       nama: `${formulir.User.nama_depan} ${formulir.User.nama_belakang}`,
       no_identitas: formulir.User.no_identitas,
       judulTA,
+      tanggalDikirim, // Use the formatted date
       tanda_tangan: tanda_tangan_path,
     });
-
 
     doc.render();
 
@@ -375,6 +326,8 @@ const kirimFormulir = async (req, res) => {
   }
 };
 
+
+
 const editFormulir = async (req, res) => {
   try {
     const nomorSurat = req.params.id;
@@ -394,6 +347,9 @@ const editFormulir = async (req, res) => {
 const deleteFormulir = async (req, res) => {
   try {
     const nomorSurat = req.params.id;
+    await Notifikasi.destroy({ where: { nomorSurat } });
+    await Surat.destroy({ where: { nomorSurat } });
+    
     const updateFormulir = await Formulir.findOne({ where: { nomorSurat }})
    
     await updateFormulir.destroy();
@@ -404,6 +360,7 @@ const deleteFormulir = async (req, res) => {
     return res.status(500).send('Terjadi Kesalahan Server');
   }
 };
+
 
 
 const updateFormulir = async (req, res) => {
@@ -441,8 +398,12 @@ const riwayatPermintaan = async (req, res) => {
 }
 const riwayatSurat = async (req, res) => {
   try {
-    const riwayatSurat = await Formulir.findAll({ where: { id_user: req.userId } });
-    console.log(riwayatSurat)
+    const riwayatSurat = await Formulir.findAll({
+      where: { id_user: req.userId },
+      include:[{model: Surat}]
+    });
+
+    console.log(riwayatSurat.Surat)
     const nomorSurat = riwayatSurat.nomorSurat;
     const tanggalDikirim = riwayatSurat.tanggalDikirim;
     const penerima = riwayatSurat.penerima;
@@ -551,6 +512,7 @@ const testpost =async (req,res) => {
 
 module.exports = {
   form,
+  dashboard,
   checklogin,
   logout,
   updateProfilMhs,
@@ -567,6 +529,7 @@ module.exports = {
   riwayatPermintaanDitolak,
   riwayatSurat,
   tesHalaman,
+  showNotification,
     testpost,
     tesHalaman
 };

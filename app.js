@@ -51,6 +51,21 @@ io.on('connection', (socket) => {
     console.log(`User with id ${userId} joined room`);
     socket.join(userId)
   })
+  socket.on("permintaan_formulir", (data) => {
+    console.log(data);
+    const { userId } = data
+    socket.to(userId).emit("permintaan_formulir", {
+      message: `Pengajuan Formulir Diterima!`,
+    });
+  })
+
+  socket.on("permintaan_ditolak", (data) => {
+    console.log(data);
+    const { userId } = data;
+    socket.to(userId).emit("permintaan_ditolak", {
+      message: `Pengajuan Formulir Ditolak!`,
+    });
+  });
   socket.on('disconnect', () => {
     console.log('Client disconnected');
   });

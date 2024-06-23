@@ -8,7 +8,8 @@
             <table class="w-full border-collapse border border-gray-300">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="border border-gray-300 px-4 py-2">Nomor Surat</th>
+                        <th>No.</th>
+                        <!-- <th class="border border-gray-300 px-4 py-2">Nomor Surat</th> -->
                         <th class="border border-gray-300 px-4 py-2">Tanggal Dikirim</th>
                         <th class="border border-gray-300 px-4 py-2">Penerima</th>
                         <th class="border border-gray-300 px-4 py-2">Instansi</th>
@@ -17,9 +18,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% riwayatPermintaanDisetujui.forEach(function(request) { %>
+                    <% riwayatPermintaanDisetujui.forEach(function(request, index = 0) { %>
                         <tr>
-                            <td class="border border-gray-300 px-4 py-2"><%= request.nomorSurat %></td>
+                            <td><%= index+1 %></td>
+                            <!-- <td class="border border-gray-300 px-4 py-2"><%= request.nomorSurat %></td> -->
                             <td class="border border-gray-300 px-4 py-2"><%= request.tanggalDikirim %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.penerima %></td>
                             <td class="border border-gray-300 px-4 py-2"><%= request.instansi %></td>

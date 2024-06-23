@@ -14,6 +14,8 @@ function verifyToken(req, res, next) {
         return res.status(500).send({ auth: false, message: 'Gagal untuk melakukan verifikasi token.' });
       }
   
+      // console.log('decoded');
+      console.log(decoded);
       req.userId = decoded.id;
       req.userRole = decoded.role;
       req.userEmail = decoded.email;

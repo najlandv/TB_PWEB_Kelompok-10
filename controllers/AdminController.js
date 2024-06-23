@@ -197,22 +197,29 @@ const lihatDetail = async (req, res) => {
 const terimaFormulir = async (req, res) => {
   try {
     const nomorSurat = req.params.nomorSurat;
-    const statusFormulir = await Formulir.findOne({ where: { nomorSurat } });
+    const statusFormulir = await Formulir.findOne({ where: { nomorSurat }, include: { model: User } });
     statusFormulir.update({ acceptByAdmin: 1 });
     const userId = User.id;
-
+    const penerima = statusFormulir.User.id;
+    
+    
     const newNotification = await Notifikasi.create({
       nomorSurat: nomorSurat,
       tanggal: new Date(),
       isRead: false,
-      penerima: 'Mahasiswa'
+      penerima: penerima,
+
     });
     // console.log(newNotification);
 
     const io = req.app.get("io");
-    io.to(userId).emit("permintaan_formulir", {
-      message: `Pengajuan Formulir Diterima!`,
+    io.emit("permintaan_formulir", {
+      userId: userId,
     });
+    // io.to(userId).emit("permintaan_formulir", {
+    //   message: `Pengajuan Formulir Diterima!`,
+    // });
+    io.emit("permintaan_formulir", {message: `Pengajuan Formulir Diterima!`,})
     res.redirect("/admin/persetujuan");
   } catch (error) {
     console.error("Error during login: ", error);
@@ -223,14 +230,30 @@ const terimaFormulir = async (req, res) => {
 const tolakFormulir = async (req, res) => {
   try {
     const nomorSurat = req.params.nomorSurat;
-    const statusFormulir = await Formulir.findOne({ where: { nomorSurat } });
+    const statusFormulir = await Formulir.findOne({ where: { nomorSurat }, include: { model: User } });
     statusFormulir.update({ acceptByAdmin: 2, acceptByKaprodi: 2 });
+
+    const penerima = statusFormulir.User.id;
+
+    const newNotification = await Notifikasi.create({
+      nomorSurat: nomorSurat,
+      tanggal: new Date(),
+      isRead: false,
+      penerima: penerima,
+    });
+
+    const io = req.app.get("io");
+    io.emit("permintaan_formulir", {
+      userId: penerima,
+    });
+    io.emit("permintaan_formulir", {message: "Pengajuan Formulir Ditolak!", userId: penerima})
     res.redirect("/admin/persetujuan");
   } catch (error) {
     console.error("Error during login: ", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 const riwayatSurat = async(req, res) => {
 try {
@@ -312,7 +335,7 @@ const riwayatSuratByTahun = async(req, res) => {
   try {
     const angkatan = req.params.angkatan;
     const riwayatSurat = await Formulir.findAll({
-      include: [{ model: User, where : {angkatan : angkatan}  }],
+      include: [{ model: User, where : {angkatan : angkatan}  },{ model: Surat}],
       where: {
         acceptByAdmin: 1,
         acceptByKaprodi: 1,

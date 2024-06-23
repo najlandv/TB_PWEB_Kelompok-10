@@ -36,7 +36,7 @@
                 <td><%= riwayat.User.no_identitas %></td>
                 <td><%= riwayat.User.angkatan %></td>
                 <td>
-                    <button class="btn">Lihat Surat</button>
+                    <a href="/data/surat/<%= riwayat.Surat.nama_file %>" target="_blank" class="btn">Lihat Surat</a>
                 </td>
                 <td>
                     <button id="hapus-button<%= index+1 %>" type="button" class="btn" ><i class="fas fa-trash"></i>Hapus</button>

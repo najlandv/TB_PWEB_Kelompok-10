@@ -287,9 +287,9 @@ body {
     display: block;
 }
 
-.notification {
+/* .notification {
     margin-right: 15px;
-}
+} */
 
 /* Profile dropdown styling */
 .profile-dropdown {
@@ -603,4 +603,75 @@ th {
     object-fit: cover;
     cursor: pointer;
     border: 2px solid #fff;
+}
+
+.view-button {
+    display: inline-block;
+}
+
+.view-button button {
+    background-color:  #28a745; /* Primary color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.download-icon {
+    margin-left: 10px; /* Space between button and icon */
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+.download-icon svg {
+    fill:#3b82f6; /* Matching color with the button */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.action-link {
+    text-decoration: none;
+}
+
+.action-button {
+    border: none;
+    font-size: 0; /* Menghilangkan ukuran font untuk menyembunyikan teks */
+    cursor: pointer;
+    display: inline-block;
+    padding: 6px; /* Mengurangi padding */
+    width: 30px; /* Mengurangi lebar tombol */
+    height: 30px; /* Mengurangi tinggi tombol */
+    border-radius: 5px;
+}
+
+.action-button .icon {
+    width: 20px;
+    height: 20px;
+    fill: white; /* Warna ikon */
+}
+
+.action-button:focus {
+    outline: none;
+}
+
+.action-button:hover {
+    opacity: 0.8; /* Contoh efek hover */
+}
+
+.action-detail {
+    background-color: #3b82f6; /* Warna latar belakang untuk Detail */
+}
+
+.action-edit {
+    background-color: #f59e0b; /* Warna latar belakang untuk Edit */
+}
+
+.action-delete {
+    background-color: #ef4444; /* Warna latar belakang untuk Delete */
 }

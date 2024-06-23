@@ -1,6 +1,8 @@
+const express = require('express');
+const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { User } = require("../models/index");
+const { User } = require("../models");
 
 const form = (req, res) => {
   console.log("Rendering Form Login");
@@ -34,20 +36,26 @@ const checklogin = async (req, res) => {
     );
 
     // Set cookie dengan token
+
     res.cookie("token", token, { httpOnly: true });
 
-    // Redirect ke halaman sesuai dengan peran pengguna
-    if (user.role == "mahasiswa"){
-      const io = req.app.get('io');
-      const id = user.id
-      console.log(id);
-      io.emit('new-mahasiswa-add', {id});
+    const io = req.app.get('io');
+    const userId = user.id.toString();
+
+    // Menggunakan emit dari client untuk bergabung ke room yang sesuai
+    io.on('connection', (socket) => {
+      socket.emit('join', userId);
+    });
+
+
+    if (user.role === "mahasiswa") {
       return res.redirect("/mahasiswa/dashboard");
-    } else if (user.role == "kaprodi"){
+    } else if (user.role === "kaprodi") {
       return res.redirect("/kaprodi/dashboard");
-    } else if(user.role == "admin"){
+    } else if (user.role === "admin") {
       return res.redirect("/admin/dashboard");
     }
+
 
     // Jika tidak ada peran yang cocok, berikan respons standar
     res.status(200).send({ auth: true, token: token });
