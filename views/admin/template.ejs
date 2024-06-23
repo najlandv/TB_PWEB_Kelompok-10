@@ -17,7 +17,7 @@
 </head>
     <body>
       <header>
-          <!-- Navbar -->
+          
           <nav class="navbar">
             <div class="notification-icon">
                 <i class="fa-solid fa-bell fa-lg"></i>
@@ -50,7 +50,7 @@
           </nav>   
       </header>
       <aside>
-        <!-- Sidebar -->
+       
         <div class="sidebar">
             <ul>
               <li class="sidebar-item"><a href="/admin/dashboard" ><i class="fas fa-home"></i> Dashboard</a></li>
@@ -61,12 +61,12 @@
               <li class="sidebar-item"><a href="/admin/akun" ><i class="fa-solid fa-user"></i> Akun</a></li>
             </ul>
 
-            <!-- Form logout -->
+            
     <form id="logout-form" method="POST" action="/auth/logout">
       <button type="button" class="logout" id="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</button>
   </form>
 
-  <!-- Modal konfirmasi -->
+
   <div id="modal" class="modal" aria-labelledby="modal-title" role="dialog" aria-modal="true">
       <div class="modal-content">
           <div class="modal-header">
@@ -86,17 +86,15 @@
   <script src="/socket.io/socket.io.js"></script>
 
   <script>
-      // Menampilkan modal saat tombol logout diklik
+     
       document.getElementById('logout-button').addEventListener('click', function() {
           document.getElementById('modal').classList.add('show');
       });
 
-      // Menangani klik tombol "Logout" di modal
       document.getElementById('confirm-logout').addEventListener('click', function() {
           document.getElementById('logout-form').submit();
       });
 
-      // Menangani klik tombol "Cancel" di modal
       document.getElementById('cancel-logout').addEventListener('click', function() {
           document.getElementById('modal').classList.remove('show');
       });
@@ -111,18 +109,17 @@
             });
   </script> 
 <script>
-    // Menangani klik pada setiap notifikasi
     document.querySelectorAll('.notification-item').forEach(item => {
       item.addEventListener('click', async (event) => {
         const notifId = item.getAttribute('data-notif-id');
-        const isRead = item.getAttribute('data-is-read'); // Menambahkan atribut data-is-read
-        // Tambahkan validasi jika isRead sudah 1, tidak lakukan apa-apa
+        const isRead = item.getAttribute('data-is-read'); 
+        
         if (isRead === 1) {
           console.log('Notifikasi sudah dibaca, tidak bisa diklik lagi');
           return;
         }
         try {
-          // Kirim permintaan untuk menandai notifikasi sebagai sudah dibaca
+          
           const response = await fetch(`/admin/notifikasi/${notifId}/read`, {
             method: 'POST'
           });
@@ -130,7 +127,6 @@
             throw new Error('Gagal menandai notifikasi sudah dibaca');
           }
           
-          // Hapus indikator visual dari notifikasi yang sudah dibaca
           const indicator = item.querySelector('.indicator');
           if (indicator) {
             indicator.remove();
@@ -138,12 +134,10 @@
             console.warn('Indikator visual tidak ditemukan untuk notifikasi ini');
           }
           
-          // Setelah berhasil menandai, atur atribut data-is-read menjadi 1
           item.setAttribute('data-is-read', '1');
 
         } catch (error) {
           console.error('Terjadi kesalahan:', error);
-          // Tampilkan pesan kesalahan kepada pengguna jika terjadi masalah
           alert('Terjadi kesalahan saat menandai notifikasi');
         }
       });
@@ -156,19 +150,18 @@
     <main>
       <%- content %>
   </main>
-      <!-- Kontainer untuk notifikasi -->
+      
       <div id="notification-container" class="notification-container"></div>
 
-      <!-- Menyertakan script untuk socket.io -->
+      
       <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
-      <!-- Menyertakan script notifikasi -->
+    
       <script>
         const socket = io("http://localhost:3000");
   
         socket.on("connect", () => {
           console.log("Connected to Admin");
           socket.emit("joinRoom", "admin");
-          // socket.emit("join", 1);
 
         });
   
