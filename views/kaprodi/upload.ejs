@@ -1,0 +1,23 @@
+<% const uploadContent = ' ' %>
+<%- include('./template', { content: uploadContent }) %>
+<div class="container">
+    <form
+              action="/kaprodi/upload/"
+              method="post"
+              enctype="multipart/form-data"
+            >
+              <div class="form-control w-full max-w-xs" id="file-input-container">
+                <div id="file-input-wrapper">
+                  <input
+                    type="file"
+                    id="ttd"
+                    name="ttd"
+                    class="file-input file-input-bordered w-full max-w-xs"
+                  />
+                  <div class="flex justify-center mt-4" id="upload-btn-container">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+</div>

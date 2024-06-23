@@ -196,10 +196,32 @@ const tampilkanFormulir = async (req, res) => {
 
 
 const kirimFormulir = async (req, res) => {
+  const { penerima, instansi, judulTA, namaFile, user_id } = req.body;
+  
+  // Validasi manual
+  let errors = [];
+  if (!penerima || penerima.trim() === '') errors.push({ msg: 'Penerima tidak boleh kosong' });
+  if (!instansi || instansi.trim() === '') errors.push({ msg: 'Instansi tidak boleh kosong' });
+  if (!judulTA || judulTA.trim() === '') errors.push({ msg: 'Judul Tugas Akhir tidak boleh kosong' });
+  if (!namaFile || namaFile.trim() === '') errors.push({ msg: 'Nama file tidak boleh kosong' });
+
+  if (errors.length > 0) {
+    // Kirim kembali ke halaman dengan pesan kesalahan
+    return res.render('mahasiswa/isiformulir', {
+      errors,
+      user_id, // Pastikan user_id tersedia di form
+      penerima,
+      instansi,
+      judulTA,
+      namaFile
+    });
+  }
   try {
+
     const { penerima, instansi, judulTA, namaFile, user_id } = req.body;
 
     // Masukkan data formulir ke dalam database menggunakan model Formulir
+
     const newFormulir = await Formulir.create({
       penerima,
       instansi,
@@ -506,6 +528,8 @@ const testpost =async (req,res) => {
     
   }
 }
+
+
 
 
 

@@ -4,17 +4,13 @@ const verifyToken= require ('../middleware/validtokenMiddleware');
 const role= require ('../middleware/checkroleMiddleware');
 const MhswaController = require('../controllers/MhswaController');
 const showNotification = require('../middleware/notifikasimhs');
+const panduanController = require('../controllers/panduanController')
 
 router.use(verifyToken);
 router.use(showNotification);
 router.get('/notfound', verifyToken, function(req, res, next) {
   res.render('notfound');
 });
-
-// router.use(role('mahasiswa'));
-// router.get('/home', verifyToken,role('mahasiswa'), function(req, res, next) {
-//   res.render('mahasiswa/home');
-// });
 
 
 router.get('/dashboard', role('mahasiswa'), MhswaController.dashboard)
@@ -31,6 +27,8 @@ router.post('/editformulir/:id/update',role('mahasiswa'), MhswaController.editFo
 router.post('/editformulir/:id/delete',role('mahasiswa'), MhswaController.deleteFormulir); 
 router.get('/permintaandisetujui',role('mahasiswa'), MhswaController.riwayatPermintaanDisetujui);
 router.get('/permintaanditolak',role('mahasiswa'), MhswaController.riwayatPermintaanDitolak);
+router.get('/panduan', verifyToken,role('mahasiswa'), panduanController.panduan)
+
 
 
 router.get('/test', MhswaController.tesHalaman)
