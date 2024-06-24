@@ -13,9 +13,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Formulirs', // Nama tabel User
+          model: 'Formulirs', // Nama tabel yang tepat
           key: 'nomorSurat'
-        }
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       tanggal: {
         type: Sequelize.DATE

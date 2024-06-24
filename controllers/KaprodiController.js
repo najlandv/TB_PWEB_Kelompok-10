@@ -125,7 +125,6 @@ const lihatPersetujuan = async (req, res) => {
       include:[{model:User}]
     });
     console.log(lihatPersetujuan)
-    //return res.json(lihatPersetujuan)
     const nomorSurat = lihatPersetujuan.nomorSurat;
     const tanggalDikirim = lihatPersetujuan.tanggalDikirim;
     const tanggalDisetujui = lihatPersetujuan.tanggalDisetujui;
@@ -188,8 +187,7 @@ const lihatDetail = async (req, res) => {
       where: { nomorSurat },
       include: [{ model: User }],
     });
-    // console.log(lihatDetail);
-    // return res.json(lihatDetail)
+    
 
     const title = "Detail Formulir";
 
@@ -211,7 +209,6 @@ const formulirDiterima = async (req,res) => {
       },     
     })
     const title = "Formulir yang Diterima";
-    // console.log(formulirDiterima);
     res.render("kaprodi/diterima", {formulirDiterima, title})
 
   } catch (error) {
@@ -228,7 +225,6 @@ const formulirDitolak = async (req,res) => {
       },     
     })
     const title = "Formulir yang Ditolak";
-    // console.log(formulirDitolak);
     res.render("kaprodi/ditolak", {formulirDitolak, title})
 
   } catch (error) {
@@ -237,8 +233,6 @@ const formulirDitolak = async (req,res) => {
   }
 }
 
-// Middleware untuk menyimpan file
-// Middleware untuk menyimpan file
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -248,7 +242,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// File filter untuk hanya mengizinkan PDF
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
@@ -257,19 +250,16 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Konfigurasi multer
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
 }).single('ttd');
 
-// Endpoint untuk menampilkan halaman upload
 const uploadFile = (req, res) => {
   const title = 'Upload File';
   res.render('kaprodi/upload', {  title });
 };
 
-// Endpoint untuk mengunggah file
 const kirimFile = async (req, res) => {
   console.log("agyysxgysxgysyxggguxgusuixusuxsux");
   upload(req, res, async (err) => {
@@ -329,7 +319,6 @@ const riwayatSurat = async(req, res) => {
     })
     const title = "Riwayat Surat";
   
-    // console.log(riwayatSurat.Surat)
     res.render("kaprodi/riwayat", { riwayatSurat: riwayatSurat, title });
     
   } catch (error) {

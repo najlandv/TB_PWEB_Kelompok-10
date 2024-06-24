@@ -13,10 +13,7 @@ router.get('/notfound', verifyToken, function(req, res, next) {
 });
 router.get("/dashboard", verifyToken, role("kaprodi"),KaprodiControllerr.dashboard);
 
-//router.get('/dashboard', verifyToken, role('kaprodi'), function(req, res, next) {
-//  const title = 'Dashboard';
-//  res.render('kaprodi/dashboard', {title}); 
-//});
+
 
 
 
