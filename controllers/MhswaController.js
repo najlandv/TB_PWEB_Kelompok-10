@@ -57,6 +57,24 @@ const showNotification = async (req, res) => {
   }
 };
 
+const readNotifikasi = async (req,res) => {
+  try {
+    const notifikasi = await Notifikasi.findByPk(req.params.id);
+    
+    if (notifikasi) {
+      notifikasi.isRead = 1;
+      await notifikasi.save();
+      
+      res.sendStatus(200);
+    } else {
+      res.status(404).send('Notifikasi tidak ditemukan');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Terjadi Kesalahan Server');
+  }
+}
+
 
 const form = (req, res) => {
   res.render("login", { title: "Express" });
@@ -506,5 +524,7 @@ module.exports = {
   riwayatPermintaanDisetujui,
   riwayatPermintaanDitolak,
   riwayatSurat,
-  showNotification
+  showNotification,
+  readNotifikasi
+
 };

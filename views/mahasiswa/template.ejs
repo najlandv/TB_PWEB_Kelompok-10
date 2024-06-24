@@ -142,7 +142,7 @@
                       return;
                     }
                     try {
-                      const response = await fetch(`/admin/notifikasi/${notifId}/read`, {
+                      const response = await fetch(`/mahasiswa/notifikasi/${notifId}/read`, {
                         method: 'POST'
                       });
                       if (!response.ok) {

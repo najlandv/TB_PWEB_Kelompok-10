@@ -26,4 +26,5 @@ router.post('/editformulir/:id/delete',role('mahasiswa'), MhswaController.delete
 router.get('/permintaandisetujui',role('mahasiswa'), MhswaController.riwayatPermintaanDisetujui);
 router.get('/permintaanditolak',role('mahasiswa'), MhswaController.riwayatPermintaanDitolak);
 router.get('/panduan', verifyToken,role('mahasiswa'), panduanController.panduan)
+router.post('/notifikasi/:id/read', role('mahasiswa'), MhswaController.readNotifikasi);
 module.exports = router;
