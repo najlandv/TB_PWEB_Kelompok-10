@@ -71,17 +71,17 @@
   </div>
 
   <script>
-      // Menampilkan modal saat tombol logout diklik
+     
       document.getElementById('logout-button').addEventListener('click', function() {
           document.getElementById('modal').classList.add('show');
       });
 
-      // Menangani klik tombol "Logout" di modal
+    
       document.getElementById('confirm-logout').addEventListener('click', function() {
           document.getElementById('logout-form').submit();
       });
 
-      // Menangani klik tombol "Cancel" di modal
+      
       document.getElementById('cancel-logout').addEventListener('click', function() {
           document.getElementById('modal').classList.remove('show');
       });
