@@ -5,8 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const PizZip = require('pizzip');
 const Docxtemplater = require('docxtemplater');
-const ImageModule = require('docxtemplater-image-module');
 const libre = require("libreoffice-convert");
+const { getImageXml } = require("docxtemplater-image-module/js/templates");
+const image_module = require("docxtemplater-image-module-free");
 
 const dashboard = async (req, res) => {
   try {
@@ -249,21 +250,19 @@ const kirimFormulir = async (req, res) => {
 
     const imageOpts = {
       centered: false,
-      getImage: function (tagValue) {
-
-        return fs.readFileSync(path.resolve('uploads', tagValue));
-      },
-      getSize: function (img, tagValue) {
-
-        return [150, 50]; 
-      },
+      getImage: (tagValue) =>fs.readFileSync(tagValue),
+      getSize: () => [120,120],
     };
 
-    const doc = new Docxtemplater(zip, {
-      paragraphLoop: true,
-      linebreaks: true,
-      modules: [new ImageModule(imageOpts)],
-    });
+    
+    const ImageModule = new image_module(imageOpts); // Pastikan ini sudah diinisialisasi dengan benar
+
+const doc = new Docxtemplater(zip, {
+  paragraphLoop: true,
+  linebreaks: true,
+  modules: [ImageModule], // Gunakan variabel ImageModule langsung di sini
+});
+
 
     const formulir = await Formulir.findOne({
       include: [{ model: User }],
@@ -282,7 +281,8 @@ const kirimFormulir = async (req, res) => {
 
     const tanda_tangan_file = kaprodi.tanda_tangan; 
     const tanda_tangan_path = path.resolve('uploads', tanda_tangan_file); 
-
+    console.log(tanda_tangan_file);
+    console.log(tanda_tangan_path);
 
     const tanggalDikirim = new Date(formulir.tanggalDikirim).toLocaleDateString('id-ID');
 
@@ -295,6 +295,7 @@ const kirimFormulir = async (req, res) => {
       judulTA,
       tanggalDikirim, 
       tanda_tangan: tanda_tangan_path, 
+      
     });
 
     doc.render();
